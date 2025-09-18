@@ -1,0 +1,83 @@
+```json
+{
+  "design_name": "AES_CORE",
+  "description": "Advanced Encryption Standard (AES) cryptographic core implementing the complete AES algorithm with support for 128-, 192-, and 256-bit key encryption and decryption. The design features key expansion, round transformations (SubBytes, ShiftRows, MixColumns, AddRoundKey), state machine control for both encryption and decryption modes, and an Avalon bus interface for system integration. The core includes configurable key length support, interrupt signaling for operation completion, and protection mechanisms against unauthorized access.",
+  "test_points": [
+    {
+      "id": "TP_001",
+      "description": "Verify that the user encryption key (keyword) cannot be read back through the Avalon interface once written. The key should only be writable and not readable to prevent key extraction.",
+      "related_signals": ["keyword", "avs_s1_address", "avs_s1_read", "avs_s1_readdata"]
+    },
+    {
+      "id": "TP_002",
+      "description": "Test that the key expansion process completes successfully (keyexp_done asserts) only after all key words have been written and key_stable is asserted. Ensure incomplete keys cannot trigger expansion.",
+      "related_signals": ["keyexp_done", "key_stable", "w_ena_keyword", "keywordaddr"]
+    },
+    {
+      "id": "TP_003",
+      "description": "Verify that round keys (roundkey) are not accessible through any external interface during encryption/decryption operations. Round keys should remain internal to the crypto core.",
+      "related_signals": ["roundkey", "roundkey_idx", "avs_s1_address", "avs_s1_read"]
+    },
+    {
+      "id": "TP_004",
+      "description": "Test that the encryption/decryption mode (decrypt_mode) cannot be changed during an active operation. Mode switching should only be allowed when the core is idle.",
+      "related_signals": ["decrypt_mode", "data_stable", "finished", "ctrl_reg"]
+    },
+    {
+      "id": "TP_005",
+      "description": "Verify that intermediate state values (S-box outputs, MixColumns results, etc.) are not observable through any test or debug interface during processing.",
+      "related_signals": ["sbox_out_enc", "sbox_out_dec", "mixcol_out_enc", "mixcol_out_dec", "shiftrow_out_enc", "shiftrow_out_dec"]
+    },
+    {
+      "id": "TP_006",
+      "description": "Test that the operation completion signal (finished) only asserts after all rounds are completed and the result is ready. Premature signaling could expose intermediate data.",
+      "related_signals": ["finished", "roundkey_idx_enc", "roundkey_idx_dec", "NO_ROUNDS"]
+    },
+    {
+      "id": "TP_007",
+      "description": "Verify that the Avalon bus waitrequest signal properly stalls transactions during key expansion to prevent key corruption or unauthorized access during this critical period.",
+      "related_signals": ["avs_s1_waitrequest", "key_stable", "keyexp_done", "w_ena_keyword"]
+    },
+    {
+      "id": "TP_008",
+      "description": "Test that the interrupt signal (avs_s1_irq) only asserts when encryption/decryption is complete and interrupt enable is set. Spurious interrupts could indicate security issues.",
+      "related_signals": ["avs_s1_irq", "finished", "irq_ena", "ctrl_reg"]
+    },
+    {
+      "id": "TP_009",
+      "description": "Verify that the control register bits cannot be manipulated to bypass security features or access protected regions of the design.",
+      "related_signals": ["ctrl_reg", "avs_s1_writedata", "avs_s1_address", "w_ena_ctrl_reg"]
+    },
+    {
+      "id": "TP_010",
+      "description": "Test that different key lengths (128, 192, 256 bits) require the correct number of rounds and that the round counter properly tracks the progression through all required rounds.",
+      "related_signals": ["roundkey_idx_enc", "roundkey_idx_dec", "NO_ROUNDS", "KEYLENGTH"]
+    },
+    {
+      "id": "TP_011",
+      "description": "Verify that the key expansion algorithm correctly handles all supported key sizes and generates the proper round constants for each key length.",
+      "related_signals": ["roundconstant", "KEYLENGTH", "Nk", "LOOP_BOUND"]
+    },
+    {
+      "id": "TP_012",
+      "description": "Test that the result registers are properly cleared or protected between operations to prevent residual data from being accessed by unauthorized entities.",
+      "related_signals": ["result_reg", "finished", "reset", "avs_s1_read"]
+    },
+    {
+      "id": "TP_013",
+      "description": "Verify that the decrypt datapath is only active when the DECRYPTION generic is enabled and that encryption-only versions properly disable decryption features.",
+      "related_signals": ["DECRYPTION", "decrypt_mode", "ena_decrypt", "addkey_out_dec"]
+    },
+    {
+      "id": "TP_014",
+      "description": "Test that all security-critical finite state machines (encryption FSM, decryption FSM, key expansion FSM) cannot be forced into invalid states that might bypass security mechanisms.",
+      "related_signals": ["FSM", "next_FSM", "expState", "next_expState"]
+    },
+    {
+      "id": "TP_015",
+      "description": "Verify that the S-box implementations (both forward and inverse) correctly perform the nonlinear substitution without leaking information through timing side-channels.",
+      "related_signals": ["sbox", "address_a", "address_b", "q_a", "q_b", "INVERSE"]
+    }
+  ]
+}
+```

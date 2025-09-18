@@ -1,0 +1,4 @@
+```txt
+AVS_AES is a circuit design that implements AES-128/192/256 encryption and decryption in ECB mode, containing key signals avs_s1_address (memory-mapped register access), avs_s1_writedata (key and data input), avs_s1_readdata (result output), decrypt_mode (operation selection), roundkey (current cryptographic key), and data_in/result (plaintext/ciphertext data blocks), which serve the purposes of configuration, data I/O, cryptographic processing, and system integration via an Avalon-MM slave interface respectively.
+Based on the above information, retrieve possible threat models, security vulnerabilities, security assets, or security propertys, etc.
+```

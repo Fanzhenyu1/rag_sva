@@ -1,0 +1,158 @@
+# AVS_AES (AES Core with Avalon-MM Interface)
+
+## 1. Introduction
+The AVS_AES design is a complete AES (Advanced Encryption Standard) cryptographic core supporting key lengths of 128, 192, and 256 bits. It implements both encryption and decryption functionality in Electronic Code Book (ECB) mode. The design features an Avalon Memory-Mapped (MM) slave interface for integration into System-on-Chip (SoC) environments, making it suitable for use with processors like Nios II.
+
+Key features include:
+- Support for AES-128, AES-192, and AES-256 encryption/decryption
+- Configurable decryption datapath (can be disabled for encryption-only applications)
+- Avalon-MM slave interface with interrupt capability
+- Hardware key expansion with round key storage
+- Pipelined datapath for both encryption and decryption operations
+- Synchronous design with single clock domain
+
+The core implements the full AES algorithm including:
+- AddRoundKey operation
+- SubBytes transformation (using S-Boxes)
+- ShiftRows transformation  
+- MixColumns transformation
+- Key expansion for round key generation
+
+## 2. Interface Information
+
+### Avalon-MM Slave Interface
+| Signal Name | Direction | Width | Description |
+|-------------|-----------|-------|-------------|
+| clk | in | 1 | System clock |
+| reset | in | 1 | Synchronous reset |
+| avs_s1_chipselect | in | 1 | Chip select signal |
+| avs_s1_writedata | in | 32 | Write data bus |
+| avs_s1_address | in | 5 | Address bus (32-bit word addressing) |
+| avs_s1_write | in | 1 | Write enable |
+| avs_s1_read | in | 1 | Read enable |
+| avs_s1_irq | out | 1 | Interrupt request |
+| avs_s1_waitrequest | out | 1 | Wait request (stalls bus during key expansion) |
+| avs_s1_readdata | out | 32 | Read data bus |
+
+### Memory Map
+| Address Range | Description | Access |
+|---------------|-------------|--------|
+| 0x00-0x07 | Key words (128-256 bits) | Write-only |
+| 0x08-0x0B | Input data block | Write-only |
+| 0x10-0x13 | Result data block | Read-only |
+| 0x14-0x1E | Reserved | - |
+| 0x1F | Control/Status register | Read/Write |
+
+### Control Register (0x1F)
+| Bit | Name | Description |
+|-----|------|-------------|
+| 7 | KEY_VALID | Key is valid and expansion can start |
+| 6 | IRQ_ENA | Interrupt enable |
+| 5-2 | Reserved | - |
+| 1 | DEC | Decryption mode enable |
+| 0 | ENC | Encryption mode enable |
+
+## 3. Key Signals / Register Information
+
+### Internal AES Core Signals
+| Signal Name | Type | Width | Description |
+|-------------|-------|-------|-------------|
+| data_in | Internal | 128 bits (4×32) | Input data block |
+| data_stable | Internal | 1 | Input data valid flag |
+| keyword | Internal | 32 | User key word input |
+| keywordaddr | Internal | 3 | Key word address |
+| w_ena_keyword | Internal | 1 | Key word write enable |
+| key_stable | Internal | 1 | Key valid and expansion start |
+| decrypt_mode | Internal | 1 | Decryption mode select |
+| keyexp_done | Internal | 1 | Key expansion complete |
+| result | Internal | 128 bits (4×32) | AES result output |
+| finished | Internal | 1 | Operation complete flag |
+
+### Encryption Datapath Signals
+| Signal Name | Type | Width | Description |
+|-------------|-------|-------|-------------|
+| addkey_in_enc | Internal | 128 bits | Input to AddRoundKey |
+| addkey_out_enc | Internal | 128 bits | Output from AddRoundKey |
+| sbox_out_enc | Internal | 128 bits | S-Box output |
+| shiftrow_out_enc | Internal | 128 bits | ShiftRows output |
+| mixcol_out_enc | Internal | 128 bits | MixColumns output |
+| roundkey_idx_enc | Internal | 4 | Round key index |
+| round_type_enc | Internal | 2 | Round type selector |
+| finished_enc | Internal | 1 | Encryption complete |
+
+### Decryption Datapath Signals
+| Signal Name | Type | Width | Description |
+|-------------|-------|-------|-------------|
+| addkey_in_dec | Internal | 128 bits | Input to AddRoundKey |
+| addkey_out_dec | Internal | 128 bits | Output from AddRoundKey |
+| sbox_out_dec | Internal | 128 bits | Inverse S-Box output |
+| shiftrow_in_dec | Internal | 128 bits | Input to ShiftRows |
+| shiftrow_out_dec | Internal | 128 bits | ShiftRows output |
+| mixcol_out_dec | Internal | 128 bits | Inverse MixColumns output |
+| roundkey_idx_dec | Internal | 4 | Round key index |
+| round_type_dec | Internal | 2 | Round type selector |
+| finished_dec | Internal | 1 | Decryption complete |
+
+### Key Expansion Signals
+| Signal Name | Type | Width | Description |
+|-------------|-------|-------|-------------|
+| roundkey | Internal | 128 bits | Current round key |
+| roundkey_idx | Internal | 4 | Multiplexed round key index |
+| key_ready | Internal | 1 | Key expansion complete |
+
+## 4. Key Logical Behaviors / Sequential Behaviors
+
+### Key Expansion Process
+The key expansion module (keyexpansionV2) generates all round keys from the initial user key:
+1. User key words are written to shift registers via the Avalon interface
+2. When key_stable is asserted, key expansion begins
+3. The expansion uses a combination of RotWord, SubWord, and XOR with Rcon values
+4. For 256-bit keys, special handling is required every 4th word
+5. Expanded keys are stored in internal RAM for later use
+6. The keyexp_done signal indicates completion
+
+### Encryption FSM (AES_FSM_ENCRYPT)
+States: WAIT_KEY → WAIT_DATA → INITIAL_ROUND → DO_ROUND → FINAL_ROUND
+
+Behavior:
+1. Waits for valid key (key_ready) and data (data_stable)
+2. Initial round: AddRoundKey with initial key
+3. Main rounds (9, 11, or 13 rounds depending on key size):
+   - SubBytes → ShiftRows → MixColumns → AddRoundKey
+4. Final round (no MixColumns):
+   - SubBytes → ShiftRows → AddRoundKey
+5. Asserts finished_enc when complete
+
+### Decryption FSM (AES_FSM_DECRYPT)  
+States: WAIT_KEY → WAIT_DATA → INITIAL_ROUND → DO_ROUND → FINAL_ROUND
+
+Behavior:
+1. Waits for valid key (key_ready) and data (data_stable)
+2. Processes rounds in reverse order compared to encryption
+3. Uses inverse transformations: InvShiftRows, InvSubBytes, InvMixColumns
+4. Asserts finished_dec when complete
+
+### Round Processing
+The core uses a pipelined approach where each round takes one clock cycle:
+- AddRoundKey: XOR state with round key
+- SubBytes: Byte substitution using S-Box ROMs (dual-port for efficiency)
+- ShiftRows: Row shifting operation
+- MixColumns: Column mixing using Galois Field multiplication
+
+### Avalon-MM Interface Protocol
+1. Key setup: Write key words to addresses 0x00-0x07, set KEY_VALID bit
+2. Data input: Write data block to addresses 0x08-0x0B
+3. Operation start: Set ENC or DEC bit in control register
+4. Operation complete: Poll finished status or wait for interrupt
+5. Result read: Read result from addresses 0x10-0x13
+
+### Interrupt Handling
+- IRQ is asserted when operation completes if IRQ_ENA is set
+- IRQ is cleared by any read operation from the result area
+- Provides alternative to polling the finished status
+
+### Timing Characteristics
+- Key expansion: 81-115 cycles depending on key size
+- Data processing: 11-15 cycles depending on key size
+- Total latency: 92-130 cycles from data_stable to finished
+- Maximum throughput: ~128 bits every 15 cycles at maximum frequency

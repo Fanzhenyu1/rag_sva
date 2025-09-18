@@ -1,0 +1,83 @@
+```json
+{
+  "design_name": "AES_CORE",
+  "description": "Advanced Encryption Standard (AES) cryptographic core supporting 128-, 192-, and 256-bit key encryption and decryption. The design implements the complete AES algorithm with key expansion, round transformations (SubBytes, ShiftRows, MixColumns, AddRoundKey), and state machine control for both encryption and decryption modes. Features include Avalon bus interface compatibility, interrupt signaling, and configurable key length support.",
+  "security_assets": [
+    {
+      "id": "ASSET_001",
+      "description": "User encryption key - Critical secret that must be protected from unauthorized access. The entire security of the AES algorithm depends on keeping this key confidential.",
+      "related_signal": "keyword"
+    },
+    {
+      "id": "ASSET_002",
+      "description": "Expanded round keys - Intermediate keys derived from the user key through key expansion. Exposure could allow reconstruction of the original encryption key.",
+      "related_signal": "roundkey"
+    },
+    {
+      "id": "ASSET_003",
+      "description": "Plaintext input data - Sensitive unencrypted data that must be protected from eavesdropping during processing.",
+      "related_signal": "data_in"
+    },
+    {
+      "id": "ASSET_004",
+      "description": "Ciphertext output data - Encrypted result that should only be accessible to authorized entities to prevent unauthorized decryption.",
+      "related_signal": "result"
+    },
+    {
+      "id": "ASSET_005",
+      "description": "Key expansion control signals - Signals that trigger key processing; malicious activation could lead to key exposure or corruption.",
+      "related_signal": "key_stable"
+    },
+    {
+      "id": "ASSET_006",
+      "description": "Key write enable - Controls loading of key words; unauthorized writes could inject malicious keys or corrupt the key expansion process.",
+      "related_signal": "w_ena_keyword"
+    },
+    {
+      "id": "ASSET_007",
+      "description": "Key address bus - Specifies which key word is being accessed; could be used to selectively target specific key portions for extraction.",
+      "related_signal": "keywordaddr"
+    },
+    {
+      "id": "ASSET_008",
+      "description": "Encryption/decryption mode selection - Determines operational mode; unauthorized changes could lead to data processing in unintended modes.",
+      "related_signal": "decrypt_mode"
+    },
+    {
+      "id": "ASSET_009",
+      "description": "Round key index - Selects which round key is used; manipulation could expose intermediate round states or keys.",
+      "related_signal": "roundkey_idx"
+    },
+    {
+      "id": "ASSET_010",
+      "description": "S-box outputs - Nonlinear substitution results that could reveal information about intermediate encryption states if intercepted.",
+      "related_signal": "sbox_out_enc, sbox_out_dec"
+    },
+    {
+      "id": "ASSET_011",
+      "description": "Intermediate state values - Data during processing rounds; exposure could facilitate cryptographic attacks like differential power analysis.",
+      "related_signal": "addkey_out_enc, addkey_out_dec, mixcol_out_enc, mixcol_out_dec, shiftrow_out_enc, shiftrow_out_dec"
+    },
+    {
+      "id": "ASSET_012",
+      "description": "Key expansion ready signal - Indicates when keys are available; premature access could lead to using incomplete or corrupted keys.",
+      "related_signal": "keyexp_done"
+    },
+    {
+      "id": "ASSET_013",
+      "description": "Operation completion signal - Could be used to time side-channel attacks or determine when sensitive data is available in memory.",
+      "related_signal": "finished"
+    },
+    {
+      "id": "ASSET_014",
+      "description": "Avalon bus interface signals - Could be exploited by malicious software to access protected key and data registers if access controls are insufficient.",
+      "related_signal": "avs_s1_writedata, avs_s1_address, avs_s1_write, avs_s1_read"
+    },
+    {
+      "id": "ASSET_015",
+      "description": "Control register - Contains critical configuration bits including key valid, interrupt enable, and operation mode flags.",
+      "related_signal": "ctrl_reg"
+    }
+  ]
+}
+```

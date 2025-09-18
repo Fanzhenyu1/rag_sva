@@ -1,0 +1,328 @@
+```json
+{
+  "AddRoundKey": {
+    "module_name": "AddRoundKey",
+    "comment_info": "Performs the AddRoundKey step in AES encryption/decryption. This module XORs the current state with the round key. It is a fundamental operation in AES rounds where each byte of the state is combined with a byte of the round key using bitwise XOR.",
+    "comment_signal": [
+      {
+        "signal_name": "roundkey",
+        "signal_description": "Input round key for the current round. It is a KEYBLOCK type (array of 4 DWORDs) containing the expanded key for this round."
+      },
+      {
+        "signal_name": "cypherblock",
+        "signal_description": "Input state matrix for the current round. It is a STATE type (array of 4 DWORDs) representing the data being processed."
+      },
+      {
+        "signal_name": "result",
+        "signal_description": "Output state after XORing the input state with the round key. It is a STATE type that will be used in the next AES step."
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "Xoring Process",
+        "logic_description": "Combinational process that iterates through each DWORD in the state and round key, performing a bitwise XOR operation. The result is generated without any clock delay, making it purely combinational logic.",
+        "related_signals": ["roundkey", "cypherblock", "result"]
+      }
+    ]
+  },
+  "AES_CORE": {
+    "module_name": "AES_CORE",
+    "comment_info": "Top-level AES core module that implements both encryption and decryption datapaths. It integrates key expansion, round operations (SubBytes, ShiftRows, MixColumns, AddRoundKey), and control FSMs. The core supports key lengths of 128, 192, or 256 bits and can be configured to include or exclude decryption functionality.",
+    "comment_signal": [
+      {
+        "signal_name": "clk",
+        "signal_description": "System clock input. All operations are synchronized to the rising edge of this clock."
+      },
+      {
+        "signal_name": "data_in",
+        "signal_description": "Input data block to be encrypted or decrypted. It is a STATE type (4 DWORDs) representing the 128-bit data block."
+      },
+      {
+        "signal_name": "data_stable",
+        "signal_description": "Input signal indicating that the data_in is valid and stable. When asserted, the core begins processing the data block."
+      },
+      {
+        "signal_name": "keyword",
+        "signal_description": "Input for writing the user key. Each keyword is a DWORD (32 bits) of the original key."
+      },
+      {
+        "signal_name": "keywordaddr",
+        "signal_description": "Address input (3 bits) specifying which word of the key is being written. For 128-bit keys, addresses 0-3 are used; for 192-bit, 0-5; for 256-bit, 0-7."
+      },
+      {
+        "signal_name": "w_ena_keyword",
+        "signal_description": "Write enable signal for loading the keyword into the key expansion module. When asserted, the keyword is written to the address specified by keywordaddr."
+      },
+      {
+        "signal_name": "key_stable",
+        "signal_description": "Input signal indicating that the entire user key has been written and is valid. This triggers the key expansion process."
+      },
+      {
+        "signal_name": "decrypt_mode",
+        "signal_description": "Input signal selecting between encryption ('0') and decryption ('1') modes."
+      },
+      {
+        "signal_name": "keyexp_done",
+        "signal_description": "Output signal indicating that key expansion is complete and round keys are ready for use."
+      },
+      {
+        "signal_name": "result",
+        "signal_description": "Output data block after encryption or decryption. It is a STATE type (4 DWORDs) representing the 128-bit result."
+      },
+      {
+        "signal_name": "finished",
+        "signal_description": "Output signal indicating that the encryption or decryption operation is complete and the result is valid."
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "Key Expansion",
+        "logic_description": "The keyexpansionV2 module generates round keys from the user key. It supports key lengths of 128, 192, and 256 bits. The expansion process involves generating round keys through a series of transformations including RotWord, SubWord, and XOR with round constants.",
+        "related_signals": ["keyword", "keywordaddr", "w_ena_keyword", "key_stable", "roundkey_idx", "keyexp_done", "roundkey"]
+      },
+      {
+        "logic_name": "Encryption Datapath",
+        "logic_description": "The encryption datapath consists of initial round (AddRoundKey only), main rounds (SubBytes, ShiftRows, MixColumns, AddRoundKey), and final round (SubBytes, ShiftRows, AddRoundKey). The FSM_ENC controller manages the round sequencing and multiplexer selection.",
+        "related_signals": ["data_in", "data_stable", "roundkey", "roundkey_idx_enc", "round_type_enc", "finished_enc", "result"]
+      },
+      {
+        "logic_name": "Decryption Datapath",
+        "logic_description": "The decryption datapath is similar but uses inverse transformations: initial round (AddRoundKey), main rounds (InvShiftRows, InvSubBytes, AddRoundKey, InvMixColumns), and final round (InvShiftRows, InvSubBytes, AddRoundKey). The FSM_DEC controller manages the round sequencing. This datapath is only included if the DECRYPTION generic is true.",
+        "related_signals": ["data_in", "data_stable", "roundkey", "roundkey_idx_dec", "round_type_dec", "finished_dec", "result"]
+      },
+      {
+        "logic_name": "Round Key Selection",
+        "logic_description": "The roundkey_idx signal is multiplexed between encryption and decryption modes. For encryption, rounds start at 0 and increment; for decryption, rounds start at the last round index and decrement.",
+        "related_signals": ["roundkey_idx_enc", "roundkey_idx_dec", "decrypt_mode", "roundkey_idx"]
+      },
+      {
+        "logic_name": "Result Multiplexing",
+        "logic_description": "The result output is multiplexed between the encryption and decryption datapaths based on the decrypt_mode signal. If decryption is disabled, the encryption result is directly connected to the output.",
+        "related_signals": ["addkey_out_enc", "addkey_out_dec", "decrypt_mode", "result"]
+      }
+    ]
+  },
+  "aes_fsm_decrypt": {
+    "module_name": "aes_fsm_decrypt",
+    "comment_info": "Finite State Machine (FSM) controller for the AES decryption datapath. It generates control signals for the decryption rounds, including round key index and round type selection. The FSM manages the sequence of operations for decryption, which processes rounds in reverse order compared to encryption.",
+    "comment_signal": [
+      {
+        "signal_name": "clk",
+        "signal_description": "System clock input. The FSM transitions occur on the rising edge of the clock."
+      },
+      {
+        "signal_name": "data_stable",
+        "signal_description": "Input signal indicating that the input data is valid and decryption should start. This signal is derived from the top-level data_stable and decrypt_mode signals."
+      },
+      {
+        "signal_name": "key_ready",
+        "signal_description": "Input signal from the key expansion module indicating that round keys are ready for use."
+      },
+      {
+        "signal_name": "round_index_out",
+        "signal_description": "Output signal providing the round key index for the current decryption round. For decryption, rounds are processed from the highest index down to 0."
+      },
+      {
+        "signal_name": "finished",
+        "signal_description": "Output signal indicating that decryption is complete and the result is valid."
+      },
+      {
+        "signal_name": "round_type_sel",
+        "signal_description": "Output control signal (2 bits) selecting the round type for multiplexers in the datapath. It distinguishes between initial round, main rounds, and final round."
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "FSM States",
+        "logic_description": "The FSM has five states: WAIT_KEY (wait for key expansion), WAIT_DATA (wait for valid data), INITIAL_ROUND (first decryption round), DO_ROUND (main decryption rounds), and FINAL_ROUND (last decryption round). Transitions are controlled by data_stable, key_ready, and the round counter.",
+        "related_signals": ["data_stable", "key_ready", "round_index"]
+      },
+      {
+        "logic_name": "Round Counter",
+        "logic_description": "The round index starts at the maximum round number (NO_ROUNDS) and decrements each round until it reaches 1, then transitions to the final round. For 128-bit keys, NO_ROUNDS=10; 192-bit: 12; 256-bit: 14.",
+        "related_signals": ["round_index_out", "round_index"]
+      },
+      {
+        "logic_name": "Round Type Selection",
+        "logic_description": "The round_type_sel signal controls multiplexers in the datapath. For the initial round, it selects '00'; for main rounds, '01'; and for the final round, it also uses '01' but asserts the finished signal.",
+        "related_signals": ["round_type_sel", "finished"]
+      }
+    ]
+  },
+  "aes_fsm_encrypt": {
+    "module_name": "aes_fsm_encrypt",
+    "comment_info": "Finite State Machine (FSM) controller for the AES encryption datapath. It generates control signals for the encryption rounds, including round key index and round type selection. The FSM manages the sequence of operations for encryption, which processes rounds from 0 to the maximum round number.",
+    "comment_signal": [
+      {
+        "signal_name": "clk",
+        "signal_description": "System clock input. The FSM transitions occur on the rising edge of the clock."
+      },
+      {
+        "signal_name": "data_stable",
+        "signal_description": "Input signal indicating that the input data is valid and encryption should start. This signal is derived from the top-level data_stable and decrypt_mode signals."
+      },
+      {
+        "signal_name": "key_ready",
+        "signal_description": "Input signal from the key expansion module indicating that round keys are ready for use."
+      },
+      {
+        "signal_name": "round_index_out",
+        "signal_description": "Output signal providing the round key index for the current encryption round. For encryption, rounds are processed from 0 up to the maximum round number."
+      },
+      {
+        "signal_name": "finished",
+        "signal_description": "Output signal indicating that encryption is complete and the result is valid."
+      },
+      {
+        "signal_name": "round_type_sel",
+        "signal_description": "Output control signal (2 bits) selecting the round type for multiplexers in the datapath. It distinguishes between initial round, main rounds, and final round."
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "FSM States",
+        "logic_description": "The FSM has five states: WAIT_KEY (wait for key expansion), WAIT_DATA (wait for valid data), INITIAL_ROUND (first encryption round), DO_ROUND (main encryption rounds), and FINAL_ROUND (last encryption round). Transitions are controlled by data_stable, key_ready, and the round counter.",
+        "related_signals": ["data_stable", "key_ready", "round_index"]
+      },
+      {
+        "logic_name": "Round Counter",
+        "logic_description": "The round index starts at 0 and increments each round until it reaches NO_ROUNDS-1, then transitions to the final round. For 128-bit keys, NO_ROUNDS=10; 192-bit: 12; 256-bit: 14.",
+        "related_signals": ["round_index_out", "round_index"]
+      },
+      {
+        "logic_name": "Round Type Selection",
+        "logic_description": "The round_type_sel signal controls multiplexers in the datapath. For the initial round, it selects '00'; for main rounds, '01'; and for the final round, '10' (which skips MixColumns).",
+        "related_signals": ["round_type_sel", "finished"]
+      }
+    ]
+  },
+  "avs_AES": {
+    "module_name": "avs_AES",
+    "comment_info": "Avalon Memory-Mapped (MM) Slave interface for the AES core. This module provides a bus-compatible interface for integrating the AES core into a system-on-chip (SoC). It handles register mapping, interrupt generation, and control signal management for the AES operations.",
+    "comment_signal": [
+      {
+        "signal_name": "clk",
+        "signal_description": "Avalon bus clock. All operations are synchronized to the rising edge of this clock."
+      },
+      {
+        "signal_name": "reset",
+        "signal_description": "Synchronous reset signal for the Avalon interface. When asserted, it clears the control register and interrupt state."
+      },
+      {
+        "signal_name": "avs_s1_chipselect",
+        "signal_description": "Chip select signal from the Avalon bus. When asserted, the slave is selected for read or write operations."
+      },
+      {
+        "signal_name": "avs_s1_writedata",
+        "signal_description": "32-bit write data bus from the Avalon bus. Used to write keywords, data input, or control register."
+      },
+      {
+        "signal_name": "avs_s1_address",
+        "signal_description": "5-bit address bus specifying the word offset within the slave's address space. See memory map for details."
+      },
+      {
+        "signal_name": "avs_s1_write",
+        "signal_description": "Write enable signal from the Avalon bus. When asserted with chipselect, data is written to the address specified."
+      },
+      {
+        "signal_name": "avs_s1_read",
+        "signal_description": "Read enable signal from the Avalon bus. When asserted with chipselect, data is read from the address specified."
+      },
+      {
+        "signal_name": "avs_s1_irq",
+        "signal_description": "Interrupt request output signal. Asserted when an operation completes and interrupt is enabled."
+      },
+      {
+        "signal_name": "avs_s1_waitrequest",
+        "signal_description": "Wait request output signal. Asserted when the slave cannot accept a write transaction (e.g., during key expansion)."
+      },
+      {
+        "signal_name": "avs_s1_readdata",
+        "signal_description": "32-bit read data bus to the Avalon bus. Provides data from the result registers or control register."
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "Memory Map Decoding",
+        "logic_description": "The address space is divided into key words (0x00-0x07), data input (0x08-0x0B), result output (0x10-0x13), and control register (0x1F). Write operations to key and data registers are enabled based on address decoding.",
+        "related_signals": ["avs_s1_address", "avs_s1_write", "avs_s1_read", "w_ena_keyword", "w_ena_data_in", "w_ena_ctrl_reg"]
+      },
+      {
+        "logic_name": "Interrupt Handling",
+        "logic_description": "An interrupt is generated when an operation completes (finished signal is asserted) and interrupts are enabled (irq_ena bit in control register). The interrupt is cleared on any read operation.",
+        "related_signals": ["finished", "irq_ena", "avs_s1_read", "avs_s1_irq"]
+      },
+      {
+        "logic_name": "Control Register",
+        "logic_description": "The control register (CTRL) contains bits for key valid (bit 7), interrupt enable (bit 6), decrypt mode (bit 1), and encrypt mode (bit 0). Writing to this register controls the AES core operation.",
+        "related_signals": ["avs_s1_writedata", "w_ena_ctrl_reg", "ctrl_reg", "key_stable", "decrypt_mode", "data_stable"]
+      },
+      {
+        "logic_name": "Key Expansion Stall",
+        "logic_description": "If a new key is written while key expansion is still in progress (key_stable is asserted but keyexp_done is not), the waitrequest signal is asserted to stall the bus transaction.",
+        "related_signals": ["key_stable", "keyexp_done", "avs_s1_waitrequest"]
+      }
+    ]
+  },
+  "keyexpansionV2": {
+    "module_name": "keyexpansionV2",
+    "comment_info": "Key expansion module for AES. Generates round keys from the user-supplied key. Supports key lengths of 128, 192, and 256 bits. The expansion algorithm involves generating new words through a process of rotation, byte substitution using S-box, XOR with round constants, and XOR with previous words. The expanded keys are stored in an internal RAM for access during encryption/decryption rounds.",
+    "comment_signal": [
+      {
+        "signal_name": "clk",
+        "signal_description": "System clock input. All key expansion operations are synchronized to the rising edge of this clock."
+      },
+      {
+        "signal_name": "keyword",
+        "signal_description": "Input for writing the user key words. Each keyword is a DWORD (32 bits) of the original key."
+      },
+      {
+        "signal_name": "keywordaddr",
+        "signal_description": "Address input (3 bits) specifying which word of the key is being written. For 128-bit keys, addresses 0-3 are used; for 192-bit, 0-5; for 256-bit, 0-7."
+      },
+      {
+        "signal_name": "w_ena_keyword",
+        "signal_description": "Write enable signal for loading the keyword into the key expansion shift register. When asserted, the keyword is written to the address specified by keywordaddr."
+      },
+      {
+        "signal_name": "key_stable",
+        "signal_description": "Input signal indicating that the entire user key has been written and is valid. This triggers the key expansion process. When deasserted, the key expansion is reset."
+      },
+      {
+        "signal_name": "roundkey_idx",
+        "signal_description": "Input signal specifying which round key is being requested. This address is used to read from the round key memory."
+      },
+      {
+        "signal_name": "roundkey",
+        "signal_description": "Output round key for the round specified by roundkey_idx. It is a KEYBLOCK type (4 DWORDs) containing the 128-bit round key."
+      },
+      {
+        "signal_name": "ready",
+        "signal_description": "Output signal indicating that key expansion is complete and all round keys are ready for use."
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "Key Expansion Algorithm",
+        "logic_description": "The key expansion algorithm processes the user key to generate round keys. For each new word w[i]: if i mod Nk == 0, w[i] = w[i-Nk] XOR SubWord(RotWord(w[i-1])) XOR Rcon[i/Nk]; else if Nk=8 and i mod 8 == 4, w[i] = w[i-Nk] XOR SubWord(w[i-1]); else w[i] = w[i-Nk] XOR w[i-1]. Nk is the number of 32-bit words in the user key (4, 6, or 8).",
+        "related_signals": ["keyword", "w_ena_keyword", "key_stable", "roundconstant"]
+      },
+      {
+        "logic_name": "Shift Register Bank",
+        "logic_description": "A bank of shift registers stores the last Nk words of the key expansion process. The registers are loaded with the user key initially, and then shifted during expansion with new words fed back from the expansion logic.",
+        "related_signals": ["keyshiftreg_out", "keyshiftreg_ena", "last_word"]
+      },
+      {
+        "logic_name": "Round Key Memory",
+        "logic_description": "A RAM stores the expanded round keys. Each round key is 128 bits (4 DWORDs). The memory is written during key expansion and read during encryption/decryption rounds using roundkey_idx as the address.",
+        "related_signals": ["mem_in", "w_ena_keymem", "w_addr", "roundkey_idx", "roundkey"]
+      },
+      {
+        "logic_name": "Key Expansion FSM",
+        "logic_description": "A finite state machine controls the key expansion process. States include INIT (reset), SUBSTITUTE (S-box lookup), SHIFT (shift registers and write to memory), WRITELAST (write final key), and DONE (expansion complete).",
+        "related_signals": ["expState", "key_stable", "i", "ready"]
+      }
+    ]
+  }
+}
+```

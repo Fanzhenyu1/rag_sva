@@ -1,0 +1,116 @@
+Looking at the RTL code and the security test points, I'll generate SVA assertions for the AES_CORE module. Here's my analysis:
+
+```json
+[
+  {
+    "module1": "AES_CORE",
+    "security_properties": [
+      {
+        "test_point_id": "TP_001",
+        "description": "Verify that the user encryption key (keyword) cannot be read back through the Avalon interface once written",
+        "property": "property keyword_read_protection; @(posedge clk) disable iff (reset) !(avs_s1_read && avs_s1_address[4:3] == 2'b00 && avs_s1_chipselect); endproperty",
+        "sva": "assert property (keyword_read_protection) else $error(\"Keyword read access detected through Avalon interface\");"
+      },
+      {
+        "test_point_id": "TP_002",
+        "description": "Test that key expansion completes only after all key words written and key_stable asserted",
+        "property": "property key_expansion_completion; @(posedge clk) disable iff (reset) keyexp_done |-> $past(key_stable) && ($past(w_ena_keyword && keywordaddr == 3'b111) || $past(key_stable && keyexp_done)); endproperty",
+        "sva": "assert property (key_expansion_completion) else $error(\"Key expansion completed without proper key setup\");"
+      },
+      {
+        "test_point_id": "TP_003",
+        "description": "Verify round keys are not accessible through external interface",
+        "property": "property roundkey_isolation; @(posedge clk) disable iff (reset) !(avs_s1_read && (roundkey_idx != 4'b0) && !finished); endproperty",
+        "sva": "assert property (roundkey_isolation) else $error(\"Round key access detected during operation\");"
+      },
+      {
+        "test_point_id": "TP_004",
+        "description": "Test that encryption/decryption mode cannot be changed during active operation",
+        "property": "property mode_change_protection; @(posedge clk) disable iff (reset) $changed(decrypt_mode) |-> !data_stable && finished; endproperty",
+        "sva": "assert property (mode_change_protection) else $error(\"Mode changed during active operation\");"
+      },
+      {
+        "test_point_id": "TP_006",
+        "description": "Test that operation completion signal only asserts after all rounds completed",
+        "property": "property completion_signal_integrity; @(posedge clk) disable iff (reset) finished |-> (decrypt_mode ? (roundkey_idx_dec == 4'b0) : (roundkey_idx_enc == $unsigned(NO_ROUNDS))); endproperty",
+        "sva": "assert property (completion_signal_integrity) else $error(\"Premature completion signal detected\");"
+      },
+      {
+        "test_point_id": "TP_007",
+        "description": "Verify Avalon waitrequest properly stalls during key expansion",
+        "property": "property waitrequest_during_keyexpansion; @(posedge clk) disable iff (reset) (key_stable && !keyexp_done && avs_s1_write && avs_s1_address[4:3] == 2'b00) |-> avs_s1_waitrequest; endproperty",
+        "sva": "assert property (waitrequest_during_keyexpansion) else $error(\"Waitrequest not asserted during key expansion\");"
+      },
+      {
+        "test_point_id": "TP_008",
+        "description": "Test interrupt signal only asserts when operation complete and interrupt enabled",
+        "property": "property interrupt_integrity; @(posedge clk) disable iff (reset) avs_s1_irq |-> finished && ctrl_reg[6]; endproperty",
+        "sva": "assert property (interrupt_integrity) else $error(\"Spurious interrupt detected\");"
+      },
+      {
+        "test_point_id": "TP_012",
+        "description": "Test result registers are protected between operations",
+        "property": "property result_register_protection; @(posedge clk) disable iff (reset) !finished |-> !(avs_s1_read && avs_s1_address[4:3] == 2'b10); endproperty",
+        "sva": "assert property (result_register_protection) else $error(\"Result register access during operation\");"
+      },
+      {
+        "test_point_id": "TP_013",
+        "description": "Verify decrypt datapath only active when DECRYPTION generic enabled",
+        "property": "property decrypt_path_activation; @(posedge clk) disable iff (reset) !DECRYPTION |-> !ena_decrypt && (addkey_out_dec === 'X); endproperty",
+        "sva": "assert property (decrypt_path_activation) else $error(\"Decrypt path active when disabled\");"
+      },
+      {
+        "test_point_id": "TP_014",
+        "description": "Test FSM cannot be forced into invalid states",
+        "property": "property fsm_state_integrity; @(posedge clk) disable iff (reset) !(FSM inside {WAIT_KEY, WAIT_DATA, INITIAL_ROUND, DO_ROUND, FINAL_ROUND}) && !(expState inside {INIT, SUBSTITUTE, SHIFT, WRITELAST, DONE}); endproperty",
+        "sva": "assert property (fsm_state_integrity) else $error(\"FSM in invalid state\");"
+      }
+    ]
+  },
+  {
+    "module2": "AddRoundKey",
+    "security_properties": [
+      {
+        "test_point_id": "TP_005",
+        "description": "Verify intermediate state values not observable through external interface",
+        "property": "property intermediate_state_isolation; @(posedge clk) disable iff (reset) !finished |-> ##[0:$] !$isunknown(result); endproperty",
+        "sva": "assert property (intermediate_state_isolation) else $error(\"Intermediate state values observable\");"
+      }
+    ]
+  },
+  {
+    "module3": "keyexpansionV2",
+    "security_properties": [
+      {
+        "test_point_id": "TP_011",
+        "description": "Verify key expansion handles all supported key sizes correctly",
+        "property": "property key_expansion_integrity; @(posedge clk) disable iff (reset) (KEYLENGTH == 128) |-> (Nk == 4) && (LOOP_BOUND == 44); endproperty",
+        "sva": "assert property (key_expansion_integrity) else $error(\"Key expansion parameters mismatch\");"
+      }
+    ]
+  },
+  {
+    "module4": "sbox",
+    "security_properties": [
+      {
+        "test_point_id": "TP_015",
+        "description": "Verify S-box implementations perform correct substitution",
+        "property": "property sbox_functionality; @(posedge clk) disable iff (reset) !INVERSE |-> ##1 (q_a != address_a && q_b != address_b); endproperty",
+        "sva": "assert property (sbox_functionality) else $error(\"S-box substitution error detected\");"
+      }
+    ]
+  }
+]
+```
+
+**Note:** Some test points (TP_009, TP_010) couldn't be converted to SVA assertions because:
+- TP_009 involves control register manipulation that requires knowledge of specific security bypass mechanisms not detailed in the RTL
+- TP_010 requires dynamic checking of round counts vs key lengths during operation, which is complex to express in SVA without additional monitoring logic
+
+The assertions focus on critical security properties like:
+- Key read/write protection
+- Operation completion integrity
+- Intermediate state isolation
+- FSM state validity
+- Mode change restrictions
+- Interrupt signaling correctness
