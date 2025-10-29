@@ -1,0 +1,16 @@
+    #(
+    parameter BIT_WIDTH = 4
+    )
+    (
+    clk, 
+    rst_aon_ni, 
+    cfg_fsm_rst_i, 
+    wakeup_timer_cnt_q
+    );
+
+    input clk;
+    input rst_aon_ni;
+    
+    input logic cfg_fsm_rst_i;
+    input logic [BIT_WIDTH-1:0] wakeup_timer_cnt_q; 
+

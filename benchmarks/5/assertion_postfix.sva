@@ -1,0 +1,11 @@
+    #(
+    .NO_WORDS(NO_WORDS),
+    .BIT_WIDTH(BIT_WIDTH)
+    )
+    i_bind_dut_buggy
+    (
+    .clk           (clk          ),
+    .rst           (rst          ),
+    .debug_mode_i  (debug_mode_i ),
+    .key_big2      (key_big2     )
+); 

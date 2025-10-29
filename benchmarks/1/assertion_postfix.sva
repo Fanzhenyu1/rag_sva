@@ -1,0 +1,13 @@
+    #(
+    .RED(RED), 
+    .GREEN(GREEN), 
+    .YELLOW(YELLOW), 
+    .WALK_TIME(WALK_TIME)
+    )
+    i_bind_dut_buggy
+    (
+    .walk     (walk), 
+    .signal   (signal),
+    .clk      (clk),
+    .rst      (rst)
+); 

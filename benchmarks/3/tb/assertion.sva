@@ -1,0 +1,49 @@
+`timescale 1ns/10ps
+
+module v_dut
+    #(
+    parameter NB_PERIPHERALS = 4,
+    parameter PRIV_TYPES = 2
+    )
+    (
+    clk, 
+    rst, 
+    acc_ctrl, 
+    acc_ctrl_c
+    );
+
+    input clk;
+    input rst;
+    
+    input logic [PRIV_TYPES*NB_PERIPHERALS-1 :0]   acc_ctrl; 
+    input logic [PRIV_TYPES-1:0][NB_PERIPHERALS-1:0] acc_ctrl_c;
+
+    // assertion here
+    ///////////////  Assertion 1 /////////////////
+    genvar priv, peripheral;
+    generate
+        for (priv=0; priv < PRIV_TYPES; priv++) begin
+            for (peripheral=0; peripheral < NB_PERIPHERALS; peripheral++) begin
+                assert property (@(posedge clk) (acc_ctrl_c[priv][peripheral] == acc_ctrl[peripheral*PRIV_TYPES+priv]) )
+                                    else $display("GOLDEN: FAIL, time=%4d, acc_ctrl=%d, acc_ctrl_c=%d", $time, acc_ctrl, acc_ctrl_c); 
+            end
+        end       
+    endgenerate 
+
+endmodule
+
+bind tb 
+    v_dut 
+    #(
+    .NB_PERIPHERALS(NB_PERIPHERALS),
+    .PRIV_TYPES(PRIV_TYPES)
+    )
+    i_bind_dut
+    (
+    .clk           (clk          ),
+    .rst           (rst          ),
+    .acc_ctrl      (acc_ctrl     ),
+    .acc_ctrl_c    (acc_ctrl_c   )
+); 
+
+    

@@ -1,0 +1,47 @@
+`timescale 1ns/10ps
+
+module v_dut
+    #(
+    parameter CSR_WRITE = 2, 
+    parameter CSR_SET = 3, 
+    parameter CSR_CLEAR = 4, 
+    parameter CSR_READ = 5
+    )
+    (
+    clk, 
+    rst, 
+    csr_op_i, 
+    priv_lvl_o, 
+    priv_lvl, 
+    privilege_violation
+    );
+
+    input clk;
+    input rst;
+   
+    input logic [2:0] csr_op_i;  
+    input logic [1:0] priv_lvl_o;
+    input logic [1:0] priv_lvl; 
+    input logic privilege_violation ; 
+
+
+    // assertion here
+    ///////////////  Assertion 1 /////////////////
+    assert property (@(posedge clk) (((priv_lvl_o & priv_lvl) != priv_lvl) && (csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ}) |-> privilege_violation == 1'b1) )
+                       else $display("GOLDEN: FAIL, time=%4d, priv_lvl_o=%d, priv_lvl=%d, priv_vio=%d", $time, priv_lvl_o, priv_lvl, privilege_violation); 
+
+endmodule
+
+bind tb 
+    v_dut 
+    i_bind_dut
+    (
+    .clk           (clk          ),
+    .rst           (rst          ),
+    .csr_op_i      (csr_op_i     ),
+    .priv_lvl_o    (priv_lvl_o   ),
+    .priv_lvl      (priv_lvl     ),
+    .privilege_violation (privilege_violation     )
+); 
+
+    

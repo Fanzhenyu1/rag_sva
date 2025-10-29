@@ -21,6 +21,10 @@ def embedding_model_2():
     )
     return embeddings
 
+def vectorstore_build(model):
+    vectorstore = InMemoryVectorStore(model)
+    return vectorstore
+
 def index_build_store(chunks):
     ## load embedding model ##
     embedding_model = embedding_model_1()

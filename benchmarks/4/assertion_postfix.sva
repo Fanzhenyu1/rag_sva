@@ -1,0 +1,13 @@
+    #(
+    .ADDR_WIDTH(ADDR_WIDTH), 
+    .DATA_WIDTH(DATA_WIDTH)
+    )
+    i_bind_dut_buggy
+    (
+    .clk      (clk          ),
+    .rst      (rst          ),
+    .address  (address      ),
+    .ct_valid (ct_valid     ),
+    .en       (en           ),
+    .rdata    (rdata        )
+); 

@@ -1,0 +1,15 @@
+{
+    "examples": {
+        "NoEx" : ["\n\n"],
+        "Ex1"  : [" r_en is 0 if w_en is 1\n assert property (@(posedge clk) (w_en == 1) |-> (r_en == 0));\n\n"]
+        "Ex2"  : [" r_en is 0 if w_en is set\n assert property (@(posedge clk) ($past(w_en) == 1) |-> (r_en == 0));\n\n"],
+        "Ex3"  : [" at every positive edge of clock, the value of the r_en signal is same as its value in the previous clock cycle if the value of the w_en signal in the previous clock cycle is 0\nassert property (@(posedge clk) ($past(w_en) == 0) |-> (r_en == $past(r_en)));\n\n"],
+      }, 
+
+    "properties": {
+        "Brf"      : " the register value is not changed if it is locked\n",
+        "BrfWVars" : " the data is not changed if the lock is set\n",
+        "DetWVars" : " at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal in the previous clock cycle is 1\n",
+      }
+
+}

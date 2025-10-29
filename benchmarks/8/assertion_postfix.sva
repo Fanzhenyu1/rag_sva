@@ -1,0 +1,10 @@
+    #(
+    .BIT_WIDTH(BIT_WIDTH)
+    )
+    i_bind_dut_buggy
+    (
+    .clk           (clk          ),
+    .rst_aon_ni    (rst_aon_ni   ),
+    .cfg_fsm_rst_i (cfg_fsm_rst_i),
+    .wakeup_timer_cnt_q  (wakeup_timer_cnt_q )
+); 

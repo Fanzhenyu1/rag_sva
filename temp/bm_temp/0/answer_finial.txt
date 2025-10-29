@@ -1,0 +1,25 @@
+**Module: lock_reg**
+
+**TP_001:**
+property lock_protection; @(posedge clk) disable iff (rst) (lock && w_en) |=> (data == $past(data)); endproperty
+sva: assert property (lock_protection);
+
+**TP_002:**
+property write_enabled; @(posedge clk) disable iff (rst) (!lock && w_en) |=> (data == $past(data_in)); endproperty
+sva: assert property (write_enabled);
+
+**TP_003:**
+property read_control; @(posedge clk) disable iff (rst) (r_en) |-> (data_out == data) and (!r_en) |-> (data_out == 1'b0); endproperty
+sva: assert property (read_control);
+
+**TP_004:**
+property reset_functionality; @(posedge clk) (rst) |=> (data == 1'b0); endproperty
+sva: assert property (reset_functionality);
+
+**TP_005:**
+property lock_timing; @(posedge clk) disable iff (rst) (w_en) |-> ($stable(lock) throughout [0:1]); endproperty
+sva: assert property (lock_timing);
+
+**TP_006:**
+property concurrent_ops; @(posedge clk) disable iff (rst) (r_en && w_en && !lock) |=> (data_out == $past(data_in)) and (r_en && w_en && lock) |=> (data_out == $past(data)); endproperty
+sva: assert property (concurrent_ops);

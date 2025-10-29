@@ -1,0 +1,21 @@
+{
+    "examples": {
+        "NoEx" : ["\n\n"],
+        "Ex2"  : [" for each of the DATA_SIZE number of data arrays in mem, each of their BIT_WIDTH number of bits should be equal to 1 \n genvar bit, data;\ngenerate\n    for (data=0; data < DATA_SIZE; data++) begin\n        for (bit=0; bit < BIT_WIDTH; bit++) begin\n            assert property (@(posedge clk) mem[data][bit] == 1);\n        end\n    end\nendgenerate \n\n"],
+        "Ex3"  : [" at every positive edge of clock, for each of the DATA_SIZE number of data arrays in the mem matrix, the value of each of the BIT_WIDTH number of bits is same as the corresponding bit in the main_mem array where the value of the ith data for the jth bit is stored in the (j*DATA_SIZE + i)th bit \n genvar bit, data;\ngenerate\n    for (data=0; data < DATA_SIZE; data++) begin\n        for (bit=0; bit < BIT_WIDTH; bit++) begin\n            assert property (@(posedge clk) mem[data][bit] == main_mem[bit*DATA_SIZE + data]);\n        end\n    end\nendgenerate \n\n"]
+      }, 
+
+    "properties": {
+        "Brf"      : " the acc_ctrl_c and acc_ctrl should be same for all privilege levels and all peripherals\n",
+        "BrfWVars" : " for each of the PRIV_TYPES number of privilege arrays in acc_ctrl_c, the NB_PERIPHERALS number of peripheral bits are same as the corresponding bits in acc_ctrl where the ith privilege type of the jth peripheral is the (j*PRIV_TYPES + i)th bit \n",
+        "DetWVars" : " at every positive edge of clock, for each of the PRIV_TYPES number of privilege arrays in the acc_ctrl_c matrix, the value of each of the NB_PERIPHERALS number of peripherals is same as the corresponding bit in the acc_ctrl array where the value for the ith privilege type of the jth peripheral is stored in the (j*PRIV_TYPES + i)th bit \n",
+      }, 
+
+    "assertion_begins": {
+        "noA": "", 
+        "justAssert": "genvar privilege, peripheral;", 
+        "AP": "genvar privilege, peripheral;\ngenerate\n", 
+        "APC": "genvar privilege, peripheral;\ngenerate\n    for (privilege=0;"
+      }
+
+}

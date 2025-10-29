@@ -1,0 +1,43 @@
+`timescale 1ns/10ps
+
+module v_dut
+    #(
+    parameter MIN_CYCLES = 1,
+    parameter MAX_CYCLES = 2
+    )
+    (
+    clk, 
+    rst_i, 
+    por_n_i, 
+    rst_por_aon_n
+    );
+
+    input clk;
+    input rst_i;
+    
+    input logic por_n_i;
+    input logic rst_por_aon_n; 
+
+
+    // assertion here
+    ///////////////  Assertion 1 /////////////////
+    assert property (@(posedge clk) disable iff (rst_i !== '0) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] por_n_i || !rst_por_aon_n)
+                       else $display("GOLDEN: FAIL, time=%4d, por_n_i=%d, rst_por_aon_n=%d", $time, por_n_i, rst_por_aon_n); 
+
+endmodule
+
+bind tb 
+    v_dut 
+    #(
+    .MIN_CYCLES(MIN_CYCLES),
+    .MAX_CYCLES(MAX_CYCLES)
+    )
+    i_bind_dut
+    (
+    .clk           (clk           ),
+    .rst_i         (rst_i         ),
+    .por_n_i       (por_n_i       ),
+    .rst_por_aon_n (rst_por_aon_n )
+); 
+
+    

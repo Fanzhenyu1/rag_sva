@@ -1,0 +1,23 @@
+    #(
+    parameter CSR_WRITE = 2, 
+    parameter CSR_SET = 3, 
+    parameter CSR_CLEAR = 4, 
+    parameter CSR_READ = 5
+    )
+    (
+    clk, 
+    rst, 
+    csr_op_i, 
+    priv_lvl_o, 
+    priv_lvl, 
+    privilege_violation
+    );
+
+    input clk;
+    input rst;
+    
+    input logic [2:0] csr_op_i;  
+    input logic [1:0] priv_lvl_o;
+    input logic [1:0] priv_lvl; 
+    input logic privilege_violation ; 
+

@@ -1,0 +1,58 @@
+`timescale 1ns/10ps
+
+module v_dut_buggy
+    (
+    data_in ,
+    data_out,
+    r_en    ,
+    w_en    ,
+    lock    ,
+    clk     ,
+    rst     ,
+    data       
+    );
+
+    
+    input data_in ;
+    input data_out;
+    input r_en    ;
+    input w_en    ;
+    input lock    ;
+    input clk     ;
+    input rst     ;
+    input data    ;
+
+    // assertion here
+    ///////////////  Assertion 1 /////////////////
+    // property to check that the registers value is only changed 
+    // when the lock is not on
+    reg data_d; 
+    always @(posedge clk) begin
+        if (rst) begin
+            data_d <= 'b0; 
+        end else begin
+            data_d <= data; 
+        end
+    end
+    property reg_value_change;
+        @(posedge clk) (data) |-> ($past(lock) == 0); 
+    endproperty
+    
+    assert property (@(posedge clk) ($past(lock) == 1) |-> (data == $past(data))); 
+
+endmodule
+
+bind tb 
+    v_dut_buggy 
+    i_bind_dut_buggy
+    (
+    .data_in  (data_in),
+    .data_out (data_out),
+    .r_en     (r_en),
+    .w_en     (w_en),
+    .lock     (lock),
+    .clk      (clk),
+    .rst      (rst),
+    .data     (data)
+); 
+    

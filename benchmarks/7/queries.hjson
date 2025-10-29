@@ -1,0 +1,23 @@
+{
+    "examples": {
+        "NoEx" : ["\n\n"],
+        "Ex1"  : [" r_en is 0 if w_en is 1\n assert property (@(posedge clk) (w_en == 1) |-> (r_en == 0));\n\n"]
+        "Ex2"  : [" all the DATA_SIZE number of elements in data are set to 0 if the value of w_en is 1\n genvar i;\n generate\n     for (i=0; i < DATA_SIZE; i++) begin\n        assert property (@(posedge clk) ((w_en == 1) |-> data[i] == 0 ));\n     end\n  endgenerate\n\n"],
+        "Ex3"  : [" at every positive edge of clock, all the BITS number of bits of the DATA_SIZE number of elements in the data array are set to 1 if the value of the w_en signal in the previous clock cycle is 0\n genvar i;\n generate\n     for (i=0; i < DATA_SIZE; i++) begin\n        assert property (@(posedge clk) (($past(w_en) == 0) |-> data[i] == {BITS{ 1'b1 }} ));\n     end\n  endgenerate\n\n"],
+      }, 
+
+    "properties": {
+        "Brf"      : " all the register locks are cset at reset\n",
+        "BrfWVars" : " all the BIT_WIDTH number of bits of the NO_WORDS number of elements in the reglk_mem array are set at reset (represented by the rst_i signal)\n",
+        "DetWVars" : " at every positive edge of clock, all the BIT_WIDTH number of bits of each of the NO_WORDS number of elements in the reglk_mem array are set to 1 if the value of the rst signal in the previous clock cycle is 1\n",
+      }, 
+
+    "assertion_begins": {
+        "noA": "", 
+        "justAssert": "genvar word;", 
+        "AP": "genvar word;\ngenerate\n", 
+        "APC": "genvar word;\ngenerate\n    for (word=0;"
+      }
+
+
+}

@@ -1,0 +1,15 @@
+{
+    "examples": {
+        "NoEx" : ["\n\n"],
+        "Ex1"  : [" r_en is 0 if w_en is 1\n assert property (@(posedge clk) (w_en == 1) |-> (r_en == 0));\n\n"]
+        "Ex2"  : [" the DONE data is always preceeded by the VALID data\nassert property (@(posedge clk) (data == DONE) |-> ($past(data) == VALID));\n\n"],
+        "Ex3"  : [" at every positive edge of clock, if the value of the data register is DONE, then the value of the data register in the previous clock cycle is either VALID or DONE\nassert property (@(posedge clk) (data == DONE) |-> ($past(data) == VALID) || ($past(data) == DONE));\n\n"],
+      }, 
+
+    "properties": {
+        "Brf"      : " the signal can change to red only from yellow\n",
+        "BrfWVars" : " the RED signal is always preceeded by the YELLOW or the RED signals\n",
+        "DetWVars" : " at every positive edge of clock, if the value of the signal register is RED, then the value of the signal register in the previous clock cycle is either RED or YELLOW\n",
+      }
+
+}

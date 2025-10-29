@@ -1,0 +1,19 @@
+    #(
+    parameter RED = 0,
+    parameter GREEN = 1,
+    parameter YELLOW = 2,
+    parameter WALK_TIME = 4 
+    )    
+    (
+    walk    , 
+    signal  , 
+    clk     ,
+    rst     
+    );
+
+    
+    input walk    ; 
+    input [1:0] signal  ; 
+    input clk     ; 
+    input rst     ; 
+

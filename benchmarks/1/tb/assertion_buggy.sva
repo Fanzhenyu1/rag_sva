@@ -1,0 +1,44 @@
+module v_dut_buggy
+    #(
+    parameter RED = 0,
+    parameter GREEN = 1,
+    parameter YELLOW = 2,
+    parameter WALK_TIME = 4 
+    )    
+    (
+    walk    , 
+    signal  , 
+    clk     ,
+    rst     
+    );
+
+    
+    input walk    ; 
+    input [1:0] signal  ; 
+    input clk     ; 
+    input rst     ; 
+
+    // assertion here
+    ///////////////  Assertion 1 /////////////////
+    // property to check that red light is always preceeded by yellow light
+    assert property (@(posedge clk) (signal == RED) |-> (1));
+
+endmodule
+
+bind tb 
+    v_dut_buggy
+    #(
+    .RED(RED), 
+    .GREEN(GREEN), 
+    .YELLOW(YELLOW), 
+    .WALK_TIME(WALK_TIME)
+    )
+    i_bind_dut_buggy
+    (
+    .walk     (walk), 
+    .signal   (signal),
+    .clk      (clk),
+    .rst      (rst)
+); 
+
+    

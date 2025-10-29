@@ -1,0 +1,28 @@
+```json
+{
+  "design_name": "lock_reg",
+  "description": "A lockable register module that provides controlled read/write access with a lock mechanism. When locked, the register preserves its current value and cannot be overwritten. The module supports synchronous reset, controlled write operations with lock protection, and controlled read operations.",
+  "security_assets": [
+    {
+      "id": "ASSET_001",
+      "description": "Lock control signal that determines whether the register can be written. When asserted (high), the register becomes read-only and preserves its current value regardless of write enable signals.",
+      "related_signal": "lock"
+    },
+    {
+      "id": "ASSET_002",
+      "description": "Register data storage element that holds the secured value. This is the actual hardware storage that contains the protected data when the lock is active.",
+      "related_signal": "data"
+    },
+    {
+      "id": "ASSET_003",
+      "description": "Write enable signal that controls write operations to the register. When combined with the lock signal, determines if new data can be written to the register.",
+      "related_signal": "w_en"
+    },
+    {
+      "id": "ASSET_004", 
+      "description": "Read enable signal that controls read access to the register data. When deasserted, the output is forced to zero, providing output data protection.",
+      "related_signal": "r_en"
+    }
+  ]
+}
+```

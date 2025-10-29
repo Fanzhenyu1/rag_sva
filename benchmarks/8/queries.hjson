@@ -1,0 +1,15 @@
+{
+    "examples": {
+        "NoEx" : ["\n\n"],
+        "Ex1"  : [" r_en is 0 if w_en is 1\n assert property (@(posedge clk) (w_en == 1) |-> (r_en == 0));\n\n"]
+        "Ex2"  : [" other than when rst is 0, r_en is 1 if w_en is 1\n assert property (@(posedge clk) disable iff (rst === '0) (w_en == 1) |-> (r_en == 1));\n\n"],
+        "Ex3"  : [" at every positive edge of clock other than when the rst signal is 1, the value of the r_en signal is 0 in the next clock cycle if the value of the w_en signal in this clock cycle is 0\n assert property (@(posedge clk) disable iff (rst === '1) (w_en == 0) |=> (r_en == 0));\n\n"],
+      }, 
+
+    "properties": {
+        "Brf"      : " the counter is cleared on reset\n",
+        "BrfWVars" : " the wakeup_timer_cnt_q is cleared at fsm reset (represented by the cfg_fsm_rst_i signal)\n",
+        "DetWVars" : " at every positive edge of clock other than when the rst_i signal is 0, the value of the wakeup_timer_cnt_q signal is 0 in the next clock cycle if the value of the cfg_fsm_rst_i signal in this clock cycle is 1 \n",
+      }
+
+}

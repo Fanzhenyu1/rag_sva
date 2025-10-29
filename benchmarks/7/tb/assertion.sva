@@ -1,0 +1,45 @@
+`timescale 1ns/10ps
+
+module v_dut
+    #(
+    parameter NO_WORDS = 3,
+    parameter BIT_WIDTH = 2  
+    )
+    (
+    clk, 
+    rst_i, 
+    reglk_mem
+    );
+
+    input clk;
+    input rst_i;
+    
+    input logic [NO_WORDS-1:0][BIT_WIDTH-1:0] reglk_mem;  
+
+
+    // assertion here
+    ///////////////  Assertion 1 /////////////////
+    genvar i;
+    generate
+        for (i=0; i < NO_WORDS; i++) begin
+            assert property (@(posedge clk) ($past(rst_i) |-> reglk_mem[i] == {BIT_WIDTH{ 1'b1 }} ))
+                                else $display("GOLDEN: FAIL, time=%4d, rst_i=%d, reglk_mem[i]=%d", $time, rst_i, reglk_mem[i]); 
+        end 
+    endgenerate 
+
+endmodule
+
+bind tb 
+    v_dut 
+    #(
+    .NO_WORDS(NO_WORDS),
+    .BIT_WIDTH(BIT_WIDTH)
+    )
+    i_bind_dut
+    (
+    .clk           (clk          ),
+    .rst_i         (rst_i        ),
+    .reglk_mem     (reglk_mem    )
+); 
+
+    

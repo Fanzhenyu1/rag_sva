@@ -146,3 +146,36 @@ def prompt_build_property_generation(docs_content, json_testpoint, rtl_files, RA
             .replace(r'${context}', "知识库功能禁用，无需检索知识库。")       # 填入检索文档
         )
     return filled_prompt
+
+def prompt_build_property_generation_all(docs_content, rtl_files, RAG_ENABLE = 0):
+    with open('e:/mylife_yanjiu/project/rag_sva/rules/property_generation_en.md', 'r', encoding='utf-8') as f:
+        prompt_template = f.read()
+    rtl_code = ""
+    for rtl_path in rtl_files:
+        if not os.path.isfile(rtl_path):
+            print(f'{rtl_path} is not a file, skip it.')
+            continue
+        with open(rtl_path, 'r', encoding='utf-8') as f:
+            rtl_code = rtl_code + f.read()
+    if RAG_ENABLE:
+        filled_prompt = (
+            prompt_template
+            .replace(r'${document}', rtl_code)          # 填入RTL代码
+            .replace(r'${context}', docs_content)       # 填入检索文档
+        )
+    else:
+        filled_prompt = (
+            prompt_template
+            .replace(r'${document}', rtl_code)               # 填入RTL代码
+            .replace(r'${context}', "知识库功能禁用，无需检索知识库。")       # 填入检索文档
+        )
+    return filled_prompt
+
+def prompt_build_sva_simplify(sva_content):
+    with open('e:/mylife_yanjiu/project/rag_sva/rules/sva_simplify_en.md', 'r', encoding='utf-8') as f:
+        prompt_template = f.read()
+    filled_prompt = (
+        prompt_template
+        .replace(r'${sva_content}', sva_content)          # 填入SVA内容
+    )
+    return filled_prompt

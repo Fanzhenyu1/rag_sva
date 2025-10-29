@@ -1,0 +1,15 @@
+{
+    "examples": {
+        "NoEx" : ["\n\n"],
+        "Ex1"  : [" r_en is 0 if w_en is 1\n assert property (@(posedge clk) (w_en == 1) |-> (r_en == 0));\n\n"]
+        "Ex2"  : [" other than when the rst signal is 0, if the r_en signal falls, then w_en should become 0 or valid should become 1. \n assert property (@(posedge clk) disable iff (rst === '0)  $fell(r_en) |-> ((w_en == 0) || (valid == 1)));\n\n"],
+        "Ex3"  : [" at every positive edge of clock other than when the rst signal is 0, if the r_en signal falls, then in a minimum of A_CYCLES number of clock cycles and a maximum of B_CYCLES number of clock cycles, the value of the w_en signal should become 0 or the value of the valid signal should become 1 \n assert property (@(posedge clk) disable iff (rst === '0)  $fell(r_en) |-> ##[A_CYCLES:B_CYCLES] ((w_en == 0) || (valid == 1)));\n\n"],
+      }, 
+
+    "properties": {
+        "Brf"      : " a fall in por_n_i leads to a fall in rst_por_aon_n\n",
+        "BrfWVars" : " a fall in por_n_i leads to a fall in rst_por_aon_n after MIN_CYCLES to MAX_CYCLES number of clock cycles unless por_n_i is asserted again\n",
+        "DetWVars" : " at every positive edge of clock other than when the rst_i signal is 1, if the por_n_i signal falls, then in a minimum of MIN_CYCLES clock cycles and a maximum of MAX_CYCLES clock cycles, the value of the por_n_i signal should become 1 or the value of the rst_por_aon_n signal should become 0 \n",
+      }
+
+}

@@ -1,0 +1,10 @@
+    #(
+    .NO_WORDS(NO_WORDS),
+    .BIT_WIDTH(BIT_WIDTH)
+    )
+    i_bind_dut_buggy
+    (
+    .clk           (clk          ),
+    .rst_i         (rst_i        ),
+    .reglk_mem     (reglk_mem    )
+); 

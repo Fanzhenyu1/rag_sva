@@ -1,0 +1,15 @@
+{
+    "examples": {
+        "NoEx" : ["\n\n"],
+        "Ex1"  : [" the error is triggered if the test signal is 1 \n assert property (@(posedge clk) (test == 1) |-> (error == 1));\n\n"]
+        "Ex2"  : [" r_en is 0 if any bit of data_in is greater than that of cmd\n assert property (@(posedge clk) ((data_in | cmd) != cmd |-> (r_en == 0));\n\n"],
+        "Ex3"  : [" at every positive edge of clock, the value of the r_en signal is 0 if any bit of the data_in signal is 1 while the corresponding bit of the data_out signal is 0 and the value of the cmd signal is among the three values CMD_START, CMD_STOP, and CMD_JUMP\n assert property (@(posedge clk) ((data_in | data_out) != data_out) && (cmd inside {CMD_START, CMD_STOP, CMD_JUMP}) |-> (r_en == 0));\n\n"],
+      }, 
+
+    "properties": {
+        "Brf"      : " the violation is triggered when accessing from a lower tha n required privilege level\n",
+        "BrfWVars" : " the privilege_violation signal is triggered if the privilege level of the priv_lvl_o signal is lower than the privilege level of the priv_lvl signal\n",
+        "DetWVars" : " at every positive edge of clock, the value of the privilege_violation signal is 1 if any bit of the priv_lvl_o signal is 0 while the corresponding bit of the priv_lvl signal is 1 and the value of the csr_op_i signal is among the four values CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ\n",
+      }
+
+}

@@ -1,0 +1,13 @@
+    (
+    lock    ,
+    clk     ,
+    rst     ,
+    data       
+    );
+
+    
+    input lock    ;
+    input clk     ;
+    input rst     ;
+    input data    ;
+

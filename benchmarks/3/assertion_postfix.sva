@@ -1,0 +1,11 @@
+    #(
+    .NB_PERIPHERALS(NB_PERIPHERALS),
+    .PRIV_TYPES(PRIV_TYPES)
+    )
+    i_bind_dut_buggy
+    (
+    .clk           (clk          ),
+    .rst           (rst          ),
+    .acc_ctrl      (acc_ctrl     ),
+    .acc_ctrl_c    (acc_ctrl_c   )
+); 

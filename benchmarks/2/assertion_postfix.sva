@@ -1,0 +1,11 @@
+    i_bind_dut_buggy
+    (
+    .clk           (clk          ),
+    .rst           (rst          ),
+    .pass_mode     (pass_mode    ),
+    .dmi_req_ready (dmi_req_ready),
+    .dmi_req_valid (dmi_req_valid),
+    .pass_check    (pass_check   ),
+    .we_flag       (we_flag      ),
+    .dmi_access    (dmi_access   )
+);

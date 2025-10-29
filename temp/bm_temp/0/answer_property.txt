@@ -1,0 +1,63 @@
+Looking at the RTL code and security test points, I'll analyze each test point and generate appropriate SVA assertions where possible.
+
+```json
+[
+  {
+    "module1": "lock_reg",
+    "security_properties": [
+      {
+        "test_point_id": "TP_001",
+        "description": "Verify that when lock signal is asserted (high), the register data cannot be overwritten regardless of write enable and data input signals",
+        "property": "property lock_protection; @(posedge clk) disable iff (rst) (lock && w_en) |=> (data == $past(data)); endproperty",
+        "sva": "assert property (lock_protection);"
+      },
+      {
+        "test_point_id": "TP_002",
+        "description": "Verify that when lock signal is deasserted (low) and write enable is active, the register correctly captures data input on clock edge",
+        "property": "property write_enabled; @(posedge clk) disable iff (rst) (!lock && w_en) |=> (data == $past(data_in)); endproperty",
+        "sva": "assert property (write_enabled);"
+      },
+      {
+        "test_point_id": "TP_003",
+        "description": "Verify that read enable signal properly controls output data visibility - output should be register data when enabled, forced to zero when disabled",
+        "property": "property read_control; @(posedge clk) disable iff (rst) (r_en) |-> (data_out == data) and (!r_en) |-> (data_out == 1'b0); endproperty",
+        "sva": "assert property (read_control);"
+      },
+      {
+        "test_point_id": "TP_004",
+        "description": "Verify synchronous reset functionality clears the register data regardless of lock state or write operations",
+        "property": "property reset_functionality; @(posedge clk) (rst) |=> (data == 1'b0); endproperty",
+        "sva": "assert property (reset_functionality);"
+      },
+      {
+        "test_point_id": "TP_005",
+        "description": "Verify lock signal timing requirements - ensure lock state is properly sampled and applied during write operations",
+        "property": "property lock_timing; @(posedge clk) disable iff (rst) (w_en) |-> ($stable(lock) throughout [0:1]); endproperty",
+        "sva": "assert property (lock_timing);"
+      },
+      {
+        "test_point_id": "TP_006",
+        "description": "Verify that concurrent read and write operations with lock transitions maintain data integrity and proper output behavior",
+        "property": "property concurrent_ops; @(posedge clk) disable iff (rst) (r_en && w_en && !lock) |=> (data_out == $past(data_in)) and (r_en && w_en && lock) |=> (data_out == $past(data)); endproperty",
+        "sva": "assert property (concurrent_ops);"
+      }
+    ]
+  }
+]
+```
+
+## Analysis Summary:
+
+**TP_001**: Created assertion to verify that when lock is high and write enable is active, the register data remains unchanged.
+
+**TP_002**: Created assertion to verify that when lock is low and write enable is active, the register correctly captures the input data.
+
+**TP_003**: Created assertion to verify read enable functionality - output equals register data when enabled, forced to zero when disabled.
+
+**TP_004**: Created assertion to verify synchronous reset clears the register data regardless of other conditions.
+
+**TP_005**: Created assertion to verify lock signal stability during write operations to ensure proper timing.
+
+**TP_006**: Created assertion to verify data integrity during concurrent read/write operations with different lock states.
+
+All test points were successfully converted to SVA assertions that directly correspond to the security requirements and RTL functionality. The assertions cover the critical security aspects of the lockable register including write protection, read control, reset behavior, and concurrent operation scenarios.

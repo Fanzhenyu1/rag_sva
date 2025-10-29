@@ -1,0 +1,41 @@
+`timescale 1ns/10ps
+
+module v_dut_buggy
+    #(
+    parameter BIT_WIDTH = 2
+    )
+    (
+    clk, 
+    rst_i, 
+    cfg_fsm_rst_i, 
+    wakeup_timer_cnt_q
+    );
+
+    input clk;
+    input rst_i;
+    
+    input logic cfg_fsm_rst_i;
+    input logic [BIT_WIDTH-1:0] wakeup_timer_cnt_q; 
+
+
+    // assertion here
+    ///////////////  Assertion 1 /////////////////
+    assert property (@(posedge clk) disable iff (rst_i !== '0) (cfg_fsm_rst_i |=> wakeup_timer_cnt_q == 0) )
+                       else $display("GOLDEN: FAIL, time=%4d, cfg_fsm_rst_i=%d, wakeup_timer_cnt_q=%d", $time, cfg_fsm_rst_i, wakeup_timer_cnt_q); 
+
+endmodule
+
+bind tb 
+    v_dut_buggy
+    #(
+    .BIT_WIDTH(BIT_WIDTH)
+    )
+    i_bind_dut_buggy
+    (
+    .clk           (clk          ),
+    .rst_i         (rst_i          ),
+    .cfg_fsm_rst_i (cfg_fsm_rst_i),
+    .wakeup_timer_cnt_q  (wakeup_timer_cnt_q )
+); 
+
+    

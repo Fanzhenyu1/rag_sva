@@ -1,0 +1,37 @@
+`timescale 1ns/10ps
+
+module v_dut_buggy
+    (
+    clk, 
+    rst, 
+    priv_lvl_o, 
+    priv_lvl, 
+    privilege_violation
+    );
+
+    input clk;
+    input rst;
+    
+    input logic [1:0] priv_lvl_o;
+    input logic [1:0] priv_lvl; 
+    input logic privilege_violation ; 
+
+
+    // assertion here
+    ///////////////  Assertion 1 /////////////////
+    assert property (@(posedge clk) (((priv_lvl_o & priv_lvl) != priv_lvl) |-> privilege_violation == 1'b1) ); 
+
+endmodule
+
+bind tb 
+    v_dut_buggy
+    i_bind_dut_buggy
+    (
+    .clk           (clk          ),
+    .rst           (rst          ),
+    .priv_lvl_o    (priv_lvl_o   ),
+    .priv_lvl      (priv_lvl     ),
+    .privilege_violation (privilege_violation     )
+); 
+
+    

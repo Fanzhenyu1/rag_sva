@@ -1,0 +1,125 @@
+{
+  "0": {
+        "design description": "A simple register lock module. The register (named data) cannot be modified when the lock signal is on",
+        "design source": "Manual by author", 
+        "files": ["assertion_postfix.sva", "assertion_prefix.sva", "src/dut_buggy.sv", "src/dut.sv", "tb/tb.sv", "tb/assertion.sva", "queries.hjson"],
+        "CWE": [], 
+        "no_assertions": 1,
+        "no_bugs": 1,
+        "bug description": ["Register can be modified even when the lock is on"],
+        "no_inputs": 6,
+        "no_outputs": 1,
+        "has_all_files": 1
+       }, 
+  "1": {
+        "design description": "A simple traffic controller. Traffic changes from red -> green -> yellow -> red. If a pedestrian presses walk button, traffic should stop for 4 cycles",
+        "design source": "Manual by author", 
+        "files": ["assertion_postfix.sva", "assertion_prefix.sva", "src/dut_buggy.sv", "src/dut.sv", "tb/tb.sv", "tb/assertion.sva", "queries.hjson"],
+        "CWE": [], 
+        "no_assertions": 1,
+        "no_bugs": 1,
+        "bug description": ["Traffic controller skips yellow before going red when walk button is pressed on green"],
+        "no_inputs": 3,
+        "no_outputs": 1,
+        "has_all_files": 1
+       },
+  "2": {
+        "design description": "JTAG module in cva6 processor. It is locked with a password by default.",
+        "design source": "Hack@DAC 2021", 
+        "files": ["assertion_postfix.sva", "assertion_prefix.sva", "src/dut_buggy.sv", "tb/tb.sv", "tb/assertion.sva", "queries.hjson"],
+        "CWE": [], 
+        "no_assertions": 1,
+        "no_bugs": 1,
+        "bug description": ["Able to 'write' to locked JTAG"],
+        "no_inputs": 6,
+        "no_outputs": 2,
+        "has_all_files": 1
+       },
+  "3": {
+        "design description": "Access control bus in cva6 processor",
+        "design source": "Hack@DAC 2021", 
+        "files": ["assertion_postfix.sva", "assertion_prefix.sva", "src/dut_buggy.sv", "tb/tb.sv", "tb/assertion.sva", "queries.hjson"],
+        "CWE": [], 
+        "no_assertions": 1,
+        "no_bugs": 1,
+        "bug description": ["Access to HMAC peripheral grants it access to PKT peripheral"],
+        "no_inputs": "TODO",
+        "no_outputs": "TODO",
+        "has_all_files": 0
+       },
+  "4": {
+        "design description": "AES accelerator",
+        "design source": "Hack@DAC 2021", 
+        "files": ["assertion_postfix.sva", "assertion_prefix.sva", "src/dut_buggy.sv", "tb/tb.sv", "tb/assertion.sva", "queries.hjson"],
+        "CWE": [], 
+        "no_assertions": 1,
+        "no_bugs": 1,
+        "bug description": ["Internal register of AES are visible externally"],
+        "no_inputs": "TODO",
+        "no_outputs": "TODO",
+        "has_all_files": 1
+       },
+
+
+
+  "5": {
+        "design description": "AES accelerator",
+        "design source": "Hack@DAC 2021", 
+        "files": ["assertion_postfix.sva", "assertion_prefix.sva", "src/dut_buggy.sv", "tb/tb.sv", "tb/assertion.sva", "queries.hjson"],
+        "CWE": [], 
+        "no_assertions": 1,
+        "no_bugs": 1,
+        "bug description": ["Secret keys are not cleared when entering debug mode"],
+        "no_inputs": "TODO",
+        "no_outputs": "TODO",
+        "has_all_files": 1
+       },
+  "6": {
+        "design description": "CSR controller of CVA6 processor",
+        "design source": "Hack@DAC 2021", 
+        "files": ["assertion_postfix.sva", "assertion_prefix.sva", "src/dut_buggy.sv", "tb/tb.sv", "tb/assertion.sva", "queries.hjson"],
+        "CWE": [], 
+        "no_assertions": 1,
+        "no_bugs": 1,
+        "bug description": ["Access to privileged CSR"],
+        "no_inputs": "TODO",
+        "no_outputs": "TODO",
+        "has_all_files": 1
+       },
+  "7": {
+        "design description": "Register lock feature",
+        "design source": "Hack@DAC 2021", 
+        "files": ["assertion_postfix.sva", "assertion_prefix.sva", "src/dut_buggy.sv", "tb/tb.sv", "tb/assertion.sva", "queries.hjson"],
+        "CWE": [], 
+        "no_assertions": 1,
+        "no_bugs": 1,
+        "bug description": ["Incorrect default values"],
+        "no_inputs": "TODO",
+        "no_outputs": "TODO",
+        "has_all_files": 1
+       },
+  "8": {
+        "design description": "ADC controller",
+        "design source": "OpenTitan SoC", 
+        "files": ["assertion_postfix.sva", "assertion_prefix.sva", "src/dut_buggy.sv", "tb/tb.sv", "tb/assertion.sva", "queries.hjson"],
+        "CWE": [], 
+        "no_assertions": 1,
+        "no_bugs": 1,
+        "bug description": ["Wakeup timer is incorrectly configured at reset"],
+        "no_inputs": "TODO",
+        "no_outputs": "TODO",
+        "has_all_files": 1
+       },
+  "9": {
+        "design description": "Reset manager",
+        "design source": "OpenTitan SoC", 
+        "files": ["assertion_postfix.sva", "assertion_prefix.sva", "src/dut_buggy.sv", "tb/tb.sv", "tb/assertion.sva", "queries.hjson"],
+        "CWE": [], 
+        "no_assertions": 1,
+        "no_bugs": 1,
+        "bug description": ["No reset even after maximum clock cycles of input trigger"],
+        "no_inputs": "TODO",
+        "no_outputs": "TODO",
+        "has_all_files": 1
+       }
+}

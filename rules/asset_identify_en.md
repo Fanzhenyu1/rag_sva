@@ -12,23 +12,23 @@
 * Output: Security assets in JSON format
 * The specific format is as follows:
 ```json
-{
+{{
   "design_name": "design name",  
   "description": "Introduce the design of circuit, such as function and features",
   "security_assets": [
-    {
+    {{
       "id": "ASSET_001",
       "description": "Description of security asset 1 / Description of security-critical signal a",
       "related_signal": "signal_a" 
-    },
-    {
+    }},
+    {{
       "id": "ASSET_002",
       "description": "Description of security asset 2 / Description of security-critical signal b",
       "related_signal": "signal_b"
-    }
+    }}
     ...
   ] 
-}
+}}
 ```
 
 # 4. Knowledge Base

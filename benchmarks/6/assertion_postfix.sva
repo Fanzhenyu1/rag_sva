@@ -1,0 +1,9 @@
+    i_bind_dut_buggy
+    (
+    .clk           (clk          ),
+    .rst           (rst          ),
+    .csr_op_i      (csr_op_i     ),
+    .priv_lvl_o    (priv_lvl_o   ),
+    .priv_lvl      (priv_lvl     ),
+    .privilege_violation (privilege_violation     )
+); 

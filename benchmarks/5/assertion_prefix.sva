@@ -1,0 +1,17 @@
+    #(
+    parameter NO_WORDS = 3,
+    parameter BIT_WIDTH = 2 
+    )
+    (
+    clk, 
+    rst, 
+    debug_mode_i, 
+    key_big2
+    );
+
+    input clk;
+    input rst;
+    
+    input logic debug_mode_i;
+    input logic [BIT_WIDTH*NO_WORDS-1:0] key_big2 ; 
+

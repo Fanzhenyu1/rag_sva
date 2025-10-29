@@ -1,0 +1,15 @@
+{
+    "examples": {
+        "NoEx" : ["\n\n"],
+        "Ex1"  : [" r_en is 0 if w_en is 1\n assert property (@(posedge clk) (w_en == 1) |-> (r_en == 0));\n\n"]
+        "Ex2"  : [" r_en is 1 if w_en is 1\n assert property (@(posedge clk) (w_en == 1) |-> (r_en == 1));\n\n"],
+        "Ex3"  : [" at every positive edge of clock, the value of the r_en signal is 0 if the value of the w_en signal is 0\n assert property (@(posedge clk) (w_en == 0) |-> (r_en == 0));\n\n"],
+      }, 
+
+    "properties": {
+        "Brf"      : " valid is not asserted till the password is checked\n",
+        "BrfWVars" : " dmi_req_valid is not enabled if the password check is not done\n",
+        "DetWVars" : " at every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_check signal is 0\n",
+      }
+
+}

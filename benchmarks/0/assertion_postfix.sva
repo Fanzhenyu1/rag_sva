@@ -1,0 +1,7 @@
+    i_bind_dut_buggy
+    (
+    .lock     (lock),
+    .clk      (clk),
+    .rst      (rst),
+    .data     (data)
+);

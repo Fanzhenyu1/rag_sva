@@ -1,0 +1,21 @@
+    #(
+    parameter ADDR_WIDTH = 4, 
+    parameter DATA_WIDTH = 2
+    )
+    (
+    clk, 
+    rst, 
+    address, 
+    ct_valid, 
+    en, 
+    rdata
+    );
+
+    input clk;
+    input rst;
+    
+    input logic ct_valid;
+    input logic [ADDR_WIDTH-1:0] address; 
+    input logic en; 
+    input logic [DATA_WIDTH-1:0] rdata ; 
+

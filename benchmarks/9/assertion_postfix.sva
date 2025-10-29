@@ -1,0 +1,11 @@
+    #(
+    .MIN_CYCLES(MIN_CYCLES),
+    .MAX_CYCLES(MAX_CYCLES)
+    )
+    i_bind_dut_buggy
+    (
+    .clk           (clk           ),
+    .rst_i         (rst_i         ),
+    .por_n_i       (por_n_i       ),
+    .rst_por_aon_n (rst_por_aon_n )
+); 

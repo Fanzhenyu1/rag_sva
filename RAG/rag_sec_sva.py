@@ -142,11 +142,12 @@ def main():
     design_name = "aes"  # 设计名称
     # dir of src
     src_path = f"e:/mylife_yanjiu/project/rag_sva/src/{design_name}"
-    rtl_files = [
-        os.path.normpath(os.path.join(src_path, f))
-        for f in os.listdir(src_path)
-        if os.path.isfile(os.path.join(src_path, f)) and f.lower().endswith(('.v', '.sv', 'txt', '.vhd'))
-    ]
+    # rtl_files = [
+    #     os.path.normpath(os.path.join(src_path, f))
+    #     for f in os.listdir(src_path)
+    #     if os.path.isfile(os.path.join(src_path, f)) and f.lower().endswith(('.v', '.sv', 'txt', '.vhd'))
+    # ]
+    rtl_files = ["e:/mylife_yanjiu/project/aes_ip/AES_bug_in/AES_IP_AXI_interface.sv"]
     # dir of SPEC
     spec_path = src_path + "/spec"
     spec_file = [
@@ -178,26 +179,38 @@ def main():
         pass
 ########################=====query to RAG=====######################################
 ####################################################################################
-    lib_path = "e:/mylife_yanjiu/project/rag_sva/lib_data"
-    lib_data_file = [lib_path + "/output.md"]
+    if(0):
+        lib_path = "e:/mylife_yanjiu/project/rag_sva/lib_data"
+        lib_data_file = [lib_path + "/output.md"]
 
-    with open(os.path.join(temp_path, "query_rag.txt"), "r", encoding="utf-8") as f:
-        query_rag = f.read()            # 一般需要注释掉
-    docs = file_load.load_files(lib_data_file) # load lib data
-    chunks = doc_chunk.langchain_doc_chunk(docs) # chunking
-    vec_store = vector_store.index_build_store(chunks) # build vector store
-    retrieved_docs = vector_store.vector_store_search(vec_store, query_rag)
-    docs_content = "\n\n".join([doc.page_content for doc in retrieved_docs[:5]])
-    print(f"Retrieved documents:\n{docs_content}\n")
+        with open(os.path.join(temp_path, "query_rag.txt"), "r", encoding="utf-8") as f:
+            query_rag = f.read()            # 一般需要注释掉
+        docs = file_load.load_files(lib_data_file) # load lib data
+        chunks = doc_chunk.langchain_doc_chunk(docs) # chunking
+        vec_store = vector_store.index_build_store(chunks) # build vector store
+        retrieved_docs = vector_store.vector_store_search(vec_store, query_rag, k=5)    # parmeter k is important
+        docs_content = "\n\n".join([doc.page_content for doc in retrieved_docs[:5]])
+        print(f"Retrieved documents:\n{docs_content}\n")
+    else:
+        docs_content = '''
+        HT1:When this operation is completed and the working mode is ECB mode and encryption mode, the Trojan enable counter accumulates. When the Trojan enable counter reaches the threshold predefined by the attacker, the Trojan enable signal (Tj_En) activates the load circuit, which will mask the original output data and lock the output.
+        HT2:When the trigger circuit detects that the input data is a specific value set by the attacker, the hardware Trojan is triggered, and the load circuit will replace this input data with another data with the same bit width, resulting in an error in the operation result of the AES IP.
+        HT3:When the trigger circuit detects that the plaintext length of the input exceeds the attacker's set value, the hardware Trojan is triggered. The Trojan enable signal (Tj_En) is high, causing the last bit of the written data to be inverted, thereby tampering with the value of the written data and resulting in an AES IP encryption error.
+        HT4:When the trigger circuit detects that the plaintext length of this input is equal to the value preset by the attacker, the hardware Trojan is triggered, and the Trojan enable signal (Tj_En) is high, causing the output data to be replaced with the data in the key register. Attackers can illegally obtain keys by listening to the output signals of AES IP, resulting in the destruction of the confidentiality of AES IP.
+        BUG1:This was caused by the incorrect connection between the clock port of the top-level module of AES IP and the clock port of the working mode configuration module. When the AES IP is called by the system to complete the encryption and decryption tasks, the interrupt signal remains zero, and when the host reads the operation result of the AES IP, the read data signal is also zero.
+        BUG2:It is caused by the incorrect setting of the number of rounds for encryption and decryption operations in the finite state machine. For the AES encryption and decryption algorithm with a key length of 128 bits, the finite state critical control data processing unit completes 10 rounds of round transformation. Here, the threshold of the counter is changed to 9 rounds, resulting in the operation ending prematurely.
+        BUG3:Because the mode selection port of the AES IP working mode configuration module is not correctly connected to the mode selection port of the control unit, when the AES IP performs encryption operations, the mode selection signal transmitted to the control unit is in decryption mode, which makes the encryption function of the AES IP unable to be correctly invoked.
+        '''
     pass
 
 ########################=====LLM With RAG=====######################################
 ####################################################################################
 
-    # LLM call for comment fill
-    answer_comment = comment_llm_call(all_files, docs_content if RAG_ENABLE == 1 else "", 0)
-    # save answer to temp file
-    answer_to_temp(answer_comment, temp_path, "answer_comment.txt")
+    # # LLM call for comment fill
+    # answer_comment = comment_llm_call(all_files, docs_content if RAG_ENABLE == 1 else "", 0)
+    # # save answer to temp file
+    # answer_to_temp(answer_comment, temp_path, "answer_comment.txt")
+
     all_files = rtl_files + [os.path.join(temp_path, "answer_comment.txt")]
 
     # LLM call for asset identify

@@ -1,0 +1,17 @@
+    #(
+    parameter NB_PERIPHERALS = 4,
+    parameter PRIV_TYPES = 2
+    )
+    (
+    clk, 
+    rst, 
+    acc_ctrl, 
+    acc_ctrl_c
+    );
+
+    input clk;
+    input rst;
+    
+    input logic [PRIV_TYPES*NB_PERIPHERALS-1 :0]   acc_ctrl; 
+    input logic [PRIV_TYPES-1:0][NB_PERIPHERALS-1:0] acc_ctrl_c;
+

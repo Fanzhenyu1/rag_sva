@@ -1,82 +1,82 @@
 ```json
 {
-  "design_name": "AES_CORE",
-  "description": "Advanced Encryption Standard (AES) cryptographic core implementing the complete AES algorithm with support for 128-, 192-, and 256-bit key encryption and decryption. The design features key expansion, round transformations (SubBytes, ShiftRows, MixColumns, AddRoundKey), state machine control for both encryption and decryption modes, and an Avalon bus interface for system integration. The core includes configurable key length support, interrupt signaling for operation completion, and protection mechanisms against unauthorized access.",
+  "design_name": "AES_IP_AXI_interface",
+  "description": "AXI4-Lite interface module for AES encryption/decryption IP core. Provides AXI4 slave interface for configuration, data transfer, and result reading. Supports both ECB and CBC modes with configurable encryption/decryption operations. Contains configurable hardware trojan and bug injection mechanisms for security testing.",
   "test_points": [
     {
       "id": "TP_001",
-      "description": "Verify that the user encryption key (keyword) cannot be read back through the Avalon interface once written. The key should only be writable and not readable to prevent key extraction.",
-      "related_signals": ["keyword", "avs_s1_address", "avs_s1_read", "avs_s1_readdata"]
+      "description": "Monitor key leakage through HT4 mechanism - when ht_leakkey_en is active and counter_for_frame_number reaches threshold, key data appears on axi_rdata output",
+      "related_signals": ["ht_leakkey_en", "counter_for_frame_number", "axi_rdata", "key_reg[0:3]"]
     },
     {
       "id": "TP_002",
-      "description": "Test that the key expansion process completes successfully (keyexp_done asserts) only after all key words have been written and key_stable is asserted. Ensure incomplete keys cannot trigger expansion.",
-      "related_signals": ["keyexp_done", "key_stable", "w_ena_keyword", "keywordaddr"]
+      "description": "Detect unauthorized intermediate data exposure - when bug_intermediate_en is active, intermediate encryption states are readable via axi_rdata",
+      "related_signals": ["bug_intermediate_en", "axi_rdata", "intermediate_data", "output_text_valid"]
     },
     {
       "id": "TP_003",
-      "description": "Verify that round keys (roundkey) are not accessible through any external interface during encryption/decryption operations. Round keys should remain internal to the crypto core.",
-      "related_signals": ["roundkey", "roundkey_idx", "avs_s1_address", "avs_s1_read"]
+      "description": "Verify input data integrity against HT2 replacement - monitor counter_for_replace_special_string and detect when input data is replaced with attacker-defined values",
+      "related_signals": ["ht_replace_input_en", "counter_for_replace_special_string", "input_text_reg[0:3]", "S_AXI_WDATA"]
     },
     {
       "id": "TP_004",
-      "description": "Test that the encryption/decryption mode (decrypt_mode) cannot be changed during an active operation. Mode switching should only be allowed when the core is idle.",
-      "related_signals": ["decrypt_mode", "data_stable", "finished", "ctrl_reg"]
+      "description": "Check for frame length restriction bypass - ensure HT3 doesn't corrupt data when legitimate frame lengths are used",
+      "related_signals": ["ht_frame_cnt_en", "counter_for_frame_number", "frame_reg", "input_text_reg[0:3]"]
     },
     {
       "id": "TP_005",
-      "description": "Verify that intermediate state values (S-box outputs, MixColumns results, etc.) are not observable through any test or debug interface during processing.",
-      "related_signals": ["sbox_out_enc", "sbox_out_dec", "mixcol_out_enc", "mixcol_out_dec", "shiftrow_out_enc", "shiftrow_out_dec"]
+      "description": "Validate encryption round completeness - detect BUG2 activation that reduces rounds from 10 to 9",
+      "related_signals": ["bug_9_round_en", "start", "done", "counter_for_frame_number"]
     },
     {
       "id": "TP_006",
-      "description": "Test that the operation completion signal (finished) only asserts after all rounds are completed and the result is ready. Premature signaling could expose intermediate data.",
-      "related_signals": ["finished", "roundkey_idx_enc", "roundkey_idx_dec", "NO_ROUNDS"]
+      "description": "Verify decryption functionality - ensure BUG3 doesn't force decryption mode to encryption",
+      "related_signals": ["bug_without_dec_en", "mode_of_enc_or_dec_reg", "S_AXI_WDATA", "config_reg"]
     },
     {
       "id": "TP_007",
-      "description": "Verify that the Avalon bus waitrequest signal properly stalls transactions during key expansion to prevent key corruption or unauthorized access during this critical period.",
-      "related_signals": ["avs_s1_waitrequest", "key_stable", "keyexp_done", "w_ena_keyword"]
+      "description": "Monitor output data corruption via HT1 counter mechanism - detect when counter_HT threshold triggers data corruption",
+      "related_signals": ["ht_cnt_en", "counter_HT", "axi_rdata", "output_text_reg[0:3]"]
     },
     {
       "id": "TP_008",
-      "description": "Test that the interrupt signal (avs_s1_irq) only asserts when encryption/decryption is complete and interrupt enable is set. Spurious interrupts could indicate security issues.",
-      "related_signals": ["avs_s1_irq", "finished", "irq_ena", "ctrl_reg"]
+      "description": "Detect read data reordering manipulation - verify HT5 doesn't corrupt output data ordering",
+      "related_signals": ["ht_wrong_order_en", "counter_for_rdata", "axi_rdata", "output_text_reg[0:3]"]
     },
     {
       "id": "TP_009",
-      "description": "Verify that the control register bits cannot be manipulated to bypass security features or access protected regions of the design.",
-      "related_signals": ["ctrl_reg", "avs_s1_writedata", "avs_s1_address", "w_ena_ctrl_reg"]
+      "description": "Validate configuration register security - ensure unauthorized modifications to security-critical control signals",
+      "related_signals": ["ht_bug_config_reg", "config_reg", "frame_reg", "mode_of_enc_or_dec_reg", "mode_of_ecb_or_cbc_reg"]
     },
     {
       "id": "TP_010",
-      "description": "Test that different key lengths (128, 192, 256 bits) require the correct number of rounds and that the round counter properly tracks the progression through all required rounds.",
-      "related_signals": ["roundkey_idx_enc", "roundkey_idx_dec", "NO_ROUNDS", "KEYLENGTH"]
+      "description": "Monitor reset signal integrity - ensure rst_n_to_AES_core isn't improperly asserted during encryption operations",
+      "related_signals": ["rst_n_to_AES_core", "clr_aes_irq", "counter_for_frame_number", "frame_reg", "S_AXI_ARESETN"]
     },
     {
       "id": "TP_011",
-      "description": "Verify that the key expansion algorithm correctly handles all supported key sizes and generates the proper round constants for each key length.",
-      "related_signals": ["roundconstant", "KEYLENGTH", "Nk", "LOOP_BOUND"]
+      "description": "Verify AXI read data multiplexing security - ensure sensitive data isn't leaked through unintended data paths",
+      "related_signals": ["axi_rdata", "output_text_valid", "bug_intermediate_en", "ht_leakkey_en", "ht_cnt_en"]
     },
     {
       "id": "TP_012",
-      "description": "Test that the result registers are properly cleared or protected between operations to prevent residual data from being accessed by unauthorized entities.",
-      "related_signals": ["result_reg", "finished", "reset", "avs_s1_read"]
+      "description": "Check interrupt and status signal integrity - ensure proper operation completion signaling",
+      "related_signals": ["INT2", "busy", "done", "done_negedge", "clr_aes_irq"]
     },
     {
       "id": "TP_013",
-      "description": "Verify that the decrypt datapath is only active when the DECRYPTION generic is enabled and that encryption-only versions properly disable decryption features.",
-      "related_signals": ["DECRYPTION", "decrypt_mode", "ena_decrypt", "addkey_out_dec"]
+      "description": "Validate input data flow control - ensure data_all_full properly gates start signal generation",
+      "related_signals": ["data_all_full", "start", "input_text_full_reg", "key_full_reg", "IV_full_reg"]
     },
     {
       "id": "TP_014",
-      "description": "Test that all security-critical finite state machines (encryption FSM, decryption FSM, key expansion FSM) cannot be forced into invalid states that might bypass security mechanisms.",
-      "related_signals": ["FSM", "next_FSM", "expState", "next_expState"]
+      "description": "Monitor key register protection - ensure key data isn't accessible through unintended read paths",
+      "related_signals": ["key_reg[0:3]", "axi_rdata", "ht_leakkey_en", "bug_intermediate_en"]
     },
     {
       "id": "TP_015",
-      "description": "Verify that the S-box implementations (both forward and inverse) correctly perform the nonlinear substitution without leaking information through timing side-channels.",
-      "related_signals": ["sbox", "address_a", "address_b", "q_a", "q_b", "INVERSE"]
+      "description": "Verify IV register security in CBC mode - ensure IV data integrity and confidentiality",
+      "related_signals": ["IV_reg[0:3]", "mode_of_ecb_or_cbc_reg", "axi_rdata", "data_all_full"]
     }
   ]
 }

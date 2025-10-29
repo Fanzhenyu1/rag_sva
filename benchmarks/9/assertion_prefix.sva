@@ -1,0 +1,17 @@
+    #(
+    parameter MIN_CYCLES = 3,
+    parameter MAX_CYCLES = 5
+    )
+    (
+    clk, 
+    rst_i, 
+    por_n_i, 
+    rst_por_aon_n
+    );
+
+    input clk;
+    input rst_i;
+    
+    input logic por_n_i;
+    input logic rst_por_aon_n; 
+

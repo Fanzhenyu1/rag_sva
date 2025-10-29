@@ -1,0 +1,91 @@
+Looking at the RTL code and security test points, I need to analyze the hardware trojans and bugs implemented in the design and create corresponding SVA assertions. Let me examine the key security vulnerabilities:
+
+## Analysis of Security Vulnerabilities:
+
+1. **HT Counter (ht_cnt_en)**: When counter reaches threshold (12), corrupts output data
+2. **HT Frame Counter (ht_frame_cnt_en)**: Corrupts input when frame counter >= 2
+3. **HT Key Leakage (ht_leakkey_en)**: Leaks key register data in output
+4. **HT Input Replacement (ht_replace_input_en)**: Replaces specific input patterns
+5. **HT Wrong Order (ht_wrong_order_en)**: Reorders output data
+6. **Bug 9 Round (bug_9_round_en)**: Reduces rounds from 10 to 9
+7. **Bug Intermediate Data (bug_intermediate_en)**: Exposes intermediate data
+8. **Bug Without Decryption (bug_without_dec_en)**: Forces encryption mode
+
+Here are the security properties and assertions:
+
+```json
+[
+  {
+    "module1": "AES_IP_AXI_interface",
+    "security_properties": [
+      {
+        "test_point_id": "TP_HT_COUNTER",
+        "description": "Hardware Trojan: Counter-based data corruption when HT counter reaches threshold",
+        "property": "property ht_counter_corruption; @(posedge S_AXI_ACLK) disable iff (!S_AXI_ARESETN) (ht_cnt_en && counter_HT == 3 && axi_rvalid) |-> (axi_rdata == 32'hffff_ffff); endproperty",
+        "sva": "assert property (ht_counter_corruption);"
+      },
+      {
+        "test_point_id": "TP_HT_FRAME",
+        "description": "Hardware Trojan: Input data corruption when frame counter exceeds threshold in encryption mode",
+        "property": "property ht_frame_corruption; @(posedge S_AXI_ACLK) disable iff (!S_AXI_ARESETN) (ht_frame_cnt_en && mode_of_enc_or_dec_reg == 0 && counter_for_frame_number >= 2 && S_AXI_WVALID && S_AXI_WREADY && config_reg == 0) |-> (input_text_reg[counter_for_store_data] == 32'hffff_ffff); endproperty",
+        "sva": "assert property (ht_frame_corruption);"
+      },
+      {
+        "test_point_id": "TP_HT_KEY_LEAK",
+        "description": "Hardware Trojan: Key leakage when frame counter reaches specific value",
+        "property": "property ht_key_leakage; @(posedge S_AXI_ACLK) disable iff (!S_AXI_ARESETN) (ht_leakkey_en && counter_for_frame_number == 3 && axi_rvalid && counter_for_rdata == 3) |-> (axi_rdata == key_reg[0]); endproperty",
+        "sva": "assert property (ht_key_leakage);"
+      },
+      {
+        "test_point_id": "TP_HT_INPUT_REPLACE",
+        "description": "Hardware Trojan: Input data replacement when specific pattern detected",
+        "property": "property ht_input_replacement; @(posedge S_AXI_ACLK) disable iff (!S_AXI_ARESETN) (ht_replace_input_en && counter_for_replace_special_string == 5 && S_AXI_WDATA == 32'h00010203 && config_reg == 0) |-> (input_text_reg[counter_for_store_data] == 32'hffff_ffff); endproperty",
+        "sva": "assert property (ht_input_replacement);"
+      },
+      {
+        "test_point_id": "TP_HT_WRONG_ORDER",
+        "description": "Hardware Trojan: Output data reordering when frame counter reaches specific value",
+        "property": "property ht_wrong_order; @(posedge S_AXI_ACLK) disable iff (!S_AXI_ARESETN) (ht_wrong_order_en && counter_for_frame_number == 3 && axi_rvalid) |-> ((counter_for_rdata == 2) -> (axi_rdata == output_text_reg[3])) && ((counter_for_rdata == 3) -> (axi_rdata == output_text_reg[2])); endproperty",
+        "sva": "assert property (ht_wrong_order);"
+      },
+      {
+        "test_point_id": "TP_BUG_9_ROUND",
+        "description": "Bug: 9-round encryption instead of 10 rounds enabled by configuration",
+        "property": "property bug_9_round_enable; @(posedge S_AXI_ACLK) disable iff (!S_AXI_ARESETN) (ht_bug_config_reg[5] == 1'b1) |-> (bug_9_round_en == 1'b1); endproperty",
+        "sva": "assert property (bug_9_round_enable);"
+      },
+      {
+        "test_point_id": "TP_BUG_INTERMEDIATE",
+        "description": "Bug: Intermediate data exposure when output text is not valid",
+        "property": "property bug_intermediate_exposure; @(posedge S_AXI_ACLK) disable iff (!S_AXI_ARESETN) (bug_intermediate_en && axi_rvalid && !output_text_valid) |-> (axi_rdata == intermediate_data); endproperty",
+        "sva": "assert property (bug_intermediate_exposure);"
+      },
+      {
+        "test_point_id": "TP_BUG_NO_DECRYPTION",
+        "description": "Bug: Decryption mode forced to encryption when bug enabled",
+        "property": "property bug_no_decryption; @(posedge S_AXI_ACLK) disable iff (!S_AXI_ARESETN) (bug_without_dec_en && S_AXI_WDATA[2] == 1'b1 && S_AXI_WVALID && S_AXI_WREADY && axi_awaddr == 'h210) |-> (mode_of_enc_or_dec_reg == 1'b0); endproperty",
+        "sva": "assert property (bug_no_decryption);"
+      },
+      {
+        "test_point_id": "TP_SECURE_MODE_CONFIG",
+        "description": "Security property: Mode configuration should be properly latched when written",
+        "property": "property secure_mode_config; @(posedge S_AXI_ACLK) disable iff (!S_AXI_ARESETN) (S_AXI_WVALID && S_AXI_WREADY && axi_awaddr == 'h210 && S_AXI_WDATA[10] == 1'b1) |-> (##1 {frame_reg, mode_of_ecb_or_cbc_reg, mode_of_enc_or_dec_reg, config_reg} == S_AXI_WDATA[9:0]); endproperty",
+        "sva": "assert property (secure_mode_config);"
+      },
+      {
+        "test_point_id": "TP_SECURE_OUTPUT_ERASE",
+        "description": "Security property: Output registers should be cleared on reset to prevent data leakage",
+        "property": "property secure_output_erase; @(posedge S_AXI_ACLK) (!S_AXI_ARESETN) |-> (output_text_reg[0] == 0 && output_text_reg[1] == 0 && output_text_reg[2] == 0 && output_text_reg[3] == 0); endproperty",
+        "sva": "assert property (secure_output_erase);"
+      }
+    ]
+  }
+]
+```
+
+These security properties cover:
+- **Detection of Hardware Trojans**: Counter-based corruption, frame-based corruption, key leakage, input replacement, and data reordering
+- **Detection of Bugs**: 9-round encryption bug, intermediate data exposure, decryption disable bug
+- **Security Best Practices**: Proper mode configuration and secure data erasure on reset
+
+The assertions use the actual signals and conditions from the RTL code to detect when these security vulnerabilities are active and functioning as designed.

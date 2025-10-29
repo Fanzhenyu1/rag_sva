@@ -1,82 +1,97 @@
 ```json
 {
-  "design_name": "AES_CORE",
-  "description": "Advanced Encryption Standard (AES) cryptographic core supporting 128-, 192-, and 256-bit key encryption and decryption. The design implements the complete AES algorithm with key expansion, round transformations (SubBytes, ShiftRows, MixColumns, AddRoundKey), and state machine control for both encryption and decryption modes. Features include Avalon bus interface compatibility, interrupt signaling, and configurable key length support.",
+  "design_name": "AES_IP_AXI_interface",
+  "description": "AXI4-Lite interface module for AES encryption/decryption IP core. Provides AXI4 slave interface for configuration, data transfer, and result reading. Supports both ECB and CBC modes with configurable encryption/decryption operations. Contains configurable hardware trojan and bug injection mechanisms for security testing.",
   "security_assets": [
     {
       "id": "ASSET_001",
-      "description": "User encryption key - Critical secret that must be protected from unauthorized access. The entire security of the AES algorithm depends on keeping this key confidential.",
-      "related_signal": "keyword"
+      "description": "AES encryption key - Critical security asset that must be protected from unauthorized access or leakage",
+      "related_signal": "key_reg[0:3]"
     },
     {
       "id": "ASSET_002",
-      "description": "Expanded round keys - Intermediate keys derived from the user key through key expansion. Exposure could allow reconstruction of the original encryption key.",
-      "related_signal": "roundkey"
+      "description": "Intermediate encryption data - Sensitive intermediate state that could reveal information about the encryption process",
+      "related_signal": "intermediate_data"
     },
     {
       "id": "ASSET_003",
-      "description": "Plaintext input data - Sensitive unencrypted data that must be protected from eavesdropping during processing.",
-      "related_signal": "data_in"
+      "description": "Output ciphertext/plaintext - Final encryption/decryption results that must be protected from tampering",
+      "related_signal": "output_text_reg[0:3]"
     },
     {
       "id": "ASSET_004",
-      "description": "Ciphertext output data - Encrypted result that should only be accessible to authorized entities to prevent unauthorized decryption.",
-      "related_signal": "result"
+      "description": "Input plaintext/ciphertext - Sensitive input data that should not be modified by unauthorized entities",
+      "related_signal": "input_text_reg[0:3]"
     },
     {
       "id": "ASSET_005",
-      "description": "Key expansion control signals - Signals that trigger key processing; malicious activation could lead to key exposure or corruption.",
-      "related_signal": "key_stable"
+      "description": "Initialization Vector (IV) - Critical for CBC mode security, must be unpredictable and protected",
+      "related_signal": "IV_reg[0:3]"
     },
     {
       "id": "ASSET_006",
-      "description": "Key write enable - Controls loading of key words; unauthorized writes could inject malicious keys or corrupt the key expansion process.",
-      "related_signal": "w_ena_keyword"
+      "description": "Operation mode control - Controls encryption/decryption and ECB/CBC modes, critical for correct security operation",
+      "related_signal": "mode_of_enc_or_dec_reg, mode_of_ecb_or_cbc_reg"
     },
     {
       "id": "ASSET_007",
-      "description": "Key address bus - Specifies which key word is being accessed; could be used to selectively target specific key portions for extraction.",
-      "related_signal": "keywordaddr"
+      "description": "Hardware Trojan configuration - Enables various security vulnerability injections that could compromise the system",
+      "related_signal": "ht_bug_config_reg"
     },
     {
       "id": "ASSET_008",
-      "description": "Encryption/decryption mode selection - Determines operational mode; unauthorized changes could lead to data processing in unintended modes.",
-      "related_signal": "decrypt_mode"
+      "description": "Key leakage Trojan - HT4: When triggered, replaces output data with key register contents, leaking encryption keys",
+      "related_signal": "ht_leakkey_en"
     },
     {
       "id": "ASSET_009",
-      "description": "Round key index - Selects which round key is used; manipulation could expose intermediate round states or keys.",
-      "related_signal": "roundkey_idx"
+      "description": "Input replacement Trojan - HT2: Replaces specific input data with attacker-defined values, corrupting encryption results",
+      "related_signal": "ht_replace_input_en, counter_for_replace_special_string"
     },
     {
       "id": "ASSET_010",
-      "description": "S-box outputs - Nonlinear substitution results that could reveal information about intermediate encryption states if intercepted.",
-      "related_signal": "sbox_out_enc, sbox_out_dec"
+      "description": "Frame length restriction Trojan - HT3: Triggers when input plaintext length exceeds threshold, corrupts written data",
+      "related_signal": "ht_frame_cnt_en"
     },
     {
       "id": "ASSET_011",
-      "description": "Intermediate state values - Data during processing rounds; exposure could facilitate cryptographic attacks like differential power analysis.",
-      "related_signal": "addkey_out_enc, addkey_out_dec, mixcol_out_enc, mixcol_out_dec, shiftrow_out_enc, shiftrow_out_dec"
+      "description": "9-round encryption bug - BUG2: Reduces encryption rounds from 10 to 9, weakening cryptographic security",
+      "related_signal": "bug_9_round_en"
     },
     {
       "id": "ASSET_012",
-      "description": "Key expansion ready signal - Indicates when keys are available; premature access could lead to using incomplete or corrupted keys.",
-      "related_signal": "keyexp_done"
+      "description": "Decryption disable bug - BUG3: Forces decryption mode to encryption, breaking decryption functionality",
+      "related_signal": "bug_without_dec_en"
     },
     {
       "id": "ASSET_013",
-      "description": "Operation completion signal - Could be used to time side-channel attacks or determine when sensitive data is available in memory.",
-      "related_signal": "finished"
+      "description": "Intermediate data exposure - Allows reading of intermediate encryption states, potentially revealing key information",
+      "related_signal": "bug_intermediate_en"
     },
     {
       "id": "ASSET_014",
-      "description": "Avalon bus interface signals - Could be exploited by malicious software to access protected key and data registers if access controls are insufficient.",
-      "related_signal": "avs_s1_writedata, avs_s1_address, avs_s1_write, avs_s1_read"
+      "description": "Output data corruption - Counter-based HT that corrupts output data when threshold is reached",
+      "related_signal": "ht_cnt_en, counter_HT"
     },
     {
       "id": "ASSET_015",
-      "description": "Control register - Contains critical configuration bits including key valid, interrupt enable, and operation mode flags.",
-      "related_signal": "ctrl_reg"
+      "description": "Read data reordering - Reorders output data reads, potentially causing data integrity issues",
+      "related_signal": "ht_wrong_order_en"
+    },
+    {
+      "id": "ASSET_016",
+      "description": "AXI read data bus - Multiplexed output that could leak sensitive data through various HT/bug mechanisms",
+      "related_signal": "axi_rdata"
+    },
+    {
+      "id": "ASSET_017",
+      "description": "Configuration registers - Control critical security parameters and operation modes",
+      "related_signal": "config_reg, frame_reg"
+    },
+    {
+      "id": "ASSET_018",
+      "description": "Reset control - Controls AES core reset, could be used to disrupt encryption operations",
+      "related_signal": "rst_n_to_AES_core"
     }
   ]
 }

@@ -1,0 +1,42 @@
+`timescale 1ns/10ps
+
+module v_dut_buggy
+    #(
+    parameter MIN_CYCLES = 3,
+    parameter MAX_CYCLES = 5
+    )
+    (
+    clk, 
+    rst_i, 
+    por_n_i, 
+    rst_por_aon_n
+    );
+
+    input clk;
+    input rst_i;
+    
+    input logic por_n_i;
+    input logic rst_por_aon_n; 
+
+
+    // assertion here
+    ///////////////  Assertion 1 /////////////////
+    assert property (@(posedge clk) disable iff (rst_i !== '0) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] por_n_i || rst_por_aon_n); 
+
+endmodule
+
+bind tb 
+    v_dut_buggy
+    #(
+    .MIN_CYCLES(MIN_CYCLES),
+    .MAX_CYCLES(MAX_CYCLES)
+    )
+    i_bind_dut_buggy
+    (
+    .clk           (clk           ),
+    .rst_i         (rst_i         ),
+    .por_n_i       (por_n_i       ),
+    .rst_por_aon_n (rst_por_aon_n )
+); 
+
+    

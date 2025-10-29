@@ -1,0 +1,28 @@
+```json
+{
+  "design_name": "traffic_controller",
+  "description": "A finite state machine traffic light controller with pedestrian crossing functionality. The controller cycles through RED -> GREEN -> YELLOW states. When the walk button is pressed, the system maintains RED state for 4 clock cycles to allow pedestrian crossing before resuming normal operation.",
+  "security_assets": [
+    {
+      "id": "ASSET_001",
+      "description": "Traffic signal state control - Critical for ensuring proper traffic light sequencing and pedestrian safety. Malicious manipulation could cause unsafe traffic conditions by skipping required states or displaying incorrect signals.",
+      "related_signal": "signal"
+    },
+    {
+      "id": "ASSET_002",
+      "description": "Walk counter control - Security-critical for maintaining pedestrian safety timing. Tampering could shorten pedestrian crossing time or cause indefinite red lights, creating traffic hazards.",
+      "related_signal": "walk_ctr"
+    },
+    {
+      "id": "ASSET_003",
+      "description": "Walk button input - Critical input that triggers pedestrian crossing mode. Spoofing or glitching this signal could disrupt normal traffic flow and create unsafe conditions.",
+      "related_signal": "walk"
+    },
+    {
+      "id": "ASSET_004",
+      "description": "State transition logic - Security-critical FSM that must maintain proper RED-YELLOW-GREEN sequencing. Bypassing YELLOW state when walk is pressed during GREEN could create dangerous traffic situations.",
+      "related_signal": "signal"
+    }
+  ]
+}
+```

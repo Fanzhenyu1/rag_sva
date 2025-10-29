@@ -1,0 +1,46 @@
+`timescale 1ns/10ps
+
+module v_dut_buggy
+    (
+    clk, 
+    rst, 
+    pass_mode,
+    dmi_req_ready,
+    dmi_req_valid,
+    pass_check, 
+    we_flag,
+    dmi_access 
+    );
+
+    input clk;
+    input rst;
+    
+    input pass_mode;
+    input dmi_req_ready;
+    input dmi_req_valid;
+    input pass_check; 
+    input we_flag;
+    input dmi_access;
+
+
+    // assertion here
+    ///////////////  Assertion 1 /////////////////
+    assert property (@(posedge clk) (pass_check == 1) |-> (dmi_req_valid == 0)); 
+
+endmodule
+
+bind tb 
+    v_dut_buggy
+    i_bind_dut_buggy
+    (
+    .clk           (clk          ),
+    .rst           (rst          ),
+    .pass_mode     (pass_mode    ),
+    .dmi_req_ready (dmi_req_ready),
+    .dmi_req_valid (dmi_req_valid),
+    .pass_check    (pass_check   ),
+    .we_flag       (we_flag      ),
+    .dmi_access    (dmi_access   )
+); 
+
+    
