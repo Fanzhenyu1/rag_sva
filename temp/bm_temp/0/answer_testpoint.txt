@@ -1,37 +1,42 @@
 ```json
 {
   "design_name": "lock_reg",
-  "description": "A lockable register module with controlled read/write access and lock protection mechanism. The register supports synchronous reset, conditional write operations based on lock status, and controlled read operations with output masking. When locked, the register preserves its current value and cannot be overwritten, providing data integrity protection.",
+  "description": "A register lock module with write protection functionality. The register data can only be written when the lock signal is inactive (0). When lock is active (1), write operations are blocked and the register maintains its current value. The module supports synchronous reset, clocked write operations, and controlled read access through read enable signal.",
   "test_points": [
     {
       "id": "TP_001",
-      "description": "Verify that when lock signal is asserted (high), the register data cannot be overwritten regardless of write enable and data input signals",
+      "description": "Verify that when lock signal is active (1), write operations are blocked and register data maintains its current value regardless of w_en and data_in signals",
       "related_signals": ["lock", "w_en", "data_in", "data"]
     },
     {
       "id": "TP_002",
-      "description": "Verify that when lock signal is deasserted (low) and write enable is active, the register correctly captures data input on clock edge",
+      "description": "Verify that when lock signal is inactive (0) and w_en is active, register data is updated with data_in value on clock edge",
       "related_signals": ["lock", "w_en", "data_in", "data", "clk"]
     },
     {
       "id": "TP_003",
-      "description": "Verify that read enable signal properly controls output data visibility - output should be register data when enabled, forced to zero when disabled",
-      "related_signals": ["r_en", "data_out", "data"]
+      "description": "Verify that synchronous reset properly clears the register data to 0 regardless of lock state",
+      "related_signals": ["rst", "data", "clk"]
     },
     {
       "id": "TP_004",
-      "description": "Verify synchronous reset functionality clears the register data regardless of lock state or write operations",
-      "related_signals": ["rst", "data", "clk", "lock", "w_en"]
+      "description": "Verify that read enable control (r_en) properly gates the data output - output should be data when r_en=1, and 0 when r_en=0",
+      "related_signals": ["r_en", "data_out", "data"]
     },
     {
       "id": "TP_005",
-      "description": "Verify lock signal timing requirements - ensure lock state is properly sampled and applied during write operations",
-      "related_signals": ["lock", "w_en", "clk", "data"]
+      "description": "Verify that write operations without write enable (w_en=0) do not modify register data regardless of lock state",
+      "related_signals": ["w_en", "data_in", "data", "lock", "clk"]
     },
     {
       "id": "TP_006",
-      "description": "Verify that concurrent read and write operations with lock transitions maintain data integrity and proper output behavior",
-      "related_signals": ["r_en", "w_en", "lock", "data_in", "data_out", "data"]
+      "description": "Verify lock signal timing requirements - ensure lock signal stability around clock edges to prevent glitch-based attacks",
+      "related_signals": ["lock", "clk", "data"]
+    },
+    {
+      "id": "TP_007",
+      "description": "Verify that the protected register data maintains integrity during power-on and normal operation under various lock/write enable scenarios",
+      "related_signals": ["data", "lock", "w_en", "rst"]
     }
   ]
 }

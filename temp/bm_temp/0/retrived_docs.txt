@@ -1,0 +1,1 @@
+A simple register lock module. The register (named data) cannot be modified when the lock signal is on

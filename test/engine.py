@@ -86,10 +86,11 @@ def my_chain(BM_ENABLE, design_name, RAG_ENABLE):
         # BUG2:It is caused by the incorrect setting of the number of rounds for encryption and decryption operations in the finite state machine. For the AES encryption and decryption algorithm with a key length of 128 bits, the finite state critical control data processing unit completes 10 rounds of round transformation. Here, the threshold of the counter is changed to 9 rounds, resulting in the operation ending prematurely.
         # BUG3:Because the mode selection port of the AES IP working mode configuration module is not correctly connected to the mode selection port of the control unit, when the AES IP performs encryption operations, the mode selection signal transmitted to the control unit is in decryption mode, which makes the encryption function of the AES IP unable to be correctly invoked.
         # '''
-        # docs_content = "A simple register lock module. The register (named data) cannot be modified when the lock signal is on"
-        docs_content = '''A simple traffic controller. Traffic changes from red -> green -> yellow -> red. If a pedestrian presses walk button, traffic should stop for 4 cycles.  "bug description": ["Traffic controller skips yellow before going red when walk button is pressed on green"]'''
+        docs_content = "A simple register lock module. The register (named data) cannot be modified when the lock signal is on"
+        # docs_content = '''A simple traffic controller. Traffic changes from red -> green -> yellow -> red. If a pedestrian presses walk button, traffic should stop for 4 cycles.  "bug description": ["Traffic controller skips yellow before going red when walk button is pressed on green"]'''
     pass
     print(f"Retrieved documents:\n{docs_content}\n")
+    answer_to_temp(docs_content, temp_path, "retrived_docs.txt")
 
     #### LLM_chain ####
     # LLM call for asset identify
