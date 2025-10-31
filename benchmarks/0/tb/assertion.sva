@@ -1,4 +1,3 @@
     ///////////////  Assertion 1 /////////////////
 
-    assert property (@(posedge clk) ((data ^ $past(data))) |-> ($past(lock) == 0))
-                                else $display("GOLDEN: FAIL, time=%4d, data=%d, data_d=%d, lock=%d", $time, data, $past(data), $past(lock)); 
+    assert property (@(posedge clk) ((data ^ $past(data))) |-> ($past(lock) == 0));

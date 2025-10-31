@@ -1,5 +1,7 @@
 import os
 import openai
+import json
+from pathlib import Path
 from dotenv import load_dotenv
 from ragas import evaluate
 from datasets import Dataset
@@ -39,17 +41,48 @@ def create_sample(question, answer, contexts, ground_truth):
 
     return sample
 
+def load_info_json(path: str = r"e:\mylife_yanjiu\project\rag_sva\benchmarks\info.json") -> dict:
+    p = Path(path)
+    with p.open("r", encoding="utf-8") as f:
+        return json.load(f)
+
+def get_design_description(info_or_path, design_id="0") -> str:
+    """
+    info_or_path: 已解析的 dict 或 info.json 的路径
+    design_id: design 的 key（字符串或数字），默认 "0"
+    返回 design description（字符串），找不到则抛 KeyError
+    """
+    if isinstance(info_or_path, (str, Path)):
+        info = load_info_json(str(info_or_path))
+    else:
+        info = info_or_path
+
+    key = str(design_id)
+    try:
+        return str(info[key]["design description"])
+    except KeyError as e:
+        raise KeyError(f"Missing key in info.json: {e}")
+
 def main():
 
-    evaluation_samples = []
+    info = load_info_json()
+    desc = get_design_description(info, design_name)
+    
     #### LLM input ####
     llm_input_query = '''
-    * You are now a digital IC security verification engineer proficient in writing SV and SVA, capable of thoroughly analyzing RTL designs, converting test points into verifiable properties and assertions, with a foundational understanding of hardware security.
-    * You need to generate security-related SVA assertions based on the provided RTL source files, combined with RTL code.
-    RTL design: a register lock module.
+    You need to generate security-related SVA assertions for a RTL design.
+    {$DESIGN_DESCRIPTION}
+    The RTL code is provided as follows:
+    ```
+    {$RTL_CODE}
+    ```
     '''
+    RTL_PATH = f"e:/mylife_yanjiu/project/rag_sva/benchmarks/{design_name}/src/dut.sv"
+    with open(RTL_PATH, 'r', encoding='utf-8') as f:
+        rtl_code = f.read()
+    query_1 = llm_input_query.replace("{$DESIGN_DESCRIPTION}", desc).replace("{$RTL_CODE}", rtl_code)
     query_list = []
-    query_list.append(llm_input_query)
+    query_list.append(query_1)
 
     #### LLM Output result ####
     llm_out_file = f"e:/mylife_yanjiu/project/rag_sva/temp/bm_temp/{design_name}/answer_finial.txt"
@@ -79,13 +112,13 @@ def main():
         'contexts': retrived_list,
         'ground_truth': golden_list
     }
-    test_data = {
-        "question": ["我们公司的总部在哪里？"],
-        "answer": ["我们公司的总部在北京"],
-        "contexts": [["根据公司2024年财报显示，我们公司的总部位于中国北京。"]],
-        "ground_truth": ["公司的总部在北京"]
-    }
-    dataset = Dataset.from_dict(test_data)
+    # test_data = {
+    #     "question": ["我们公司的总部在哪里？"],
+    #     "answer": ["我们公司的总部在北京"],
+    #     "contexts": [["根据公司2024年财报显示，我们公司的总部位于中国北京。"]],
+    #     "ground_truth": ["公司的总部在北京"]
+    # }
+    dataset = Dataset.from_dict(data_dict)
 
     end_to_end_results = evaluate(
         dataset,

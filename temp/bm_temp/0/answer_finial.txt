@@ -1,27 +1,22 @@
-// TP_001:
+The generated security related SVA are as follows:
+
 property lock_protection; @(posedge clk) disable iff (rst) (lock && w_en) |=> (data == $past(data)); endproperty
 assert property (lock_protection);
 
-// TP_002:
 property write_enabled; @(posedge clk) disable iff (rst) (!lock && w_en) |=> (data == $past(data_in)); endproperty
 assert property (write_enabled);
 
-// TP_003:
 property reset_check; @(posedge clk) (rst) |=> (data == 1'b0); endproperty
 assert property (reset_check);
 
-// TP_004:
 property read_control; @(*) (r_en) -> (data_out == data) and (!r_en) -> (data_out == 1'b0); endproperty
 assert property (read_control);
 
-// TP_005:
 property no_write_enable; @(posedge clk) disable iff (rst) (!w_en) |=> (data == $past(data)); endproperty
 assert property (no_write_enable);
 
-// TP_006:
 property lock_stability; @(posedge clk) disable iff (rst) $stable(lock) throughout [0:$]; endproperty
 assert property (lock_stability);
 
-// TP_007:
 property data_integrity; @(posedge clk) disable iff (rst) (lock || !w_en) |=> (data == $past(data)); endproperty
 assert property (data_integrity);
