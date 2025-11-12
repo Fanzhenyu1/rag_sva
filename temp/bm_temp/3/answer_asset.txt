@@ -1,0 +1,20 @@
+```json
+{
+  "design_name": "ariane_testharness",
+  "description": "Access control signal transformation module that rearranges access control values from a flattened input array to a structured 2D output array, with conditional OR operations between peripheral indices",
+  "security_vulnerability": [
+    {
+      "id": "VUNL_001",
+      "description": "Access control mechanism integrity violation - peripheral index 1 (j==1) incorrectly ORs its bits with peripheral index 0 (acc_ctrl[0*BIT_WIDTH+i]), potentially bypassing intended access restrictions and violating security policy that ROM data should never be read by Core1",
+      "related_signal": "acc_ctrl_c",
+      "source": "INTEGRITY_ACCESS_CONTROL_MECHANISM - The second rule will fail because access control only allows the access when bit [0] is 0 even though it should be allowed"
+    },
+    {
+      "id": "VUNL_002",
+      "description": "Improper access control transformation logic creates unintended privilege escalation path where peripheral 1 inherits access rights from peripheral 0, violating the principle of least privilege and integrity of access control mechanisms",
+      "related_signal": "acc_ctrl",
+      "source": "INTEGRITY_ACCESS_CONTROL_MECHANISM - Based on the security goal we fill in the template from the example signals, obtaining the rule below"
+    }
+  ]
+}
+```

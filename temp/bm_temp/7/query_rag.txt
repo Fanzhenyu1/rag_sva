@@ -1,0 +1,3 @@
+```txt
+A simple register lock module that implements a reset-initialized memory array. The module contains multiple words of configurable bit width that are all reset to zero when a reset signal is asserted. The registers maintain their values during normal operation and only change during reset conditions. Retrieve possible threat models, or vulnerability it may have.
+```

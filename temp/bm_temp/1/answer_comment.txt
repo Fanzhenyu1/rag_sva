@@ -1,0 +1,52 @@
+```json
+{
+  "traffic_controller": {
+    "module_name": "traffic_controller",
+    "comment_info": "Traffic light controller with pedestrian crossing functionality. Implements a finite state machine (FSM) that controls traffic light signals (RED, YELLOW, GREEN) and manages pedestrian walk requests. The controller maintains RED signal when pedestrians are crossing and transitions through normal traffic light cycles when no pedestrian requests are active.",
+    "comment_signal": [
+      {
+        "signal_name": "walk",
+        "signal_description": "Pedestrian walk request input signal. When asserted high, indicates a pedestrian wants to cross, causing the controller to enter or maintain RED state."
+      },
+      {
+        "signal_name": "signal",
+        "signal_description": "2-bit register output representing the current traffic light state. Encoded as: 0=RED, 1=GREEN, 2=YELLOW. Controls the actual traffic light display."
+      },
+      {
+        "signal_name": "walk_ctr",
+        "signal_description": "3-bit counter that tracks the remaining time for pedestrian crossing. Counts down from WALK_TIME value when walk request is active and signal is RED."
+      },
+      {
+        "signal_name": "clk",
+        "signal_description": "System clock input for synchronous operation of the FSM and counter."
+      },
+      {
+        "signal_name": "rst",
+        "signal_description": "Active-high reset signal. When asserted, initializes the traffic light to RED state and clears the walk counter."
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "Traffic Light FSM",
+        "logic_description": "Three-state finite state machine controlling traffic light transitions: RED → GREEN → YELLOW → RED. The FSM prioritizes pedestrian safety by remaining in RED when walk requests are active or when the walk counter is non-zero.",
+        "related_signals": ["signal", "walk", "walk_ctr", "clk", "rst"]
+      },
+      {
+        "logic_name": "Walk Request Handling",
+        "logic_description": "When walk input is asserted, the controller immediately transitions to or remains in RED state and loads the walk counter with WALK_TIME value. The counter decrements only during RED state, ensuring minimum crossing time for pedestrians.",
+        "related_signals": ["walk", "walk_ctr", "signal"]
+      },
+      {
+        "logic_name": "Walk Counter Management",
+        "logic_description": "3-bit down-counter that maintains RED state for a fixed duration (WALK_TIME cycles) after a walk request. Counter only decrements during RED state and prevents state transitions to GREEN until crossing time expires.",
+        "related_signals": ["walk_ctr", "walk", "signal", "clk", "rst"]
+      },
+      {
+        "logic_name": "State Transition Timing",
+        "logic_description": "All state transitions and counter operations occur on positive clock edges with 1ns delay. Reset synchronously initializes the system to RED state with cleared counter.",
+        "related_signals": ["clk", "rst", "signal", "walk_ctr"]
+      }
+    ]
+  }
+}
+```

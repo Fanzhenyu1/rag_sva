@@ -1,0 +1,14 @@
+```json
+{
+  "design_name": "lock_reg",
+  "description": "A lockable register module with read/write control and lock protection mechanism. The register can be written only when not locked, and read through read enable control. Provides data protection by preventing writes when locked and controlling read access.",
+  "security_vunlerability": [
+    {
+      "id": "VUNL_001",
+      "description": "Improper lock protection implementation: When the lock signal is locked, the register can be written by the attaker.",
+      "related_signal": "lock",
+      "source": "CWE 1231: Improper Implementation of Lock Protection Registers"
+    }
+  ]
+}
+```

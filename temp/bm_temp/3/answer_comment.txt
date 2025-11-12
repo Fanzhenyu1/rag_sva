@@ -1,0 +1,30 @@
+```json
+{
+  "ariane_testharness": {
+    "module_name": "ariane_testharness",
+    "comment_info": "Access control signal transformation module that rearranges and processes access control values from a flattened input array to a structured output array with conditional OR operations",
+    "comment_signal": [
+      {
+        "signal_name": "acc_ctrl",
+        "signal_description": "Input access control values in flattened format - [BIT_WIDTH*NB_PERIPHERALS-1:0] array containing all control bits for all peripherals"
+      },
+      {
+        "signal_name": "acc_ctrl_c",
+        "signal_description": "Output access control values in structured 2D format - [BIT_WIDTH-1:0][NB_PERIPHERALS-1:0] array organized by bit position then peripheral"
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "bit_remapping_with_conditional_or",
+        "logic_description": "Transforms input bit arrangement and applies conditional OR operation where peripheral index 1 gets OR-ed with peripheral index 0 bits",
+        "related_signals": ["acc_ctrl", "acc_ctrl_c"]
+      },
+      {
+        "logic_name": "generate_loop_processing",
+        "logic_description": "Uses nested generate loops to process each bit position and peripheral combination, implementing the transformation logic",
+        "related_signals": ["acc_ctrl", "acc_ctrl_c"]
+      }
+    ]
+  }
+}
+```

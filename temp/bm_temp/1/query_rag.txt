@@ -1,0 +1,3 @@
+```txt
+A traffic controller module. Traffic changes from red -> green -> yellow -> red, retrieve possible threat models, or vulnerability it may have.
+```

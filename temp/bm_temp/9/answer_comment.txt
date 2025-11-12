@@ -1,0 +1,68 @@
+```json
+{
+  "rstmgr_por": {
+    "module_name": "rstmgr_por",
+    "comment_info": "Power-On Reset (POR) manager module with configurable filtering and stretching capabilities. Provides a controlled reset signal with scan mode support for testability. The module filters the incoming POR signal through multiple stages, waits for stability, then stretches the reset for a configurable duration before releasing.",
+    "comment_signal": [
+      {
+        "signal_name": "clk_i",
+        "signal_description": "Clock input for the reset management logic"
+      },
+      {
+        "signal_name": "rst_ni",
+        "signal_description": "Asynchronous power-on reset input (active low)"
+      },
+      {
+        "signal_name": "scan_rst_ni",
+        "signal_description": "Scan reset input for test mode (active low)"
+      },
+      {
+        "signal_name": "scanmode_i",
+        "signal_description": "Scan mode control signal - when asserted, bypasses normal reset logic and uses scan reset"
+      },
+      {
+        "signal_name": "rst_no",
+        "signal_description": "Managed reset output (active low) - filtered and stretched version of input reset"
+      },
+      {
+        "signal_name": "rst_filter_n",
+        "signal_description": "Filter chain register array - implements multi-stage filtering of the input reset signal"
+      },
+      {
+        "signal_name": "rst_stable",
+        "signal_description": "Stability indicator - asserted when all filter stages agree the reset is stable"
+      },
+      {
+        "signal_name": "cnt",
+        "signal_description": "Stretch counter - counts clock cycles during reset stretching phase"
+      },
+      {
+        "signal_name": "rst_root_n",
+        "signal_description": "Root reset after scan mux - main reset signal used internally after scan mode selection"
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "Reset Filtering",
+        "logic_description": "Implements a multi-stage shift register filter that requires the reset signal to be stable for FilterStages clock cycles before considering it stable. This debounces the POR input.",
+        "related_signals": ["rst_filter_n", "rst_root_n", "clk_i", "rst_stable"]
+      },
+      {
+        "logic_name": "Reset Stretching",
+        "logic_description": "After the reset is deemed stable, the module stretches the reset assertion for StretchCount clock cycles before releasing the output reset. This ensures proper initialization time for downstream logic.",
+        "related_signals": ["cnt", "rst_stable", "rst_no", "cnt_en"]
+      },
+      {
+        "logic_name": "Scan Mode Bypass",
+        "logic_description": "Provides test mode functionality where scan_rst_ni bypasses the normal filtering and stretching logic when scanmode_i is asserted. Uses clock muxes at multiple points in the reset chain.",
+        "related_signals": ["scanmode_i", "scan_rst_ni", "u_rst_root_mux", "u_rst_clean_mux", "u_rst_out_mux"]
+      },
+      {
+        "logic_name": "Stability Voting",
+        "logic_description": "Uses an AND reduction of all filter stages (rst_stable = &rst_filter_n) to determine when the reset input has stabilized. Only when all stages agree is the counter enabled.",
+        "related_signals": ["rst_filter_n", "rst_stable", "cnt_en"]
+      }
+    ]
+  }
+}
+```

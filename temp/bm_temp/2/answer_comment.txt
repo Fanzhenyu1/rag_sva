@@ -1,0 +1,97 @@
+```json
+{
+  "dmi_jtag": {
+    "module_name": "dmi_jtag",
+    "comment_info": "JTAG to DMI (Debug Module Interface) bridge module that translates JTAG operations into DMI transactions. Provides secure access to debug module through password protection and handles read/write operations to the debug module.",
+    "comment_signal": [
+      {
+        "signal_name": "clk_i",
+        "signal_description": "DMI clock input for synchronous operations"
+      },
+      {
+        "signal_name": "rst_ni",
+        "signal_description": "Asynchronous active-low reset signal"
+      },
+      {
+        "signal_name": "jtag_key",
+        "signal_description": "32-bit password/key for JTAG authentication - enables access protection"
+      },
+      {
+        "signal_name": "dmi_rst_no",
+        "signal_description": "Hard reset output to debug module"
+      },
+      {
+        "signal_name": "dmi_req_o",
+        "signal_description": "DMI request output to debug module - contains op, address, and data fields"
+      },
+      {
+        "signal_name": "dmi_req_valid_o",
+        "signal_description": "Indicates valid DMI request on output"
+      },
+      {
+        "signal_name": "dmi_req_ready_i",
+        "signal_description": "Debug module ready to accept DMI request"
+      },
+      {
+        "signal_name": "dmi_resp_i",
+        "signal_description": "DMI response input from debug module"
+      },
+      {
+        "signal_name": "dmi_resp_ready_o",
+        "signal_description": "Ready signal for DMI response"
+      },
+      {
+        "signal_name": "dmi_resp_valid_i",
+        "signal_description": "Valid signal for DMI response"
+      },
+      {
+        "signal_name": "tck_i, tms_i, trst_ni, td_i",
+        "signal_description": "Standard JTAG interface signals - Test Clock, Test Mode Select, Test Reset, Test Data Input"
+      },
+      {
+        "signal_name": "td_o, tdo_oe_o",
+        "signal_description": "JTAG Test Data Output and output enable signals"
+      },
+      {
+        "signal_name": "umode_o",
+        "signal_description": "Sets processor to machine mode for debug operations"
+      },
+      {
+        "signal_name": "state_q/state_d",
+        "signal_description": "State machine registers for controlling DMI transaction flow"
+      },
+      {
+        "signal_name": "address_q/address_d, data_q/data_d",
+        "signal_description": "Registers for storing DMI address and data during transactions"
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "Password Authentication FSM",
+        "logic_description": "State machine that handles password checking via DTM_PASS operations. Access to debug functions is granted only after successful password verification.",
+        "related_signals": ["jtag_key", "dmi.data", "pass_chk", "state_q", "data_d"]
+      },
+      {
+        "logic_name": "DMI Read Operation Flow",
+        "logic_description": "Handles DMI read transactions: Idle → Read → WaitReadValid → Idle. Issues read request and waits for response data.",
+        "related_signals": ["state_q", "dmi_req_valid", "dmi_req_ready_i", "dmi_resp_valid_i", "dmi_resp_i", "data_d"]
+      },
+      {
+        "logic_name": "DMI Write Operation Flow",
+        "logic_description": "Handles DMI write transactions: Idle → Write → Idle. Issues write request and completes when accepted.",
+        "related_signals": ["state_q", "dmi_req_valid", "dmi_req_ready_i", "address_d", "data_d"]
+      },
+      {
+        "logic_name": "Error Handling",
+        "logic_description": "Manages DMI error states including busy conditions, operation failures, and reserved errors. Prevents sticky errors from persisting.",
+        "related_signals": ["error_q", "error_d", "dmi_access", "update_dr"]
+      },
+      {
+        "logic_name": "JTAG-DMI Protocol Translation",
+        "logic_description": "Translates JTAG DR (Data Register) accesses into DMI protocol transactions, mapping JTAG operations to DMI read/write/pass commands.",
+        "related_signals": ["dmi.address", "dmi.data", "dmi.op", "dmi_access", "update_dr"]
+      }
+    ]
+  }
+}
+```

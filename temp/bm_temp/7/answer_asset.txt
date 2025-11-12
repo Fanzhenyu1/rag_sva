@@ -1,0 +1,26 @@
+```json
+{
+  "design_name": "register_lock",
+  "description": "A simple register lock module that implements a reset-initialized memory array. The module contains multiple words of configurable bit width that are all reset to zero when a reset signal is asserted. The registers maintain their values during normal operation and only change during reset conditions. The module appears to implement a lock mechanism where registers are locked (non-writable) during normal operation.",
+  "security_vulnerability": [
+    {
+      "id": "VUNL_001",
+      "description": "The register lock mechanism lacks proper protection during power state transitions. The lock bit (implied by register values) is cleared on reset, allowing malicious modification of configuration registers after power state transitions. Critical registers should remain protected when returning to operation after power state transitions.",
+      "related_signal": "rst_i",
+      "source": "Critical registers which should not be modifiable after configuration, should be protected by a lock mechanism. The lock bit should be set during normal operation, i.e. after secure boot is done."
+    },
+    {
+      "id": "VUNL_002",
+      "description": "Improper clearing of the lock bit after reset enables malicious software to modify configuration registers. The current design clears all register values (including lock protection) on reset, violating the security requirement that lock bits must remain set after power state transitions.",
+      "related_signal": "reglk_mem",
+      "source": "Improper clearing of the lock bit after power state transitions enables malicious software to modify configuration registers."
+    },
+    {
+      "id": "VUNL_003",
+      "description": "Missing persistent lock protection mechanism. The design lacks a proper lock bit that remains set across power state transitions. All registers become programmable after reset, making system configuration changeable by unauthorized software.",
+      "related_signal": "reglk_mem",
+      "source": "Some of the protected registers or lock bits become programmable after power state transitions (e.g., Entry and wake from low power sleep modes) causing the system configuration to be changeable."
+    }
+  ]
+}
+```

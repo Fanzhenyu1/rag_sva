@@ -1,0 +1,42 @@
+```json
+{
+  "register_lock": {
+    "module_name": "register_lock",
+    "comment_info": "A simple register lock module that implements a reset-initialized memory array. The module contains multiple words of configurable bit width that are all reset to zero when a reset signal is asserted. The registers maintain their values during normal operation and only change during reset conditions.",
+    "comment_signal": [
+      {
+        "signal_name": "clk_i",
+        "signal_description": "Clock input signal - triggers all synchronous operations on positive edges"
+      },
+      {
+        "signal_name": "rst_i",
+        "signal_description": "Active-high reset input signal - when asserted, clears all register words to zero"
+      },
+      {
+        "signal_name": "reglk_mem",
+        "signal_description": "Output register memory array with configurable dimensions (NO_WORDS × BIT_WIDTH) - stores the locked register values"
+      },
+      {
+        "signal_name": "NO_WORDS",
+        "signal_description": "Parameter defining the number of words in the register memory array (default: 3)"
+      },
+      {
+        "signal_name": "BIT_WIDTH",
+        "signal_description": "Parameter defining the bit width of each word in the register memory array (default: 2)"
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "Reset Initialization",
+        "logic_description": "On every positive clock edge, if reset (rst_i) is asserted, all words in the reglk_mem array are synchronously cleared to zero using a for-loop. This ensures all registers start from a known state after reset.",
+        "related_signals": ["clk_i", "rst_i", "reglk_mem"]
+      },
+      {
+        "logic_name": "Register Locking Behavior",
+        "logic_description": "During normal operation (when rst_i is deasserted), the register values remain unchanged as there are no write operations defined. This creates a 'locked' behavior where registers only change during reset conditions.",
+        "related_signals": ["reglk_mem", "rst_i"]
+      }
+    ]
+  }
+}
+```

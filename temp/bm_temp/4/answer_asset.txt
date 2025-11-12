@@ -1,0 +1,38 @@
+```json
+{
+  "design_name": "AES Wrapper with AES-192 Stream Encryption/Decryption",
+  "description": "This design implements an AES-192 encryption system with memory-mapped interface. The top-level wrapper (aes_wrapper) provides external bus access to control registers and data I/O, while the aes_192_sed module implements stream cipher functionality by XORing AES core output with input data. The system supports 192-bit key encryption and provides status monitoring through control signals.",
+  "security_vulnerability": [
+    {
+      "id": "VUNL_001",
+      "description": "Insufficient access control protection for memory-mapped registers. The external_bus_io interface allows reading of internal AES state including intermediate states (p_c registers) and control signals without proper authentication, potentially exposing sensitive encryption data to untrusted processors.",
+      "related_signal": "external_bus_io.addr, external_bus_io.rdata, p_c, inter_state",
+      "source": "The threat is from malicious software running on one of the untrusted processors. It will attempt to read and write all memory mapped registers in the aes address space hoping the access control policy is insufficient. If any access succeeds, information about the key may be obtained."
+    },
+    {
+      "id": "VUNL_002",
+      "description": "Intermediate state exposure through debug interface. The inter_state signal from the AES core is accessible and could be read through the JTAG debug interface, potentially leaking information about the encryption process and key material.",
+      "related_signal": "inter_state",
+      "source": "The JTAG port of the SoC is connected to the debug module in the Hardware Root of Trust, allowing an authenticated user to read data from all modules on the tbus interconnect."
+    },
+    {
+      "id": "VUNL_003",
+      "description": "Potential timing side-channel vulnerability. The design uses AES-192 which has different timing characteristics compared to other key sizes (128/256-bit), and the ct_valid signal clearly indicates when encryption completes, enabling timing analysis attacks by untrusted cores.",
+      "related_signal": "ct_valid, start",
+      "source": "The aes encryption engine uses two different length encryption keys and the time it takes to encrypt plaintext is different in the two cases. The untrusted cores core{0-N} may write data to sram and request it to be encrypted. When encryption is done, an interrupt is sent to the requesting core."
+    },
+    {
+      "id": "VUNL_004",
+      "description": "Lack of output isolation until encryption completion. The design may expose partial ciphertext data before all encryption rounds are completed, violating the requirement that cipher text must not be output until all rounds are completed.",
+      "related_signal": "out, out_valid",
+      "source": "The cipher text or plain text must not be output until all rounds are completed."
+    },
+    {
+      "id": "VUNL_005",
+      "description": "Inadequate protection for key material. The 192-bit key input (key_in) is directly connected without apparent obfuscation or protection mechanisms, making it vulnerable to bus snooping attacks through the external interface.",
+      "related_signal": "key_in, key",
+      "source": "If any access succeeds, information about the key may be obtained."
+    }
+  ]
+}
+```

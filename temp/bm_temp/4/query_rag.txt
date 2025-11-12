@@ -1,0 +1,3 @@
+```txt
+Top-level wrapper module that provides a memory-mapped interface for an AES-192 encryption core. It handles external bus communication and coordinates the AES encryption process with input/output data management. Retrieve possible threat models, or vulnerability it may have.
+```

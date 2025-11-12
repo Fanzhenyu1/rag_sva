@@ -1,0 +1,3 @@
+```txt
+Power-On Reset (POR) management module with configurable filtering and stretching capabilities. Provides a clean, stretched reset signal that can be controlled via scan mode for test purposes. Retrieve possible threat models, or vulnerability it may have.
+```

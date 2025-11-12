@@ -1,0 +1,14 @@
+```json
+{
+  "design_name": "register_lock",
+  "description": "A simple register lock module that implements a reset-initialized memory array. The module contains multiple words of configurable bit width that are all reset to zero when a reset signal is asserted. The registers maintain their values during normal operation and only change during reset conditions. The module appears to implement a lock mechanism where registers are locked (non-writable) during normal operation.",
+  "security_vulnerability": [
+    {
+      "id": "VUNL_001",
+      "description": "The lock register has incorrect default values",
+      "related_signal": "rst_i",
+      "source": ""
+    }
+  ]
+}
+```

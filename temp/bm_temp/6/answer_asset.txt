@@ -1,0 +1,26 @@
+```json
+{
+  "design_name": "csr_regfile",
+  "description": "Control and Status Register (CSR) register file module that handles CSR operations, privilege level checking, and exception return mechanisms. The module implements RISC-V CSR operations including read, write, set, clear, and return from exception instructions (MRET/SRET/DRET). It includes privilege level verification to ensure secure access to protected CSRs.",
+  "security_vulnerability": [
+    {
+      "id": "VUNL_001",
+      "description": "The privilege check logic has a bypass for CSR_MEPC register that allows access regardless of privilege level matching. This creates a security vulnerability where unauthorized privilege levels could access machine exception program counter register, potentially leaking sensitive execution flow information or allowing manipulation of exception return addresses.",
+      "related_signal": "csr_addr, priv_lvl_o, priv_lvl, privilege_violation",
+      "source": "The SoC has status registers that aid in debug and development that should not be readable after the device is manufactured. Hardware access control checks that the bus master doing the read is valid before the register value is driven to the output."
+    },
+    {
+      "id": "VUNL_002",
+      "description": "Debug mode CSR access control only checks address range (0x7B0-0x7BF) but lacks verification of authenticated debug mode status. This could allow unauthorized access to debug CSRs even when not in proper authenticated debug mode, potentially exposing security-critical debug information.",
+      "related_signal": "csr_addr_i, debug_mode_q, privilege_violation",
+      "source": "Assume that security-critical settings and identifiers are available in a range of registers bounded by PRIV_END_ADDR:PRIV_START_ADDR in the CSR module of the tmcu. These values are locked or unlocked (e.g. in an authenticated debug mode) based on the tmcu.csr.lock_bit register in the same module."
+    },
+    {
+      "id": "VUNL_003",
+      "description": "The privilege check uses bitwise AND operation for privilege level comparison which may not properly enforce hierarchical privilege model. The condition '(priv_lvl_o & priv_lvl) != priv_lvl' could allow lower privilege levels to access higher privilege CSRs if not properly implemented, violating the principle of least privilege.",
+      "related_signal": "priv_lvl_o, priv_lvl, privilege_violation",
+      "source": "All the registers in the aes block are protected by different access policies. For example, the aes.csr.key register is readable and writable by the tmcu only. The aes.csr.status register is readable by a specific master when the aes.csr.control registers is enabled for that specific master."
+    }
+  ]
+}
+```

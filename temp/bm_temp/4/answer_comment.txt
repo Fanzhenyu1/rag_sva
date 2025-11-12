@@ -1,0 +1,84 @@
+```json
+{
+  "aes_wrapper": {
+    "module_name": "AES Wrapper",
+    "comment_info": "Top-level wrapper module that provides a memory-mapped interface for an AES-192 encryption core with ciphertext XOR functionality. It serves as a bridge between an external bus interface and the AES encryption engine.",
+    "comment_signal": [
+      {
+        "signal_name": "external_bus_io",
+        "signal_description": "External bus interface with address, read data, write data, and control signals for memory-mapped register access"
+      },
+      {
+        "signal_name": "key_in",
+        "signal_description": "192-bit input key for AES-192 encryption algorithm"
+      },
+      {
+        "signal_name": "start",
+        "signal_description": "Control signal to initiate AES encryption operation"
+      },
+      {
+        "signal_name": "ct",
+        "signal_description": "128-bit ciphertext output from AES encryption"
+      },
+      {
+        "signal_name": "ct_valid",
+        "signal_description": "Status flag indicating when ciphertext output is valid"
+      },
+      {
+        "signal_name": "p_c",
+        "signal_description": "Array of plaintext/ciphertext registers for data input/output"
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "Memory Map Read Interface",
+        "logic_description": "Combinational read logic that maps internal registers to external address space. Address decoding provides access to control status and data registers.",
+        "related_signals": ["external_bus_io.addr", "external_bus_io.rdata", "start", "ct_valid", "ct", "p_c"]
+      },
+      {
+        "logic_name": "AES Core Integration",
+        "logic_description": "Instantiates and connects to the AES-192 encryption core with proper signal mapping and timing synchronization.",
+        "related_signals": ["clk_i", "rst_ni", "start", "ct", "ct_valid", "key_in"]
+      }
+    ]
+  },
+  "aes_192_sed": {
+    "module_name": "AES-192 with Stream Encryption/Decryption",
+    "comment_info": "AES-192 encryption core wrapper that implements stream cipher functionality by XORing the AES output with plaintext/ciphertext input. Supports both encryption and decryption modes.",
+    "comment_signal": [
+      {
+        "signal_name": "p_c_text",
+        "signal_description": "128-bit plaintext (for encryption) or ciphertext (for decryption) input for XOR operation"
+      },
+      {
+        "signal_name": "out_temp",
+        "signal_description": "Intermediate AES encryption output before XOR operation"
+      },
+      {
+        "signal_name": "out",
+        "signal_description": "Final output after XOR operation with p_c_text (ciphertext for encryption, plaintext for decryption)"
+      },
+      {
+        "signal_name": "out_valid",
+        "signal_description": "Valid signal indicating when the output data is ready"
+      },
+      {
+        "signal_name": "inter_state",
+        "signal_description": "128-bit intermediate state output from AES core for debugging or chaining operations"
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "Stream Cipher XOR Operation",
+        "logic_description": "Implements stream cipher functionality by performing bitwise XOR between AES core output and input data, enabling both encryption and decryption modes.",
+        "related_signals": ["out_temp", "p_c_text", "out"]
+      },
+      {
+        "logic_name": "AES Core Integration",
+        "logic_description": "Wraps the base AES-192 encryption core and maintains timing synchronization for all output signals.",
+        "related_signals": ["clk", "start", "out_valid", "inter_state"]
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,14 @@
+```json
+{
+  "design_name": "dmi_jtag",
+  "description": "JTAG to DMI (Debug Module Interface) bridge module that converts JTAG protocol operations into DMI transactions. Provides secure access to debug module through password protection and handles read/write operations to the debug module. The module implements authentication mechanism to control access to debug functionality.",
+  "security_vulnerability": [
+    {
+      "id": "VUNL_001",
+      "description": "The password protection function of JTAG has failed.",
+      "related_signal": "td_o, dmi_resp_i.data",
+      "source": "The password protection function of JTAG has failed. Attackers can bypass the password protection mechanism of JTAG through a bug implemented in hardware."
+    }
+  ]
+}
+```

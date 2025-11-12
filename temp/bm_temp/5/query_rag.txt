@@ -1,0 +1,3 @@
+```txt
+AES encryption wrapper module that interfaces with an external bus system. The module serves as an interface between external bus communications and internal AES cryptographic operations, handling data formatting and control signal management. Retrieve possible threat models, or vulnerability it may have.
+```

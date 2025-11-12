@@ -1,27 +1,25 @@
 ```json
 {
   "design_name": "traffic_controller",
-  "description": "A finite state machine traffic light controller with pedestrian crossing functionality. The controller cycles through RED -> GREEN -> YELLOW states. When the walk button is pressed, the system maintains RED state for 4 clock cycles to allow pedestrian crossing before resuming normal operation.",
-  "security_assets": [
+  "description": "A traffic light controller with pedestrian crossing functionality that implements a finite state machine controlling traffic light transitions (RED → GREEN → YELLOW → RED). The design prioritizes pedestrian safety by maintaining RED state when walk requests are active and includes a counter to ensure minimum crossing time for pedestrians.",
+  "security_vulnerability": [
     {
-      "id": "ASSET_001",
-      "description": "Traffic signal state control - Critical for ensuring proper traffic light sequencing and pedestrian safety. Malicious manipulation could cause unsafe traffic conditions by skipping required states or displaying incorrect signals.",
-      "related_signal": "signal"
+      "id": "VUNL_001",
+      "description": "Traffic controller can skip YELLOW state before going to RED when walk button is pressed during GREEN state, violating proper traffic light sequencing and potentially creating unsafe traffic conditions",
+      "related_signal": "signal",
+      "source": "Knowledge Base: Bug description - Traffic controller can skip yellow before going red when walk button is pressed on green"
     },
     {
-      "id": "ASSET_002",
-      "description": "Walk counter control - Security-critical for maintaining pedestrian safety timing. Tampering could shorten pedestrian crossing time or cause indefinite red lights, creating traffic hazards.",
-      "related_signal": "walk_ctr"
+      "id": "VUNL_002",
+      "description": "Improper state transition management in FSM allows bypassing of critical safety states (YELLOW warning state), which could lead to traffic accidents and pedestrian safety hazards",
+      "related_signal": "signal, walk",
+      "source": "Knowledge Base: Bug description combined with CWE 1323 principles - Improper Management of Sensitive Trace Data and safety-critical state transitions"
     },
     {
-      "id": "ASSET_003",
-      "description": "Walk button input - Critical input that triggers pedestrian crossing mode. Spoofing or glitching this signal could disrupt normal traffic flow and create unsafe conditions.",
-      "related_signal": "walk"
-    },
-    {
-      "id": "ASSET_004",
-      "description": "State transition logic - Security-critical FSM that must maintain proper RED-YELLOW-GREEN sequencing. Bypassing YELLOW state when walk is pressed during GREEN could create dangerous traffic situations.",
-      "related_signal": "signal"
+      "id": "VUNL_003",
+      "description": "Direct transition from GREEN to RED without YELLOW intermediate state violates standard traffic light safety protocols and could cause abrupt stopping scenarios",
+      "related_signal": "signal, walk",
+      "source": "Knowledge Base: Bug description - Traffic controller can skip yellow before going red when walk button is pressed on green"
     }
   ]
 }

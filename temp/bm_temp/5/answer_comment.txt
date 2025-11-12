@@ -1,0 +1,92 @@
+```json
+{
+  "aes_wrapper": {
+    "module_name": "AES Wrapper",
+    "comment_info": "AES encryption wrapper module that interfaces with an external bus system. The module takes in a 192-bit key and processes 128-bit plaintext/ciphertext data through AES encryption operations. It provides a bridge between the external bus interface and the internal AES cryptographic processing.",
+    "comment_signal": [
+      {
+        "signal_name": "clk_i",
+        "signal_description": "System clock input for synchronous operations"
+      },
+      {
+        "signal_name": "rst_ni",
+        "signal_description": "Active-low reset signal for initializing the module"
+      },
+      {
+        "signal_name": "key_in",
+        "signal_description": "192-bit input key for AES encryption operations"
+      },
+      {
+        "signal_name": "debug_mode_i",
+        "signal_description": "Debug mode control signal for testing and debugging purposes"
+      },
+      {
+        "signal_name": "external_bus_io",
+        "signal_description": "External bus interface following REG_BUS protocol for communication with external system"
+      },
+      {
+        "signal_name": "p_c",
+        "signal_description": "32-bit array (4 elements) storing plaintext/ciphertext data in word format"
+      },
+      {
+        "signal_name": "state",
+        "signal_description": "32-bit array (4 elements) representing the AES state during encryption process"
+      },
+      {
+        "signal_name": "p_c_big",
+        "signal_description": "128-bit concatenated plaintext/ciphertext formed from p_c array"
+      },
+      {
+        "signal_name": "state_big",
+        "signal_description": "128-bit concatenated AES state formed from state array"
+      },
+      {
+        "signal_name": "key_big",
+        "signal_description": "192-bit key formed from key_in input"
+      },
+      {
+        "signal_name": "state_iv",
+        "signal_description": "128-bit constant initialization vector with fixed value 0x3243f6a8_885a308d_00000000_00000001"
+      },
+      {
+        "signal_name": "start",
+        "signal_description": "Control signal to initiate AES encryption operation"
+      },
+      {
+        "signal_name": "inter_state",
+        "signal_description": "128-bit intermediate state during AES processing"
+      },
+      {
+        "signal_name": "ct",
+        "signal_description": "128-bit ciphertext output"
+      },
+      {
+        "signal_name": "ct_valid",
+        "signal_description": "Valid signal indicating when ciphertext output is ready"
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "Data Concatenation",
+        "logic_description": "Concatenates 32-bit word arrays into 128-bit big-endian format for AES processing. p_c array forms p_c_big, state array forms state_big, and key_in forms key_big for cryptographic operations.",
+        "related_signals": ["p_c", "p_c_big", "state", "state_big", "key_in", "key_big"]
+      },
+      {
+        "logic_name": "External Bus Interface",
+        "logic_description": "Provides always-ready bus interface with external_bus_io.ready hardwired to 1 and external_bus_io.error hardwired to 0, indicating the module is always available and error-free for bus transactions.",
+        "related_signals": ["external_bus_io", "external_bus_io.ready", "external_bus_io.error"]
+      },
+      {
+        "logic_name": "AES Processing Control",
+        "logic_description": "Controls the AES encryption flow using start signal to initiate operations and manages the state transitions through the AES algorithm rounds.",
+        "related_signals": ["start", "state", "state_big", "inter_state", "ct", "ct_valid"]
+      },
+      {
+        "logic_name": "Initialization Vector Usage",
+        "logic_description": "Uses a fixed initialization vector (state_iv) for AES state initialization, providing a constant starting point for encryption operations.",
+        "related_signals": ["state_iv", "state", "state_big"]
+      }
+    ]
+  }
+}
+```

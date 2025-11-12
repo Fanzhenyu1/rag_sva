@@ -1,0 +1,3 @@
+```txt
+Control and Status Register (CSR) register file module that handles CSR operations and privilege level checking. The module implements CSR read/write operations with different access modes (WRITE, SET, CLEAR, READ) and manages exception return operations (MRET, SRET, DRET). It also performs privilege level validation to ensure secure access to protected CSRs. Retrieve possible threat models, or vulnerability it may have.
+```

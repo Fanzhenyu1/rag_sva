@@ -1,22 +1,25 @@
 ```json
 {
   "design_name": "lock_reg",
-  "description": "A register lock module with write protection functionality. The register data can only be written when the lock signal is inactive (0). When lock is active (1), write operations are blocked and the register maintains its current value. The module supports synchronous reset, clocked write operations, and controlled read access through read enable signal.",
-  "security_assets": [
+  "description": "A lockable register module with controlled read/write access. The register can be written when write enable is active, and read when read enable is active. The register maintains its value until explicitly written or reset. The design includes a lock signal that is currently unimplemented.",
+  "security_vulnerability": [
     {
-      "id": "ASSET_001",
-      "description": "Register data protection control signal - prevents unauthorized write operations when active. This is a security-critical control signal that enforces write protection on the stored data.",
-      "related_signal": "lock"
+      "id": "VUNL_001",
+      "description": "The lock signal is connected but completely unused in the design logic, providing no protection against unauthorized write operations. Malicious software can write to the register regardless of the lock signal state.",
+      "related_signal": "lock",
+      "source": "CWE 1231: Improper Implementation of Lock Protection Registers"
     },
     {
-      "id": "ASSET_002",
-      "description": "Protected register data - the actual stored value that is protected from unauthorized modifications by the lock mechanism. This represents the security-sensitive data asset.",
-      "related_signal": "data"
+      "id": "VUNL_002",
+      "description": "Inadequate hardware lock protection for security-sensitive controls. The register lacks proper lock-based access control, allowing untrusted software to modify critical data without lock verification, enabling potential fault injection attacks.",
+      "related_signal": "w_en",
+      "source": "CWE 1233: Improper Hardware Lock Protection for Security Sensitive Controls"
     },
     {
-      "id": "ASSET_003",
-      "description": "Write enable control signal - must be properly controlled to prevent unauthorized write attempts to the protected register.",
-      "related_signal": "w_en"
+      "id": "VUNL_003",
+      "description": "No lock-based read protection mechanism. The read operation is controlled only by r_en signal without lock verification, potentially allowing unauthorized reading of sensitive register contents when lock should be enforced.",
+      "related_signal": "r_en",
+      "source": "CWE 1231: Improper Implementation of Lock Protection Registers"
     }
   ]
 }

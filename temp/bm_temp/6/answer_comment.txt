@@ -1,0 +1,58 @@
+```json
+{
+  "csr_regfile": {
+    "module_name": "csr_regfile",
+    "comment_info": "Control and Status Register (CSR) register file module that handles CSR operations, privilege level checking, and exception return mechanisms. The module implements RISC-V CSR operations including read, write, set, clear, and return from exception instructions.",
+    "comment_signal": [
+      {
+        "signal_name": "priv_lvl_o",
+        "signal_description": "Current privilege level output - indicates the current operating privilege mode of the processor"
+      },
+      {
+        "signal_name": "priv_lvl",
+        "signal_description": "Privilege level input - used for privilege checking against CSR access requirements"
+      },
+      {
+        "signal_name": "privilege_violation",
+        "signal_description": "Output signal indicating when a CSR access violates privilege level requirements"
+      },
+      {
+        "signal_name": "csr_wdata",
+        "signal_description": "CSR write data - generated based on the CSR operation type (write, set, clear)"
+      },
+      {
+        "signal_name": "csr_we",
+        "signal_description": "CSR write enable - controls whether a write operation occurs to the CSR"
+      },
+      {
+        "signal_name": "csr_read",
+        "signal_description": "CSR read enable - controls whether a read operation occurs from the CSR"
+      },
+      {
+        "signal_name": "mret",
+        "signal_description": "Machine mode return signal - indicates execution of MRET instruction for returning from machine mode exceptions"
+      },
+      {
+        "signal_name": "sret",
+        "signal_description": "Supervisor mode return signal - indicates execution of SRET instruction for returning from supervisor mode exceptions"
+      },
+      {
+        "signal_name": "dret",
+        "signal_description": "Debug mode return signal - indicates execution of DRET instruction for returning from debug mode"
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "csr_op_logic",
+        "logic_description": "Combinational logic that decodes CSR operations and generates appropriate control signals. Handles CSR write/set/clear/read operations and exception return instructions (MRET/SRET/DRET). Exception returns disable CSR read/write side effects.",
+        "related_signals": ["csr_op_i", "csr_wdata_i", "csr_rdata", "csr_we", "csr_read", "mret", "sret", "dret", "ex_i.valid"]
+      },
+      {
+        "logic_name": "privilege_check",
+        "logic_description": "Privilege level verification logic that ensures CSR accesses comply with privilege requirements. Checks if current privilege level matches CSR access requirements and verifies debug mode access for debug CSRs. Generates illegal instruction exceptions for privilege violations.",
+        "related_signals": ["priv_lvl_o", "priv_lvl", "privilege_violation", "csr_we", "csr_read", "csr_addr", "csr_addr_i", "debug_mode_q", "csr_exception_o.cause"]
+      }
+    ]
+  }
+}
+```

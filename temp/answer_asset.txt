@@ -1,97 +1,31 @@
 ```json
 {
-  "design_name": "AES_IP_AXI_interface",
-  "description": "AXI4-Lite interface module for AES encryption/decryption IP core. Provides AXI4 slave interface for configuration, data transfer, and result reading. Supports both ECB and CBC modes with configurable encryption/decryption operations. Contains configurable hardware trojan and bug injection mechanisms for security testing.",
-  "security_assets": [
+  "design_name": "lock_reg",
+  "description": "A lockable register module with read/write control and lock protection mechanism. The register can be written only when not locked, and read through read enable control. Provides data protection by preventing writes when locked and controlling read access.",
+  "security_vunlerability": [
     {
-      "id": "ASSET_001",
-      "description": "AES encryption key - Critical security asset that must be protected from unauthorized access or leakage",
-      "related_signal": "key_reg[0:3]"
+      "id": "VUNL_001",
+      "description": "Improper lock protection implementation: The lock signal directly controls write operations, but there is no mechanism to prevent unauthorized clearing of the lock signal itself. An attacker could potentially clear the lock signal and then write to protected registers.",
+      "related_signal": "lock",
+      "source": "CWE 1231: Improper Implementation of Lock Protection Registers"
     },
     {
-      "id": "ASSET_002",
-      "description": "Intermediate encryption data - Sensitive intermediate state that could reveal information about the encryption process",
-      "related_signal": "intermediate_data"
+      "id": "VUNL_002",
+      "description": "Inadequate hardware lock protection for security sensitive controls: The module relies on external lock signal control without internal lock state persistence. If the lock signal can be manipulated by untrusted software, the protection mechanism can be bypassed entirely.",
+      "related_signal": "lock, w_en",
+      "source": "CWE 1233: Improper Hardware Lock Protection for Security Sensitive Controls"
     },
     {
-      "id": "ASSET_003",
-      "description": "Output ciphertext/plaintext - Final encryption/decryption results that must be protected from tampering",
-      "related_signal": "output_text_reg[0:3]"
+      "id": "VUNL_003",
+      "description": "No protection against unauthorized read operations: While the read enable controls data output, there is no mechanism to prevent unauthorized assertion of r_en signal, potentially allowing sensitive data to be read when it should remain protected.",
+      "related_signal": "r_en, data_out",
+      "source": "CWE 1231: Improper Implementation of Lock Protection Registers"
     },
     {
-      "id": "ASSET_004",
-      "description": "Input plaintext/ciphertext - Sensitive input data that should not be modified by unauthorized entities",
-      "related_signal": "input_text_reg[0:3]"
-    },
-    {
-      "id": "ASSET_005",
-      "description": "Initialization Vector (IV) - Critical for CBC mode security, must be unpredictable and protected",
-      "related_signal": "IV_reg[0:3]"
-    },
-    {
-      "id": "ASSET_006",
-      "description": "Operation mode control - Controls encryption/decryption and ECB/CBC modes, critical for correct security operation",
-      "related_signal": "mode_of_enc_or_dec_reg, mode_of_ecb_or_cbc_reg"
-    },
-    {
-      "id": "ASSET_007",
-      "description": "Hardware Trojan configuration - Enables various security vulnerability injections that could compromise the system",
-      "related_signal": "ht_bug_config_reg"
-    },
-    {
-      "id": "ASSET_008",
-      "description": "Key leakage Trojan - HT4: When triggered, replaces output data with key register contents, leaking encryption keys",
-      "related_signal": "ht_leakkey_en"
-    },
-    {
-      "id": "ASSET_009",
-      "description": "Input replacement Trojan - HT2: Replaces specific input data with attacker-defined values, corrupting encryption results",
-      "related_signal": "ht_replace_input_en, counter_for_replace_special_string"
-    },
-    {
-      "id": "ASSET_010",
-      "description": "Frame length restriction Trojan - HT3: Triggers when input plaintext length exceeds threshold, corrupts written data",
-      "related_signal": "ht_frame_cnt_en"
-    },
-    {
-      "id": "ASSET_011",
-      "description": "9-round encryption bug - BUG2: Reduces encryption rounds from 10 to 9, weakening cryptographic security",
-      "related_signal": "bug_9_round_en"
-    },
-    {
-      "id": "ASSET_012",
-      "description": "Decryption disable bug - BUG3: Forces decryption mode to encryption, breaking decryption functionality",
-      "related_signal": "bug_without_dec_en"
-    },
-    {
-      "id": "ASSET_013",
-      "description": "Intermediate data exposure - Allows reading of intermediate encryption states, potentially revealing key information",
-      "related_signal": "bug_intermediate_en"
-    },
-    {
-      "id": "ASSET_014",
-      "description": "Output data corruption - Counter-based HT that corrupts output data when threshold is reached",
-      "related_signal": "ht_cnt_en, counter_HT"
-    },
-    {
-      "id": "ASSET_015",
-      "description": "Read data reordering - Reorders output data reads, potentially causing data integrity issues",
-      "related_signal": "ht_wrong_order_en"
-    },
-    {
-      "id": "ASSET_016",
-      "description": "AXI read data bus - Multiplexed output that could leak sensitive data through various HT/bug mechanisms",
-      "related_signal": "axi_rdata"
-    },
-    {
-      "id": "ASSET_017",
-      "description": "Configuration registers - Control critical security parameters and operation modes",
-      "related_signal": "config_reg, frame_reg"
-    },
-    {
-      "id": "ASSET_018",
-      "description": "Reset control - Controls AES core reset, could be used to disrupt encryption operations",
-      "related_signal": "rst_n_to_AES_core"
+      "id": "VUNL_004",
+      "description": "Reset vulnerability: The reset signal clears the register data without lock protection consideration, potentially allowing an attacker to reset protected data to known state (0) regardless of lock status.",
+      "related_signal": "rst, data",
+      "source": "CWE 1233: Improper Hardware Lock Protection for Security Sensitive Controls"
     }
   ]
 }

@@ -1,0 +1,43 @@
+```json
+{
+  "adc_ctrl_fsm": {
+    "module_name": "adc_ctrl_fsm",
+    "comment_info": "ADC Control Finite State Machine module that manages wakeup timing and reset functionality. The module operates on the always-on clock domain and implements a configurable-width counter for wakeup timing control with multiple reset conditions.",
+    "comment_signal": [
+      {
+        "signal_name": "clk_aon_i",
+        "signal_description": "Always-on clock input - main clock for the FSM operating in the always-on power domain"
+      },
+      {
+        "signal_name": "rst_aon_ni",
+        "signal_description": "Active-low always-on reset - asynchronous reset for the entire FSM"
+      },
+      {
+        "signal_name": "cfg_fsm_rst_i",
+        "signal_description": "Configuration FSM reset input - synchronous reset triggered by configuration changes"
+      },
+      {
+        "signal_name": "wakeup_timer_cnt_q",
+        "signal_description": "Wakeup timer counter register - BIT_WIDTH-bit counter that tracks wakeup timing, cleared on reset and set to maximum value on specific conditions"
+      }
+    ],
+    "comment_logic": [
+      {
+        "logic_name": "reset_sequence",
+        "logic_description": "Asynchronous reset handling - clears wakeup_timer_cnt_q to 0 when rst_aon_ni is asserted low",
+        "related_signals": ["rst_aon_ni", "wakeup_timer_cnt_q"]
+      },
+      {
+        "logic_name": "counter_clear_condition",
+        "logic_description": "Counter reset/set logic - sets wakeup_timer_cnt_q to all 1's when wakeup_timer_cnt_clr, cfg_fsm_rst_i, or trigger_h2l signals are active, otherwise loads the next counter value",
+        "related_signals": ["wakeup_timer_cnt_q", "cfg_fsm_rst_i", "wakeup_timer_cnt_d", "trigger_h2l"]
+      },
+      {
+        "logic_name": "clocking_behavior",
+        "logic_description": "Synchronous operation - all register updates occur on the positive edge of clk_aon_i with asynchronous reset capability",
+        "related_signals": ["clk_aon_i", "rst_aon_ni", "wakeup_timer_cnt_q"]
+      }
+    ]
+  }
+}
+```

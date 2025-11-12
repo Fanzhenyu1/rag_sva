@@ -1,0 +1,3 @@
+```txt
+JTAG module in cva6 processor. It is locked with a password by default. Retrieve possible threat models, or vulnerability it may have.
+```

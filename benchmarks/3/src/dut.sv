@@ -15,7 +15,7 @@ module ariane_testharness (
    generate
        for (i=0; i < BIT_WIDTH; i++) begin
         for (j=0; j < NB_PERIPHERALS; j++) begin
-           assign acc_ctrl_c[i][j] = acc_ctrl[j*BIT_WIDTH+i]);
+           assign acc_ctrl_c[i][j] = acc_ctrl[j*BIT_WIDTH+i];
         end
        end 
    endgenerate 

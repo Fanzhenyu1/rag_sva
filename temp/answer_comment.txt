@@ -1,84 +1,62 @@
 ```json
 {
-  "AES_IP_AXI_interface": {
-    "module_name": "AES_IP_AXI_interface",
-    "comment_info": "AXI4-Lite interface module for AES encryption/decryption IP core. Provides AXI4 slave interface for configuration, data transfer, and result reading. Supports both ECB and CBC modes with configurable encryption/decryption operations.",
+  "lock_reg": {
+    "module_name": "lock_reg",
+    "comment_info": "Lockable register module with read/write control and lock protection. The register can be written only when not locked, and read through read enable control. Provides data protection mechanism.",
     "comment_signal": [
       {
-        "signal_name": "rst_n_to_AES_core",
-        "signal_description": "Reset signal to AES core, controlled by frame counter and AXI reset"
+        "signal_name": "data_in",
+        "signal_description": "Data input signal for writing to the register when write enable is active and register is not locked"
       },
       {
-        "signal_name": "start",
-        "signal_description": "Start signal to trigger AES core operation when all input data is ready"
+        "signal_name": "data_out",
+        "signal_description": "Data output signal that outputs register value when read enable is active, otherwise outputs 0"
       },
       {
-        "signal_name": "input_text/key/IV",
-        "signal_description": "128-bit input data, key, and initialization vector (4x32-bit registers each)"
+        "signal_name": "r_en",
+        "signal_description": "Read enable signal - when high, register value is output to data_out"
       },
       {
-        "signal_name": "mode_of_enc_or_dec",
-        "signal_description": "Operation mode: 0 for encryption, 1 for decryption"
+        "signal_name": "w_en",
+        "signal_description": "Write enable signal - when high and register not locked, data_in is written to register"
       },
       {
-        "signal_name": "mode_of_ecb_or_cbc",
-        "signal_description": "Cipher mode: 0 for ECB, 1 for CBC"
+        "signal_name": "lock",
+        "signal_description": "Lock control signal - when high, prevents new data from being written to the register, maintaining current value"
       },
       {
-        "signal_name": "done",
-        "signal_description": "Completion signal from AES core indicating operation finished"
+        "signal_name": "clk",
+        "signal_description": "Clock signal for synchronous operation"
       },
       {
-        "signal_name": "output_text",
-        "signal_description": "128-bit output result from AES core (4x32-bit registers)"
+        "signal_name": "rst",
+        "signal_description": "Reset signal - when high, asynchronously clears the register to 0"
       },
       {
-        "signal_name": "busy/INT2",
-        "signal_description": "Status signals: busy indicates operation in progress, INT2 is completion interrupt"
-      },
-      {
-        "signal_name": "ht_bug_config_reg",
-        "signal_description": "8-bit configuration register for hardware trojan and bug injection features"
-      },
-      {
-        "signal_name": "axi_awaddr/axi_araddr",
-        "signal_description": "AXI address registers for write and read transactions"
-      },
-      {
-        "signal_name": "axi_rdata",
-        "signal_description": "AXI read data bus with multiplexed output from various sources"
+        "signal_name": "data",
+        "signal_description": "Internal storage register that holds the actual data value with lock protection"
       }
     ],
     "comment_logic": [
       {
-        "logic_name": "AXI4 Write Transaction Handling",
-        "logic_description": "Implements AXI4 write address and data channel protocols with burst support. Handles fixed, incremental, and wrapping burst types. Stores configuration and data in internal registers based on address mapping.",
-        "related_signals": ["axi_awready", "axi_wready", "axi_awaddr", "S_AXI_WDATA", "axi_awlen_cntr"]
+        "logic_name": "reset_operation",
+        "logic_description": "Reset behavior: when reset signal is active, the internal data register is cleared to 0 on the next clock rising edge",
+        "related_signals": ["rst", "clk", "data"]
       },
       {
-        "logic_name": "AXI4 Read Transaction Handling",
-        "logic_description": "Implements AXI4 read address and data channel protocols. Provides read access to output results, intermediate data, and status registers with configurable data sources based on HT/bug settings.",
-        "related_signals": ["axi_arready", "axi_rvalid", "axi_araddr", "axi_rdata", "axi_arlen_cntr"]
+        "logic_name": "write_operation",
+        "logic_description": "Write behavior: when write enable is active and register is not locked, input data is stored in the register on clock rising edge. If locked, register maintains current value.",
+        "related_signals": ["w_en", "lock", "data_in", "clk", "data"]
       },
       {
-        "logic_name": "AES Data Flow Control",
-        "logic_description": "Manages data transfer between AXI interface and AES core. Controls input data loading, start signal generation, output result collection, and frame-based operation sequencing.",
-        "related_signals": ["data_all_full", "start", "counter_for_load_data_to_AES", "counter_for_frame_number", "frame_reg"]
+        "logic_name": "read_operation",
+        "logic_description": "Read behavior: when read enable is active, register value is output; otherwise output is 0. Read operation is combinational and not clock-dependent.",
+        "related_signals": ["r_en", "data", "data_out"]
       },
       {
-        "logic_name": "Interrupt and Status Management",
-        "logic_description": "Generates interrupt signals on operation completion and manages busy status. Uses negative edge detection on done signal to trigger interrupts.",
-        "related_signals": ["INT2", "busy", "done_negedge", "clr_aes_irq", "done_negedge_reg0", "done_negedge_reg1"]
-      },
-      {
-        "logic_name": "Hardware Trojan and Bug Injection",
-        "logic_description": "Configurable security vulnerability injection system supporting multiple HT/bug types including: counter-based data corruption, frame length restrictions, key leakage, input replacement, read data reordering, 9-round encryption bug, intermediate data exposure, and decryption disable.",
-        "related_signals": ["ht_bug_config_reg", "ht_cnt_en", "ht_leakkey_en", "bug_9_round_en", "bug_intermediate_en", "counter_for_replace_special_string"]
-      },
-      {
-        "logic_name": "Output Data Multiplexing",
-        "logic_description": "Selects between normal output text, intermediate data, and corrupted data based on HT/bug configuration and current operation state. Supports data reordering and selective data replacement.",
-        "related_signals": ["axi_rdata", "output_text_reg", "intermediate_data", "counter_for_rdata", "output_text_valid"]
+        "logic_name": "lock_protection",
+        "logic_description": "Lock protection mechanism: when lock signal is high, write operations are ignored and current register value is preserved regardless of write enable state",
+        "related_signals": ["lock", "w_en", "data"]
       }
     ]
   }

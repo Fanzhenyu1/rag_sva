@@ -1,9 +1,37 @@
 import os
+import openai
 import file_load
 import doc_chunk
 import vector_store
 import prompt_build
+import json
+from pathlib import Path
+from dotenv import load_dotenv
+from ragas import evaluate
+from datasets import Dataset
+from ragas.metrics import faithfulness, answer_relevancy, context_precision, context_recall, answer_correctness
 from langchain_deepseek import ChatDeepSeek
+
+#### Environment Setup ####
+load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
+base_url_from_env = os.getenv("OPENAI_BASE_URL")
+default_base_url = "OPENAI_BASE_URL" # 您常用的 URL 作为默认值
+base_url = base_url_from_env if base_url_from_env else default_base_url
+print(f"使用的 Base URL: {base_url}")
+
+###################
+if not api_key:
+    raise RuntimeError("Missing OPENAI_API_KEY in environment and no fallback provided.")
+# 将值写回环境，确保其它库（基于 env 的）也能读取到
+os.environ["OPENAI_API_KEY"] = api_key
+os.environ["OPENAI_BASE_URL"] = base_url
+
+# 同时设置 openai 客户端的全局配置（部分库直接使用 openai.api_*）
+openai.api_key = api_key
+# openai.api_base 是 openai-python 用来覆盖默认 host 的变量（确保格式如 https://your-host/v1）
+openai.api_base = base_url
+
 
 def answer_to_temp(answer, temp_path, filename="1111.txt"):
     os.makedirs(temp_path, exist_ok=True)
@@ -88,11 +116,11 @@ def asset_llm_call(rtl_files, docs_content, RAG_ENABLE):
     )
     answer = llm.invoke(filled_prompt)
     if hasattr(answer, 'content'):  # 检查是否有content属性
-        return answer.content
+        return answer.content, filled_prompt
     elif isinstance(answer, str):   # 如果是直接返回字符串
-        return answer
+        return answer, filled_prompt
     else:  # 其他格式的处理
-        return str(answer)  # 转换为字符串
+        return str(answer), filled_prompt  # 转换为字符串
 
 def testpoint_llm_call(rtl_files, asset_content, docs_content, RAG_ENABLE):
     # build full prompt
@@ -135,37 +163,70 @@ def property_llm_call(rtl_files, testpoint_content, docs_content, RAG_ENABLE):
         return answer
     else:  # 其他格式的处理
         return str(answer)  # 转换为字符串
+    
+def evaluator_llm_call(input_query, llm_answer, retrived_doc, golden_answer):
+    query_list = [input_query]
+    answer_list = [llm_answer]
+    retrived_list = [retrived_doc]
+    golden_list = [golden_answer]
+
+    data_dict = {
+        'question': query_list,
+        'answer': answer_list,
+        'contexts': retrived_list,
+        'ground_truth': golden_list
+    }
+    dataset = Dataset.from_dict(data_dict)
+
+    end_to_end_results = evaluate(
+        dataset,
+        metrics=[faithfulness, answer_relevancy, context_precision, context_recall, answer_correctness]
+    )
+
+    print(end_to_end_results)
+
+    return 0
 
 def main():
 
     RAG_ENABLE = 1
-    design_name = "aes"  # 设计名称
+    design_name = "6"  # 设计名称
     # dir of src
-    src_path = f"e:/mylife_yanjiu/project/rag_sva/src/{design_name}"
+    # src_path = f"e:/mylife_yanjiu/project/rag_sva/src/{design_name}"
+    bm_path = f"e:/mylife_yanjiu/project/rag_sva/benchmarks/{design_name}"
+    src_path = bm_path + "/src/"
+
     # rtl_files = [
     #     os.path.normpath(os.path.join(src_path, f))
     #     for f in os.listdir(src_path)
     #     if os.path.isfile(os.path.join(src_path, f)) and f.lower().endswith(('.v', '.sv', 'txt', '.vhd'))
     # ]
-    rtl_files = ["e:/mylife_yanjiu/project/aes_ip/AES_bug_in/AES_IP_AXI_interface.sv"]
-    # dir of SPEC
-    spec_path = src_path + "/spec"
-    spec_file = [
-        os.path.normpath(os.path.join(spec_path, f))
-        for f in os.listdir(spec_path)
-        if os.path.isfile(os.path.join(spec_path, f)) and f.lower().endswith(('.md'))
-    ]
+    rtl_files = [src_path + "dut_buggy.sv"]
+
+    # # dir of SPEC
+    # spec_path = src_path + "/spec"
+    # spec_file = [
+    #     os.path.normpath(os.path.join(spec_path, f))
+    #     for f in os.listdir(spec_path)
+    #     if os.path.isfile(os.path.join(spec_path, f)) and f.lower().endswith(('.md'))
+    # ]
     print(f"RTL file: {rtl_files}")
-    print(f"SPEC file: {spec_file}")
-    all_files = rtl_files + spec_file
+    # print(f"SPEC file: {spec_file}")
+
     # dir of temp files
-    temp_path = f"e:/mylife_yanjiu/project/rag_sva/temp/"
+    temp_path = f"e:/mylife_yanjiu/project/rag_sva/temp/bm_temp/{design_name}/"
+
+    # LLM call for comment fill
+    answer_comment = comment_llm_call(rtl_files, "", 0)
+    # save answer to temp file
+    answer_to_temp(answer_comment, temp_path, "answer_comment.txt")
+    pass
 
 ####################################################################################
 ####################################################################################
     if(0):
         # LLM call for design analysis
-        answer_design = design_analysis_llm_call(all_files, "", 0)
+        answer_design = design_analysis_llm_call(rtl_files, "", 0)
         # save answer to temp file
         answer_to_temp(answer_design, temp_path, "answer_design.txt")
         pass
@@ -179,7 +240,7 @@ def main():
         pass
 ########################=====query to RAG=====######################################
 ####################################################################################
-    if(0):
+    if(1):
         lib_path = "e:/mylife_yanjiu/project/rag_sva/lib_data"
         lib_data_file = [lib_path + "/output.md"]
 
@@ -189,7 +250,9 @@ def main():
         chunks = doc_chunk.langchain_doc_chunk(docs) # chunking
         vec_store = vector_store.index_build_store(chunks) # build vector store
         retrieved_docs = vector_store.vector_store_search(vec_store, query_rag, k=5)    # parmeter k is important
-        docs_content = "\n\n".join([doc.page_content for doc in retrieved_docs[:5]])
+        docs_list = [doc.page_content for doc in retrieved_docs[:5]]
+        docs_content = "\n\n".join(docs_list)
+        # docs_content = "\n\n".join([doc.page_content for doc in retrieved_docs[:5]])
         print(f"Retrieved documents:\n{docs_content}\n")
     else:
         docs_content = '''
@@ -206,17 +269,20 @@ def main():
 ########################=====LLM With RAG=====######################################
 ####################################################################################
 
-    # # LLM call for comment fill
-    # answer_comment = comment_llm_call(all_files, docs_content if RAG_ENABLE == 1 else "", 0)
-    # # save answer to temp file
-    # answer_to_temp(answer_comment, temp_path, "answer_comment.txt")
-
     all_files = rtl_files + [os.path.join(temp_path, "answer_comment.txt")]
 
     # LLM call for asset identify
-    answer_asset = asset_llm_call(all_files, docs_content if RAG_ENABLE == 1 else "", RAG_ENABLE)
+    answer_asset, prompt_asset = asset_llm_call(all_files, docs_content if RAG_ENABLE == 1 else "", RAG_ENABLE)
     # save answer to temp file
     answer_to_temp(answer_asset, temp_path, "answer_asset.txt")
+    pass
+    evaluator_llm_call(
+        prompt_asset,
+        answer_asset,
+        docs_list,
+        open(f"{bm_path}/golden_answer/golden_asset.txt", 'r', encoding='utf-8').read()
+    )
+    pass
 
     # LLM call for testpoint generation
     answer_testpoint = testpoint_llm_call(all_files, answer_asset, docs_content if RAG_ENABLE == 1 else "", RAG_ENABLE)
