@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "Improper Access Control Implementation"
+}
+```

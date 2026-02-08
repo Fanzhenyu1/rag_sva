@@ -1,0 +1,18 @@
+```json
+{
+  "test_points": {
+    "TP_001": {
+      "description": "at every positive edge of clock, the value of the external_bus_io.rdata signal is 0 if the value of ct_valid signal is 0 and the value of the external_bus_io.addr corresponds to the address range of internal AES state registers (state[0:3]) and the value of the external_bus_io.en signal is 1",
+      "related_signals": ["external_bus_io.rdata", "ct_valid", "external_bus_io.addr", "external_bus_io.en"]
+    },
+    "TP_002": {
+      "description": "at every positive edge of clock, the value of the external_bus_io.rdata signal is 0 if the value of ct_valid signal is 0 and the value of the external_bus_io.addr corresponds to the address range of internal AES key registers (key_in) and the value of the external_bus_io.en signal is 1",
+      "related_signals": ["external_bus_io.rdata", "ct_valid", "external_bus_io.addr", "external_bus_io.en"]
+    },
+    "TP_003": {
+      "description": "at every positive edge of clock, the value of the external_bus_io.rdata signal is 0 if the value of ct_valid signal is 0 and the value of the external_bus_io.addr corresponds to the address range of internal AES intermediate state registers (inter_state) and the value of the external_bus_io.en signal is 1",
+      "related_signals": ["external_bus_io.rdata", "ct_valid", "external_bus_io.addr", "external_bus_io.en"]
+    }
+  }
+}
+```

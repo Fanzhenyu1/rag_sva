@@ -1,26 +1,23 @@
 ```json
 {
   "design_name": "rstmgr_por",
-  "description": "Power-On Reset (POR) manager module with configurable filtering and stretching capabilities. Provides a controlled reset signal with scan mode support for testability. The module filters the incoming POR signal through multiple stages, waits for stability, then stretches the reset for a configurable duration before releasing. Features include multi-stage filtering for debouncing, configurable stretch duration, and scan mode bypass for testability.",
-  "security_vulnerability": [
-    {
-      "id": "VUNL_001",
-      "description": "Scan mode bypass mechanism allows test reset to override normal reset filtering and stretching logic, potentially bypassing security-critical reset sequences. When scanmode_i is asserted, scan_rst_ni directly controls the reset chain through multiple clock muxes, circumventing the security-preserving filtering and stretching operations.",
-      "related_signal": "scanmode_i, scan_rst_ni",
-      "source": "When physical tampering is detected e.g., when someone is de-capping the device, the processors should stop and memories should be cleared i.e., zeroized to avoid sensitive data leakage."
+  "description": "Power-on reset manager with filtering stages and stretch counter that generates a clean reset signal after the input reset becomes stable",
+  "security_vulnerability": {
+    "VUNL_001": {
+      "description": "No reset even after maximum clock cycles of input trigger - The reset manager may fail to assert the output reset within the expected maximum cycles due to counter or filter issues",
+      "related_signal": "rst_por_aon_n, cnt, rst_stable",
+      "source": "Reset manager"
     },
-    {
-      "id": "VUNL_002",
-      "description": "Improper preservation of hardware configuration state during power save/restore operations. The reset management logic does not ensure proper clearing of security-critical states when transitioning between normal and test modes, potentially allowing malicious software to manipulate configuration registers through scan interface.",
-      "related_signal": "scanmode_i, rst_root_n, rst_clean_n",
-      "source": "CWE 1304: Improperly Preserved Integrity of Hardware Configuration State During a Power Save/Restore Operation"
+    "VUNL_002": {
+      "description": "No reset even after maximum clock cycles of input trigger - The filter stages may not properly detect the stable reset condition, preventing the counter from starting",
+      "related_signal": "rst_filter_n, rst_stable, cnt_en",
+      "source": "Reset manager"
     },
-    {
-      "id": "VUNL_003",
-      "description": "Lack of secure master authentication in reset control path. The module does not implement security attribute verification for masters attempting to manipulate reset signals through scan mode, potentially allowing un-trusted masters to control system reset behavior.",
-      "related_signal": "scanmode_i",
-      "source": "The Power Management Unit (PMU) in the Peripherals sub-system has a control register to set thermal limits. Writing the register is restricted to secure masters"
+    "VUNL_003": {
+      "description": "No reset even after maximum clock cycles of input trigger - Scan mode multiplexers could bypass the normal reset generation path, causing unpredictable reset behavior",
+      "related_signal": "scanmode_i, scan_rst_ni, u_rst_root_mux, u_rst_clean_mux, u_rst_out_mux",
+      "source": "Reset manager"
     }
-  ]
+  }
 }
 ```

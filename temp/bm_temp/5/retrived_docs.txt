@@ -1,0 +1,5 @@
+AES accelerator, "bug description": ["Secret keys are not cleared when entering debug mode"], "security property":" at every positive edge of clock, the value of the key_big2 signal is 0 if the value of the debug_mode_i signal is 1 in the current clock cycle and 0 in the past clock cycle".
+
+AES accelerator, "bug description": ["Internal register of AES are visible externally"], "security property":" at every positive edge of clock, the value of the rdata signal is 0 if the value of ct_valid signal is 0 and the value of the address is greater than or equal to 12 and less than or equal to 15 and the value of the en signal is 1".
+
+Reset manager, "bug description": ["No reset even after maximum clock cycles of input trigger"], "security property": " at every positive edge of clock other than when the rst_i signal is 1, if the por_n_i signal falls, then in a minimum of MIN_CYCLES clock cycles and a maximum of MAX_CYCLES clock cycles, the value of the por_n_i signal should become 1 or the value of the rst_por_aon_n signal should become 0".

@@ -1,0 +1,10 @@
+```json
+{
+  "threat_model": {
+    "TM_001": {
+      "description": "Reset does not follow fall of input signal within a given range of clock cycles unless input is asserted again.",
+      "related_signal": "por_n_i"
+    }
+  }
+}
+```

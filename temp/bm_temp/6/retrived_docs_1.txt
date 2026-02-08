@@ -1,0 +1,31 @@
+
+
+### Example: Privileged CSR register can be accessed by unprivileged user
+* Example:
+CSR controller of the processor. The expected security behavior is, at every positive edge of clock, the value of the privilege_violation signal is 1 if any bit of the priv_lvl_o signal is 0 while the corresponding bit of the priv_lvl signal is 1 and the value of the csr_op_i signal is among the four values CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ.
+* Related CWE:
+CWE-1261: Improper Handling of Single Event Upsets
+
+
+
+### Detection Example
+All the registers in the aes block are protected by different access policies. For example, the aes.csr.key register is readable and writable by the tmcu only. The aes.csr.status register is readable by a specific master when the aes.csr.control registers is enabled for that specific master.
+
+* Threat Model
+A less privileged access policy may override a higher privileged access policy due to incorrect implementation thus allowing access for an untrusted agent to privileged data.
+
+* Security Requirement
+Sensitive access controlled signals should adhere to intended access control policy as defined in design specification.
+
+
+
+
+
+### Detection Example
+The SoC above contains a thermal sensor with a programmable max temperature. Another register tmcu.csr.tempshutdown determines the action to take when the max temperature is reached. If the register is programmed to "1", the SoC is shut down to avoid malfunction or damage. The max temperature register and the tempshutdown register are protected by a lock bit. When trusted firmware sets the lock bit in tmcu.csr.reglock it is not possible to modify the registers. Due to a design bug, the tempshutdown register is not protected by the lock bit.
+
+* Threat Model
+Malicious software running on one of the un-trusted cores can potentially do a fault injection attack by disabling the tmcu.csr.temp shutdown register thus allowing the device to overheat to a point where behavior is unpredictable and security features are no longer active.
+
+* Security Requirement
+Critical registers which should not be modifiable after configuration, should be protected by a lock mechanism.

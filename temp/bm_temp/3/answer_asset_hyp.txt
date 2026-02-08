@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "When access to the peripheral, the access control bus grants it access to other peripherals illegally."
+}
+```

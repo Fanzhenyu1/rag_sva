@@ -1,0 +1,15 @@
+```json
+{
+  "design_name": "adc_ctrl_fsm",
+  "description": "ADC controller finite state machine with wakeup timer counter. The module includes reset handling and wakeup timer counter logic that can be cleared or reset under specific conditions.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_aon_i) disable iff (!rst_aon_ni) (cfg_fsm_rst_i |-> ##1 (wakeup_timer_cnt_q == 0)));",
+    "assertion_2": "assert property (@(posedge clk_aon_i) disable iff (!rst_aon_ni) (!rst_aon_ni |=> (wakeup_timer_cnt_q == 0)));",
+    "assertion_3": "assert property (@(posedge clk_aon_i) disable iff (!rst_aon_ni) (cfg_fsm_rst_i && !wakeup_timer_cnt_clr && !trigger_h2l |=> (wakeup_timer_cnt_q == 1)));",
+    "assertion_4": "assert property (@(posedge clk_aon_i) disable iff (!rst_aon_ni) (wakeup_timer_cnt_clr && !cfg_fsm_rst_i && !trigger_h2l |=> (wakeup_timer_cnt_q == 1)));",
+    "assertion_5": "assert property (@(posedge clk_aon_i) disable iff (!rst_aon_ni) (trigger_h2l && !cfg_fsm_rst_i && !wakeup_timer_cnt_clr |=> (wakeup_timer_cnt_q == 1)));",
+    "assertion_6": "assert property (@(posedge clk_aon_i) disable iff (!rst_aon_ni) (cfg_fsm_rst_i && wakeup_timer_cnt_clr |=> (wakeup_timer_cnt_q == 1)));",
+    "assertion_7": "assert property (@(posedge clk_aon_i) disable iff (!rst_aon_ni) (!cfg_fsm_rst_i && !wakeup_timer_cnt_clr && !trigger_h2l |=> (wakeup_timer_cnt_q == $past(wakeup_timer_cnt_d))));"
+  }
+}
+```

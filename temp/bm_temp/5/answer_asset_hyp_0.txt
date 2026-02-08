@@ -1,0 +1,10 @@
+```json
+{
+  "threat_model": {
+    "TM_001": {
+      "description": "AES secret keys are not cleared when entering debug mode, allowing an untrusted debugger to access sensitive key material through the debug interface.",
+      "related_signal": "debug_mode_i"
+    }
+  }
+}
+```

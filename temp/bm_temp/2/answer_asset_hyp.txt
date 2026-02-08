@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "The lock function is not implemented correctly, allowing attackers to write to locked JTAG."
+}
+```

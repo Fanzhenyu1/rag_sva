@@ -1,3 +1,4 @@
 ```txt
-ADC Control Finite State Machine module. Retrieve possible threat models, or vulnerability it may have.
+ADC controller is a circuit design that implements a wakeup timer counter function with reset control, containing key signals clk_aon_i (always-on clock input), rst_aon_ni (active-low always-on reset), cfg_fsm_rst_i (configuration FSM reset), and wakeup_timer_cnt_q (wakeup timer counter register), which serve the purposes of providing timing reference, system initialization, forced reset, and counting operations respectively.
+Based on the above information, retrieve possible threat models, security related test points and security properties, etc.
 ```

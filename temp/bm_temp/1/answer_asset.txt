@@ -1,26 +1,23 @@
 ```json
 {
   "design_name": "traffic_controller",
-  "description": "A traffic light controller with pedestrian crossing functionality that implements a finite state machine controlling traffic light transitions (RED → GREEN → YELLOW → RED). The design prioritizes pedestrian safety by maintaining RED state when walk requests are active and includes a counter to ensure minimum crossing time for pedestrians.",
-  "security_vulnerability": [
-    {
-      "id": "VUNL_001",
-      "description": "Traffic controller can skip YELLOW state before going to RED when walk button is pressed during GREEN state, violating proper traffic light sequencing and potentially creating unsafe traffic conditions",
+  "description": "A simple traffic light controller with pedestrian walk functionality. The controller cycles through red -> green -> yellow -> red states and includes a walk counter that extends red light duration when pedestrians request to cross.",
+  "security_vulnerability": {
+    "VUNL_001": {
+      "description": "Traffic controller skips yellow before going red when walk button is pressed on green, violating the expected state transition sequence",
       "related_signal": "signal",
-      "source": "Knowledge Base: Bug description - Traffic controller can skip yellow before going red when walk button is pressed on green"
+      "source": "Knowledge Base - Traffic controller bug description"
     },
-    {
-      "id": "VUNL_002",
-      "description": "Improper state transition management in FSM allows bypassing of critical safety states (YELLOW warning state), which could lead to traffic accidents and pedestrian safety hazards",
-      "related_signal": "signal, walk",
-      "source": "Knowledge Base: Bug description combined with CWE 1323 principles - Improper Management of Sensitive Trace Data and safety-critical state transitions"
+    "VUNL_002": {
+      "description": "Traffic controller skips yellow before going red when walk button is pressed on green, violating the expected state transition sequence",
+      "related_signal": "signal",
+      "source": "Knowledge Base - Traffic controller bug description"
     },
-    {
-      "id": "VUNL_003",
-      "description": "Direct transition from GREEN to RED without YELLOW intermediate state violates standard traffic light safety protocols and could cause abrupt stopping scenarios",
-      "related_signal": "signal, walk",
-      "source": "Knowledge Base: Bug description - Traffic controller can skip yellow before going red when walk button is pressed on green"
+    "VUNL_003": {
+      "description": "Traffic controller skips yellow before going red when walk button is pressed on green, violating the expected state transition sequence",
+      "related_signal": "signal",
+      "source": "Knowledge Base - Traffic controller bug description"
     }
-  ]
+  }
 }
 ```

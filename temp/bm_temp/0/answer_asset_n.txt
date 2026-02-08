@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "The register lock fails to lock register when lock function is enabled. Improper clearing of the lock bit or improper lock function implementation enables malicious software to modify critical registers."
+}
+```

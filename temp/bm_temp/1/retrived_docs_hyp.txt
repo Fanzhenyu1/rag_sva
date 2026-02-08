@@ -1,0 +1,20 @@
+## Vul_A_0002: Improper Traffic Controller Function
+### Description
+* Design Description: 
+A simple traffic controller.
+* Threat Model:
+Traffic controller skips yellow before going red when walk button is pressed on green.
+* Security Requirement:
+Traffic changes should from red -> green -> yellow -> red. If a pedestrian presses walk button, traffic should stop for 4 cycles.
+
+### Example: Improper Traffic Controller Function
+* Example:
+A simple traffic controller. The expected security behavior is, at every positive edge of clock, if the value of the signal register is RED, then the value of the signal register in the previous clock cycle is either RED or YELLOW.
+* Related CWE:
+CWE-1245: Improper Finite State Machines (FSMs) in Hardware Logic.
+
+### Example: The system failed to reset as required
+* Example:
+Reset manager. The expected security behavior is, at every positive edge of clock other than when the rst_i signal is 1, if the por_n_i signal falls, then in a minimum of MIN_CYCLES clock cycles and a maximum of MAX_CYCLES clock cycles, the value of the por_n_i signal should become 1 or the value of the rst_por_aon_n signal should become 0.
+* Related CWE:
+CWE-1206

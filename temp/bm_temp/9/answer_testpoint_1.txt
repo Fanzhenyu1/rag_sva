@@ -1,0 +1,10 @@
+```json
+{
+  "test_points": {
+    "TP_001": {
+      "description": "At every positive edge of clock when rst_i is not 1, if por_n_i falls to 0, then within MIN_CYCLES to MAX_CYCLES clock cycles, either por_n_i should become 1 or rst_por_aon_n should become 0",
+      "related_signals": ["clk_i", "rst_i", "por_n_i", "rst_por_aon_n"]
+    }
+  }
+}
+```

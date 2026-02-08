@@ -1,0 +1,21 @@
+### Example: Improper Access Control Implementation
+* Example:
+at every positive edge of clock, for each of the PRIV_TYPES number of privilege arrays in the acc_ctrl_c matrix, the value of each of the NB_PERIPHERALS number of peripherals is same as the corresponding bit in the acc_ctrl array where the value for the ith privilege type of the jth peripheral is stored in the (j*PRIV_TYPES + i)th bit.
+* Related CWE:
+CWE-1317: Missing Security Checks in Fabric Bridge
+
+
+
+### Example: Exposed Chip Debug and Test Interface With Insufficient or Missing Authorization
+* Example:
+debug interface in the HRoT. debug module. The expected security behavior is, Information on the internal signals connected to the Trusted Bus(tbus) must not flow to the debug interface outputs unless the debug interface is enabled. 
+tbus.$all_outputs =/=> debug.$all_outputs unless ( debug.enable == ENABLED )
+* Related CWE: 
+CWE-1191: Exposed Chip Debug and Test Interface With Insufficient or Missing Authorization
+
+### Example: Power-On of Untrusted Execution Core Before Enabling Fabric Access Control
+* Example:
+memory and fabric access controls. untrusted firmware. The expected security behavior is, Untrusted software must not execute i.e. un-trusted cores may not read instruction memory before secure boot process is complete. 
+imem.idata =/=> core0.idata unless ( tmcu.csr.boot_stage >= FULL_BOOT ) 
+* Related CWE: 
+CWE-1193: Power-On of Untrusted Execution Core Before Enabling Fabric Access Control

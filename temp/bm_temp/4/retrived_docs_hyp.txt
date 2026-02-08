@@ -1,0 +1,20 @@
+## Vul_A_0005: AES Security-critical data are visible externally
+### Description
+* Design Description: 
+AES accelerator. Internal register of AES are visible externally.
+* Threat Model:
+Incorrect implementation of AES enables attackers to illegally extract information from security-critical data such as key registers, cipher text in AES.
+* Security Requirement:
+the cipher text cannot be read until encryption is done.
+
+### Example: AES Security-critical data are visible externally
+* Example:
+AES accelerator. The expected security behavior is, at every positive edge of clock, the value of the rdata signal is 0 if the value of ct_valid signal is 0 and the value of the address is greater than or equal to 12 and less than or equal to 15 and the value of the en signal is 1.
+* Related CWE:
+CWE-1303: Non Transparent Sharing of Microarchitectural Resources.
+
+### Example: AES Secret Keys Not Cleared When Entering Debug Mode
+* Example:
+AES accelerator. The expected security behavior is, at every positive edge of clock, the value of the key_big2 signal is 0 if the value of the debug_mode_i signal is 1 in the current clock cycle and 0 in the past clock cycle.
+* Related CWE:
+CWE-1244: Improper Access to Sensitive Information Using Debug and Test Interfaces.

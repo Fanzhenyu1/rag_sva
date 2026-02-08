@@ -1,3 +1,4 @@
 ```txt
-Access control signal transformation module that rearranges and processes access control values from a flattened input format to a structured output format with conditional OR operations. Retrieve possible threat models, or vulnerability it may have.
+ariane_testharness is a circuit design of Access control bus in a processor, containing key signals acc_ctrl (input access control values) and acc_ctrl_c (reshaped output control signals).
+Based on the above information, retrieve possible threat models, security requirement, examples etc.
 ```

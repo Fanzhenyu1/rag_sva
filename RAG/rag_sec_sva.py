@@ -190,7 +190,7 @@ def evaluator_llm_call(input_query, llm_answer, retrived_doc, golden_answer):
 def main():
 
     RAG_ENABLE = 1
-    design_name = "6"  # 设计名称
+    design_name = "0"  # 设计名称
     # dir of src
     # src_path = f"e:/mylife_yanjiu/project/rag_sva/src/{design_name}"
     bm_path = f"e:/mylife_yanjiu/project/rag_sva/benchmarks/{design_name}"
@@ -248,11 +248,18 @@ def main():
             query_rag = f.read()            # 一般需要注释掉
         docs = file_load.load_files(lib_data_file) # load lib data
         chunks = doc_chunk.langchain_doc_chunk(docs) # chunking
-        vec_store = vector_store.index_build_store(chunks) # build vector store
-        retrieved_docs = vector_store.vector_store_search(vec_store, query_rag, k=5)    # parmeter k is important
-        docs_list = [doc.page_content for doc in retrieved_docs[:5]]
-        docs_content = "\n\n".join(docs_list)
-        # docs_content = "\n\n".join([doc.page_content for doc in retrieved_docs[:5]])
+        if(1):
+            chunks_texts = [doc.page_content if hasattr(doc, "page_content") else str(doc) for doc in chunks]
+            pass
+            retrieved_docs = vector_store.hyper_vector_retrieval(chunks_texts, query_rag, k=5)    # parmeter k is important
+            docs_content = "\n\n".join([doc for doc in retrieved_docs[:5]])
+            print(f"Retrieved documents:\n{docs_content}\n")
+        else:
+            vec_store = vector_store.index_build_store(chunks) # build vector store
+            retrieved_docs = vector_store.vector_store_search(vec_store, query_rag, k=5)    # parmeter k is important
+            docs_list = [doc.page_content for doc in retrieved_docs[:5]]
+            docs_content = "\n\n".join(docs_list)
+            # docs_content = "\n\n".join([doc.page_content for doc in retrieved_docs[:5]])
         print(f"Retrieved documents:\n{docs_content}\n")
     else:
         docs_content = '''

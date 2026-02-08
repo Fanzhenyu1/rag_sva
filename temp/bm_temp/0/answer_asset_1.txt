@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "CWE-1231: Improper Implementation of Lock Protection Registers"
+}
+```

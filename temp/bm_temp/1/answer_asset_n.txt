@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "Traffic controller skips yellow before going red when walk button is pressed on green."
+}
+```

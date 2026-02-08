@@ -1,0 +1,10 @@
+```json
+{
+  "threat_model": {
+    "TM_001": {
+      "description": "AES security-critical data (cipher text) are visible externally before encryption is complete. The cipher text registers (addresses 12-15) can be read via the external bus interface even when ct_valid is 0, exposing intermediate or final cipher text data prematurely.",
+      "related_signal": "ct, ct_valid, external_bus_io.rdata"
+    }
+  }
+}
+```

@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "A malicious actor can read sensitive data stored in memory or in registers when debugging using the UART interface and bypassing normal access protections."
+}
+```

@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "Incorrect implementation of the CSR controller allows attackers access to privileged CSRs."
+}
+```

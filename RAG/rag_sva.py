@@ -137,17 +137,18 @@ def main():
         pass
 ########################=====query to RAG=====######################################
 ####################################################################################
-    if(0):
+    if(1):
         lib_path = "e:/mylife_yanjiu/project/rag_sva/lib_data"
-        lib_data_file = [lib_path + "/output.md"]
+        lib_data_file = [lib_path + "/secdoc_2.md"]
 
         with open(os.path.join(temp_path, "query_rag.txt"), "r", encoding="utf-8") as f:
             query_rag = f.read()            # 一般需要注释掉
         docs = file_load.load_files(lib_data_file) # load lib data
         chunks = doc_chunk.langchain_doc_chunk(docs) # chunking
-        vec_store = vector_store.index_build_store(chunks) # build vector store
-        retrieved_docs = vector_store.vector_store_search(vec_store, query_rag, k=5)    # parmeter k is important
-        docs_content = "\n\n".join([doc.page_content for doc in retrieved_docs[:5]])
+        chunks_texts = [doc.page_content if hasattr(doc, "page_content") else str(doc) for doc in chunks]
+        pass
+        retrieved_docs = vector_store.hyper_vector_retrieval(chunks_texts, query_rag, k=5)    # parmeter k is important
+        docs_content = "\n\n".join([doc for doc in retrieved_docs[:5]])
         print(f"Retrieved documents:\n{docs_content}\n")
         pass
     else:

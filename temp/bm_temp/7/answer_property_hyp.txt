@@ -1,0 +1,9 @@
+```json
+{
+  "design_name": "register_lock",
+  "description": "A register lock module that should set all bits of reglk_mem array to 1 on reset, but currently sets them to 0, creating a security vulnerability with incorrect default permissions.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (rst_i) (($past(rst_i) == 1'b1) |-> (reglk_mem == {NO_WORDS{{BIT_WIDTH{1'b1}}}}))) else $error(\"Security violation: reglk_mem not set to all 1's after reset\");"
+  }
+}
+```

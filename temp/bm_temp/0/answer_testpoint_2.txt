@@ -1,0 +1,18 @@
+```json
+{
+  "test_points": {
+    "TP_001": {
+      "description": "at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal in the previous clock cycle is 1",
+      "related_signals": ["clk", "data", "lock"]
+    },
+    "TP_002": {
+      "description": "at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal is 1 and the value of the w_en signal is 1",
+      "related_signals": ["clk", "data", "lock", "w_en"]
+    },
+    "TP_003": {
+      "description": "at every positive edge of clock, the value of the data register is 0 if the value of the rst signal in the previous clock cycle is 1",
+      "related_signals": ["clk", "data", "rst"]
+    }
+  }
+}
+```

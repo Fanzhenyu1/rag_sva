@@ -1,0 +1,23 @@
+```json
+{
+  "design_name": "register_lock",
+  "description": "A register lock module that is intended to secure multiple words of memory. The module has a reset input that, when asserted, should initialize all bits of the reglk_mem array to a secure default state (typically all 1s to lock registers).",
+  "test_points": {
+    "TP_001": {
+      "id": "TP_001",
+      "description": "at every positive edge of clock, all the BIT_WIDTH number of bits of each of the NO_WORDS number of elements in the reglk_mem array are set to 1 if the value of the rst_i signal in the previous clock cycle is 1",
+      "related_signals": ["clk_i", "rst_i", "reglk_mem"]
+    },
+    "TP_002": {
+      "id": "TP_002",
+      "description": "at every positive edge of clock, all the BIT_WIDTH number of bits of each of the NO_WORDS number of elements in the reglk_mem array are set to 1 if the value of the rst_i signal in the previous clock cycle is 1",
+      "related_signals": ["clk_i", "rst_i", "reglk_mem"]
+    },
+    "TP_003": {
+      "id": "TP_003",
+      "description": "at every positive edge of clock, all the BIT_WIDTH number of bits of each of the NO_WORDS number of elements in the reglk_mem array are set to 1 if the value of the rst_i signal in the previous clock cycle is 1",
+      "related_signals": ["clk_i", "rst_i", "reglk_mem"]
+    }
+  }
+}
+```

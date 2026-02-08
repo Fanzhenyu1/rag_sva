@@ -1,0 +1,10 @@
+```json
+{
+  "threat_model": {
+    "TM_001": {
+      "description": "Incorrect implementation of the Wakeup timer in ADC controller allows attackers to bypass the wakeup timer. The expected security behavior is, at every positive edge of clock other than when the rst_i signal is 0, the value of the wakeup_timer_cnt_q signal is 0 in the next clock cycle if the value of the cfg_fsm_rst_i signal in this clock cycle is 1. However, the design sets wakeup_timer_cnt_q to 1 instead of 0 when cfg_fsm_rst_i is asserted.",
+      "related_signal": "wakeup_timer_cnt_q"
+    }
+  }
+}
+```

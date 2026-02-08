@@ -1,0 +1,23 @@
+## Vul_A_0009: ADC Wakeup Timer Incorrectly Configured at Reset
+### Description
+* Design Description: 
+ADC controller.
+* Threat Model:
+Incorrect implementation of the Wakeup timer in ADC controller allows attackers to bypass the wakeup timer.
+* Security Requirement:
+The ADC wakeup timer should be configured with correct values at reset.
+
+### Example: ADC Wakeup Timer Incorrectly Configured at Reset
+* Example:
+ADC controller. The expected security behavior is, at every positive edge of clock other than when the rst_i signal is 0, the value of the wakeup_timer_cnt_q signal is 0 in the next clock cycle if the value of the cfg_fsm_rst_i signal in this clock cycle is 1.
+* Related CWE:
+CWE-1221: Incorrect Register Defaults or Module Parameters.
+
+## Vul_A_0010: The system failed to reset as required
+### Description
+* Design Description: 
+Reset manager.
+* Threat Model:
+Reset does not follow fall even after maximum clock cycles of input trigger.
+* Security Requirement:
+Reset should follow fall of input signal within a given range of clock cycles unless input is asserted again.

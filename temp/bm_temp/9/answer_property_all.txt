@@ -1,0 +1,15 @@
+```json
+{
+  "design_name": "rstmgr_por",
+  "description": "This module implements a power-on-reset (POR) manager with filtering and stretching capabilities. It filters glitches on the POR input signal, ensures the reset signal is stable for a configurable number of filter stages, and then stretches the reset output for a programmable duration (StretchCount). The design includes scan mode multiplexing to allow scan chains to override the reset signals during test mode.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) $stable(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i == 1'b1 || rst_por_aon_n == 1'b0));",
+    "assertion_2": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i == 1'b1 || rst_por_aon_n == 1'b0));",
+    "assertion_3": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i == 1'b1 || rst_por_aon_n == 1'b0));",
+    "assertion_4": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i == 1'b1 || rst_por_aon_n == 1'b0));",
+    "assertion_5": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i == 1'b1 || rst_por_aon_n == 1'b0));",
+    "assertion_6": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i == 1'b1 || rst_por_aon_n == 1'b0));",
+    "assertion_7": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i == 1'b1 || rst_por_aon_n == 1'b0));"
+  }
+}
+```

@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "Privileged CSR register can be accessed by unprivileged user"
+}
+```

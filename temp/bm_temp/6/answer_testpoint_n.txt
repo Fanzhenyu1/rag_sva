@@ -1,0 +1,23 @@
+```json
+{
+  "design_name": "csr_regfile",
+  "description": "CSR (Control and Status Register) controller module for a processor. It handles CSR operations (write, set, clear, read, and returns from exceptions) and enforces privilege-level checks to prevent unauthorized access to privileged CSRs.",
+  "test_points": {
+    "TP_001": {
+      "id": "TP_001",
+      "description": "At every positive edge of clock, the value of the privilege_violation signal is 1 if any bit of the priv_lvl_o signal is 0 while the corresponding bit of the priv_lvl signal is 1 and the value of the csr_op_i signal is among the four values CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ.",
+      "related_signals": ["privilege_violation", "priv_lvl_o", "priv_lvl", "csr_op_i"]
+    },
+    "TP_002": {
+      "id": "TP_002",
+      "description": "At every positive edge of clock, the value of the privilege_violation signal is 1 if any bit of the priv_lvl_o signal is 0 while the corresponding bit of the priv_lvl signal is 1 and the value of the csr_op_i signal is among the four values CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ.",
+      "related_signals": ["privilege_violation", "priv_lvl_o", "priv_lvl", "csr_op_i"]
+    },
+    "TP_003": {
+      "id": "TP_003",
+      "description": "At every positive edge of clock, the value of the privilege_violation signal is 1 if any bit of the priv_lvl_o signal is 0 while the corresponding bit of the priv_lvl signal is 1 and the value of the csr_op_i signal is among the four values CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ.",
+      "related_signals": ["privilege_violation", "priv_lvl_o", "priv_lvl", "csr_op_i"]
+    }
+  }
+}
+```

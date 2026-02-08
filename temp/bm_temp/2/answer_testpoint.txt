@@ -1,0 +1,23 @@
+```json
+{
+  "design_name": "dmi_jtag",
+  "description": "A JTAG to DMI (Debug Module Interface) bridge module that handles communication between the JTAG interface and the internal debug module. It includes password-based access control for JTAG operations.",
+  "test_points": {
+    "TP_001": {
+      "id": "TP_001",
+      "description": "At every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_chk signal is 0 and the state is Write.",
+      "related_signals": ["dmi_req_valid", "pass_chk"]
+    },
+    "TP_002": {
+      "id": "TP_002",
+      "description": "At every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_chk signal is 0 and the state is Write.",
+      "related_signals": ["dmi_req_valid", "pass_chk"]
+    },
+    "TP_003": {
+      "id": "TP_003",
+      "description": "At every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_chk signal is 0 and the state is Write.",
+      "related_signals": ["dmi_req_valid", "pass_chk"]
+    }
+  }
+}
+```

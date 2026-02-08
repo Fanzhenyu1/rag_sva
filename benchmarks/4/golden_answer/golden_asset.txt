@@ -1,14 +1,1 @@
-```json
-{
-  "design_name": "AES Wrapper with AES-192 Stream Encryption",
-  "description": "A memory-mapped AES-192 encryption system that provides stream cipher functionality by XORing AES core output with plaintext/ciphertext. The design includes a wrapper module for external bus interface and an AES-192 stream encryption/decryption module that performs cryptographic operations.",
-  "security_vulnerability": [
-    {
-      "id": "VUNL_001",
-      "description": "Internal register of AES are visible externally, which can be used to extract key information.",
-      "related_signal": "external_bus_io.addr, external_bus_io.rdata, p_c",
-      "source": "The threat is from malicious software running on one of the untrusted processors. It will attempt to read and write all memory mapped registers in the aes address space hoping the access control policy is insufficient. If any access succeeds, information about the key may be obtained."
-    }
-  ]
-}
-```
+Incorrect implementation of AES enables attackers to illegally extract information from security-critical data such as key registers, cipher text in AES.

@@ -1,3 +1,4 @@
 ```txt
-A simple register lock module that implements a reset-initialized memory array. The module contains multiple words of configurable bit width that are all reset to zero when a reset signal is asserted. The registers maintain their values during normal operation and only change during reset conditions. Retrieve possible threat models, or vulnerability it may have.
+Register lock is a circuit design that implements a reset-initialized register lock function, has default values at reset, containing key signals clk_i (clock input for synchronization), rst_i (reset input to initialize all registers), and reglk_mem (locked register memory output), which serve the purposes of timing control, system initialization to all 1's state, and storing locked data values respectively.
+Based on the above information, retrieve possible threat models, security related test points and security properties, etc.
 ```

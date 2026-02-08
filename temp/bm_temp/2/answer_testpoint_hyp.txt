@@ -1,0 +1,10 @@
+```json
+{
+  "test_points": {
+    "TP_001": {
+      "description": "At every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_chk signal is 0 and the state is Read.",
+      "related_signals": ["pass_chk", "dmi_req_valid", "state_q"]
+    }
+  }
+}
+```

@@ -1,0 +1,11 @@
+```json
+{
+  "design_name": "ariane_testharness",
+  "description": "This module implements an access control bus mapping system. It takes a flat input vector 'acc_ctrl' containing access control bits for multiple peripherals and maps it to a 2D output array 'acc_ctrl_c'. The mapping includes a specific condition where peripheral 1 (j==1) inherits or combines its access rights with those of peripheral 0 via an OR operation, which could introduce a security vulnerability if this inheritance is unintended or violates the principle of least privilege.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk) disable iff (rst) (BIT_WIDTH > 0 && NB_PERIPHERALS > 1) |-> forall (int i=0; i<BIT_WIDTH; i++) forall (int j=0; j<NB_PERIPHERALS; j++) (j != 1) |-> (acc_ctrl_c[i][j] == acc_ctrl[j*BIT_WIDTH+i]))",
+    "assertion_2": "assert property (@(posedge clk) disable iff (rst) (BIT_WIDTH > 0 && NB_PERIPHERALS > 1) |-> forall (int i=0; i<BIT_WIDTH; i++) (acc_ctrl_c[i][1] == (acc_ctrl[1*BIT_WIDTH+i] | acc_ctrl[0*BIT_WIDTH+i])))",
+    "assertion_3": "assert property (@(posedge clk) disable iff (rst) (BIT_WIDTH > 0 && NB_PERIPHERALS > 1) |-> forall (int i=0; i<BIT_WIDTH; i++) forall (int j=0; j<NB_PERIPHERALS; j++) (j != 0 && j != 1) |-> (acc_ctrl_c[i][j] == $past(acc_ctrl_c[i][j]) || $changed(acc_ctrl[j*BIT_WIDTH+i])))"
+  }
+}
+```

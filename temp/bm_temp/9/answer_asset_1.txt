@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "The system failed to reset as required. The expected security behavior is, at every positive edge of clock other than when the rst_i signal is 1, if the por_n_i signal falls, then in a minimum of MIN_CYCLES clock cycles and a maximum of MAX_CYCLES clock cycles, the value of the por_n_i signal should become 1 or the value of the rst_por_aon_n signal should become 0."
+}
+```

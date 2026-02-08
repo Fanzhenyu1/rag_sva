@@ -1,20 +1,23 @@
 ```json
 {
   "design_name": "ariane_testharness",
-  "description": "Access control signal transformation module that rearranges access control values from a flattened input array to a structured 2D output array, with conditional OR operations between peripheral indices",
-  "security_vulnerability": [
-    {
-      "id": "VUNL_001",
-      "description": "Access control mechanism integrity violation - peripheral index 1 (j==1) incorrectly ORs its bits with peripheral index 0 (acc_ctrl[0*BIT_WIDTH+i]), potentially bypassing intended access restrictions and violating security policy that ROM data should never be read by Core1",
-      "related_signal": "acc_ctrl_c",
-      "source": "INTEGRITY_ACCESS_CONTROL_MECHANISM - The second rule will fail because access control only allows the access when bit [0] is 0 even though it should be allowed"
+  "description": "Access control matrix transformation module that converts a flattened access control array into a 2D privilege-peripheral matrix for the CVA6 processor",
+  "security_vulnerability": {
+    "VUNL_001": {
+      "description": "Access to one peripheral may grant unintended access to another peripheral due to incorrect access control matrix mapping",
+      "related_signal": "acc_ctrl, acc_ctrl_c",
+      "source": "Access control bus in cva6 processor, 'bug description': ['Access to HMAC peripheral grants it access to PKT peripheral']"
     },
-    {
-      "id": "VUNL_002",
-      "description": "Improper access control transformation logic creates unintended privilege escalation path where peripheral 1 inherits access rights from peripheral 0, violating the principle of least privilege and integrity of access control mechanisms",
-      "related_signal": "acc_ctrl",
-      "source": "INTEGRITY_ACCESS_CONTROL_MECHANISM - Based on the security goal we fill in the template from the example signals, obtaining the rule below"
+    "VUNL_002": {
+      "description": "Privilege level mapping error in access control matrix could allow unauthorized peripheral access",
+      "related_signal": "acc_ctrl, acc_ctrl_c",
+      "source": "Access control bus in cva6 processor, 'security property': 'at every positive edge of clock, for each of the PRIV_TYPES number of privilege arrays in the acc_ctrl_c matrix, the value of each of the NB_PERIPHERALS number of peripherals is same as the corresponding bit in the acc_ctrl array where the value for the ith privilege type of the jth peripheral is stored in the (j*PRIV_TYPES + i)th bit'"
+    },
+    "VUNL_003": {
+      "description": "Incorrect access control matrix transformation logic may bypass privilege-based peripheral isolation",
+      "related_signal": "acc_ctrl, acc_ctrl_c",
+      "source": "Access control bus in cva6 processor, 'bug description': ['Access to HMAC peripheral grants it access to PKT peripheral']"
     }
-  ]
+  }
 }
 ```

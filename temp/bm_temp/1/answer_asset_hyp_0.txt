@@ -1,0 +1,10 @@
+```json
+{
+  "threat_model": {
+    "TM_001": {
+      "description": "Traffic controller skips yellow before going red when walk button is pressed on green, violating the required sequence red -> green -> yellow -> red.",
+      "related_signal": "signal"
+    }
+  }
+}
+```

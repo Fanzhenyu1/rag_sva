@@ -1,0 +1,18 @@
+```json
+{
+  "test_points": {
+    "TP_001": {
+      "description": "At every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_chk signal is 0 and dm::dtm_op_t'(dmi.op) is DTM_READ",
+      "related_signals": ["dmi_req_valid", "pass_chk", "dmi.op"]
+    },
+    "TP_002": {
+      "description": "At every positive edge of clock, the value of the data_d signal is unchanged from its previous value if the value of the pass_chk signal is 0 and dm::dtm_op_t'(dmi.op) is DTM_READ",
+      "related_signals": ["data_d", "pass_chk", "dmi.op"]
+    },
+    "TP_003": {
+      "description": "At every positive edge of clock, the value of the state_d signal remains in Idle state if the value of the pass_chk signal is 0 and dm::dtm_op_t'(dmi.op) is DTM_READ",
+      "related_signals": ["state_d", "pass_chk", "dmi.op"]
+    }
+  }
+}
+```

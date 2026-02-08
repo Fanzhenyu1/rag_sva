@@ -1,0 +1,26 @@
+### Example: The system failed to reset as required
+* Example:
+Reset manager. The expected security behavior is, at every positive edge of clock other than when the rst_i signal is 1, if the por_n_i signal falls, then in a minimum of MIN_CYCLES clock cycles and a maximum of MAX_CYCLES clock cycles, the value of the por_n_i signal should become 1 or the value of the rst_por_aon_n signal should become 0.
+* Related CWE:
+CWE-1206
+
+### Detection Example
+The flip flop implementing the debug.csr.enable register is not connected to reset.
+
+* Threat Model
+The debug.csr.enable bit is unknown after reset. In the real chip, it will randomly take the value 0 or 1 meaning the chip may be in debug mode after reset. An attacker can repeatedly reset the chip until debug mode is enabled.
+
+* Security Requirement
+All security critical control registers should be set to a known value during reset.
+
+
+
+### Detection Example
+The SoC has a temperature sensor, located in the untrusted subsystem, so that overheating can be detected. The sensed temperature is computed using two parameters: offset and scale as: "sensedtemp = offset + scale * sensorval". The sensedtemp value is available in a Read Only register. The raw sensor value is not available to be read. The offset and scale registers are only writable by the tmcu. None of the cores in the untrusted subsystem can write the offset and scale registers. 
+
+* Threat Model
+Due to a design oversight, the offset and scale registers are writable by the untrusted cores. By modifying the values of the parameters, the chip may overheat. This can cause it to malfunction and possibly bypassing security protections.
+
+* Security Requirement
+The temperature sensor parameters must not be writable by untrusted software.
+

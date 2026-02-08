@@ -1,32 +1,23 @@
 ```json
 {
   "design_name": "dmi_jtag",
-  "description": "JTAG to DMI (Debug Module Interface) bridge module that translates JTAG operations into DMI transactions. Provides password-based authentication for secure access to debug module and handles read/write operations to the debug module through a finite state machine.",
-  "security_vulnerability": [
-    {
-      "id": "VUNL_001",
-      "description": "The design lacks encryption of debug data before transmission through JTAG, allowing potential snooping of sensitive information in flight. Data from the debug module is transmitted unencrypted through the JTAG port, bypassing the required AES encryption protection.",
-      "related_signal": "dmi_resp_i, td_o",
-      "source": "Only data coming from the AES block is allowed to reach the debug module and thus the JTAG port. There must be no information flow that bypass the AES block."
+  "description": "JTAG DMI (Debug Module Interface) module for processor debug access with password protection mechanism. The module handles JTAG-to-DMI protocol conversion and implements a password-based lock to restrict unauthorized debug access.",
+  "security_vulnerability": {
+    "VUNL_001": {
+      "description": "Able to write to locked JTAG - The design allows DMI write operations to proceed without proper password verification check. In the Write state, dmi_req_valid is asserted without checking pass_chk signal status, enabling unauthorized write access when JTAG is locked.",
+      "related_signal": "dmi_req_valid, pass_chk",
+      "source": "JTAG module in cva6 processor. It is locked with a password by default. 'bug description': ['Able to write to locked JTAG']. 'security property':'at every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_check signal is 0'."
     },
-    {
-      "id": "VUNL_002",
-      "description": "Password authentication mechanism is implemented but lacks proper encryption protection for the authentication process and subsequent data transfers, potentially exposing security-sensitive trace data to unauthorized access through JTAG snooping.",
-      "related_signal": "jtag_key, pass_chk, dmi.data",
-      "source": "A debugger connected to JTAG must be authenticated before being allowed to read security sensitive trace data. If authentication fails, only non-secure trace data can be read."
+    "VUNL_002": {
+      "description": "Able to write to locked JTAG - The state machine transitions to Write state from Idle without verifying pass_chk signal, allowing unauthorized write operations when the password check has not passed.",
+      "related_signal": "state_d, state_q, pass_chk",
+      "source": "JTAG module in cva6 processor. It is locked with a password by default. 'bug description': ['Able to write to locked JTAG']. 'security property':'at every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_check signal is 0'."
     },
-    {
-      "id": "VUNL_003",
-      "description": "The JTAG interface provides direct access to the DMI bus without proper data encryption, allowing attackers to potentially read secure locations in the chip by snooping on the JTAG bus during authenticated sessions.",
-      "related_signal": "dmi_req_o, dmi_resp_i, td_o",
-      "source": "If data on the JTAG pins are not protected, an attacker may snoop on the bus while an authenticated user is performing reads of secure locations in the chip."
-    },
-    {
-      "id": "VUNL_004",
-      "description": "The design does not implement proper privilege separation for debug access, potentially allowing lower privilege agents to access HRoT (Hardware Root of Trust) debug data due to insufficient access control mechanisms.",
-      "related_signal": "pass_chk, umode_o",
-      "source": "This allows agents with low privilege (3) to access debug data in nonsecure areas of the SoC and agents with the highest privilege (0) to access debug data in the HRoT."
+    "VUNL_003": {
+      "description": "Able to write to locked JTAG - The password protection only applies to read operations but not write operations, creating an asymmetric security vulnerability where writes can bypass the lock mechanism entirely.",
+      "related_signal": "dmi_req_valid, pass_chk, dmi.op",
+      "source": "JTAG module in cva6 processor. It is locked with a password by default. 'bug description': ['Able to write to locked JTAG']. 'security property':'at every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_check signal is 0'."
     }
-  ]
+  }
 }
 ```

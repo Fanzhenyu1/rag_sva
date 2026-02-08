@@ -1,0 +1,22 @@
+```json
+{
+  "test_points": {
+    "TP_001": {
+      "description": "When walk button is pressed while signal is GREEN, signal must transition through YELLOW before becoming RED",
+      "related_signals": ["walk", "signal"]
+    },
+    "TP_002": {
+      "description": "When walk button is pressed while signal is GREEN, signal must remain GREEN for at least 1 cycle before transitioning to YELLOW",
+      "related_signals": ["walk", "signal"]
+    },
+    "TP_003": {
+      "description": "When walk button is pressed while signal is GREEN, signal must be YELLOW for exactly 1 cycle before transitioning to RED",
+      "related_signals": ["signal"]
+    },
+    "TP_004": {
+      "description": "When walk button is pressed while signal is GREEN, signal must remain RED for 4 consecutive cycles before transitioning to GREEN",
+      "related_signals": ["walk", "signal", "walk_ctr"]
+    }
+  }
+}
+```

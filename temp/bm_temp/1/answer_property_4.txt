@@ -1,0 +1,11 @@
+```json
+{
+    "assertion_1": "assert property (@(posedge clk) (signal == RED) |-> ($past(signal) == RED) || ($past(signal) == YELLOW));",
+    "assertion_2": "assert property (@(posedge clk) (signal == RED) |-> ($past(signal) == RED) || ($past(signal) == YELLOW));",
+    "assertion_3": "assert property (@(posedge clk) (signal == RED) |-> ($past(signal) == RED) || ($past(signal) == YELLOW));",
+    "assertion_4": "assert property (@(posedge clk) (signal == RED) |-> ($past(signal) == RED) || ($past(signal) == YELLOW));",
+    "assertion_5": "assert property (@(posedge clk) (signal == RED) |-> ($past(signal) == RED) || ($past(signal) == YELLOW));",
+    "assertion_6": "assert property (@(posedge clk) (signal == RED) |-> ($past(signal) == RED) || ($past(signal) == YELLOW));",
+    "assertion_7": "assert property (@(posedge clk) (signal == RED) |-> ($past(signal) == RED) || ($past(signal) == YELLOW));"
+}
+```

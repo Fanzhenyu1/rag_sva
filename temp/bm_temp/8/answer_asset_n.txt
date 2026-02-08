@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "Incorrect implementation of the Wakeup timer in ADC controller allows attackers to bypass the wakeup timer."
+}
+```

@@ -1,0 +1,18 @@
+```json
+{
+  "test_points": {
+    "TP_001": {
+      "description": "Verify that for each bit position i (0 to BIT_WIDTH-1) and each peripheral j (0 to NB_PERIPHERALS-1), the assignment acc_ctrl_c[i][j] = acc_ctrl[j*BIT_WIDTH+i] | (j==1 && acc_ctrl[0*BIT_WIDTH+i]) does not grant peripheral 1 unintended access by OR-ing with peripheral 0's control bit when j==1, ensuring no privilege escalation or incorrect bit mapping occurs.",
+      "related_signals": ["acc_ctrl", "acc_ctrl_c"]
+    },
+    "TP_002": {
+      "description": "Verify that the access control mapping from input acc_ctrl to output acc_ctrl_c correctly maps each peripheral's BIT_WIDTH control bits without allowing any peripheral to inherit or combine access rights from another peripheral, except as explicitly intended by the design specification.",
+      "related_signals": ["acc_ctrl", "acc_ctrl_c"]
+    },
+    "TP_003": {
+      "description": "Verify that the conditional OR operation (j==1 && acc_ctrl[0*BIT_WIDTH+i]) does not allow peripheral 1 to gain access rights from peripheral 0's control bits in a way that violates the intended access policy, preventing an untrusted agent from bypassing access controls.",
+      "related_signals": ["acc_ctrl", "acc_ctrl_c"]
+    }
+  }
+}
+```

@@ -1,0 +1,12 @@
+```json
+{
+  "design_name": "traffic_controller",
+  "description": "A traffic controller with pedestrian walk functionality. The controller cycles through RED, GREEN, and YELLOW states. When a pedestrian presses the walk button during GREEN, the controller should transition to YELLOW for one cycle before RED, and remain RED for 4 cycles to allow safe crossing.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk) disable iff (rst) (signal == GREEN && walk) |=> (signal == YELLOW));",
+    "assertion_2": "assert property (@(posedge clk) disable iff (rst) (signal == GREEN && walk) |=> (signal == YELLOW) ##1 (signal == RED));",
+    "assertion_3": "assert property (@(posedge clk) disable iff (rst) (signal == GREEN && walk) |=> (signal == YELLOW) ##1 (signal == RED) [*4]);",
+    "assertion_4": "assert property (@(posedge clk) disable iff (rst) (signal == GREEN && walk) |=> (signal == YELLOW) ##1 (signal == RED) ##0 (walk_ctr == 4) ##1 (walk_ctr == 3) ##1 (walk_ctr == 2) ##1 (walk_ctr == 1) ##1 (walk_ctr == 0));"
+  }
+}
+```

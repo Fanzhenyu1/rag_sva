@@ -1,0 +1,18 @@
+```json
+{
+  "design_name": "aes_wrapper",
+  "description": "AES accelerator wrapper module that handles cryptographic operations with external bus interface and debug mode support. The module includes security features to clear secret keys when entering debug mode to prevent key leakage.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) $rose(debug_mode_i) |-> (key_big == 0));",
+    "assertion_2": "assert property (@(posedge clk_i) (debug_mode_i && $past(!debug_mode_i)) |-> (key_big == 0));",
+    "assertion_3": "assert property (@(posedge clk_i) $rose(debug_mode_i) |-> (key_big == 0));",
+    "assertion_4": "assert property (@(posedge clk_i) (debug_mode_i && $past(!debug_mode_i)) |-> (key_big == 0));",
+    "assertion_5": "assert property (@(posedge clk_i) $rose(debug_mode_i) |-> (key_big == 0));",
+    "assertion_6": "assert property (@(posedge clk_i) (debug_mode_i && $past(!debug_mode_i)) |-> (key_big == 0));",
+    "assertion_7": "assert property (@(posedge clk_i) $rose(debug_mode_i) |-> (key_big == 0));",
+    "assertion_8": "assert property (@(posedge clk_i) (debug_mode_i && $past(!debug_mode_i)) |-> (key_big == 0));",
+    "assertion_9": "assert property (@(posedge clk_i) $rose(debug_mode_i) |-> (key_big == 0));",
+    "assertion_10": "assert property (@(posedge clk_i) (debug_mode_i && $past(!debug_mode_i)) |-> (key_big == 0));"
+  }
+}
+```

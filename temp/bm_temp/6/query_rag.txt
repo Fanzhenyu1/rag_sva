@@ -1,3 +1,4 @@
 ```txt
-Control and Status Register (CSR) register file module that handles CSR operations and privilege level checking. The module implements CSR read/write operations with different access modes (WRITE, SET, CLEAR, READ) and manages exception return operations (MRET, SRET, DRET). It also performs privilege level validation to ensure secure access to protected CSRs. Retrieve possible threat models, or vulnerability it may have.
+CSR controller of the processor is a circuit design that has Privileged CSR register, containing key signals priv_lvl_o, priv_lvl, privilege_violation, csr_op_i, csr_we, csr_read, mret, sret, dret, which serve the purposes of current privilege level indication, required access level, privilege violation detection, CSR operation selection, write/read enable control, and exception return signaling respectively.
+Based on the above information, retrieve possible threat models, security requirments, and example, etc.
 ```

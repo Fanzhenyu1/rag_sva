@@ -1,0 +1,10 @@
+```json
+{
+  "threat_model": {
+    "TM_001": {
+      "description": "The register lock fails to lock register when lock function is enabled. The lock register can be modified when the lock signal is on.",
+      "related_signal": "lock"
+    }
+  }
+}
+```

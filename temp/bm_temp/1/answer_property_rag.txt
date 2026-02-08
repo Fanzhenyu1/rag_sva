@@ -1,0 +1,18 @@
+```json
+{
+  "design_name": "traffic_controller",
+  "description": "A simple traffic light controller with pedestrian walk functionality that cycles through red -> green -> yellow -> red states with a walk counter that extends red light duration when pedestrians request to cross",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_2": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_3": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_4": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_5": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_6": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_7": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_8": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_9": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_10": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));"
+  }
+}
+```

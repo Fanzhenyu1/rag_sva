@@ -1,0 +1,9 @@
+```json
+{
+  "design_name": "rstmgr_por",
+  "description": "Power-on reset manager with filtering and stretching stages. The module filters glitches on the power-on reset input (por_n_i) through FilterStages flip-flops, then stretches the reset output (rst_por_aon_n) for StretchCount cycles after the filtered reset becomes stable.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_aon_i) disable iff (por_n_i == 0) ($fell(por_n_i) |-> ##[FilterStages+1:FilterStages+StretchCount] (por_n_i == 1 || rst_por_aon_n == 0)));"
+  }
+}
+```

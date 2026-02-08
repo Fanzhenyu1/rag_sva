@@ -1,0 +1,10 @@
+```json
+{
+  "test_points": {
+    "TP_001": {
+      "description": "at every positive edge of clock other than when the por_n_i signal is 0, if the por_n_i signal falls, then in a minimum of FilterStages + 1 clock cycles and a maximum of FilterStages + StretchCount clock cycles, the value of the por_n_i signal should become 1 or the value of the rst_por_aon_n signal should become 0.",
+      "related_signals": ["por_n_i", "rst_por_aon_n", "clk_aon_i"]
+    }
+  }
+}
+```

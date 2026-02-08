@@ -1,0 +1,23 @@
+```json
+{
+  "design_name": "ariane_testharness",
+  "description": "This module implements access control logic for peripherals. It takes a flat input vector 'acc_ctrl' and maps it to a 2D output matrix 'acc_ctrl_c'. The mapping includes a specific condition where for peripheral index j=1, the output is also OR-ed with the value from the first privilege position (i) of the first peripheral (j=0).",
+  "test_points": {
+    "TP_001": {
+      "id": "TP_001",
+      "description": "at every positive edge of clock, for each of the BIT_WIDTH number of privilege arrays in the acc_ctrl_c matrix, the value of each of the NB_PERIPHERALS number of peripherals is same as the corresponding bit in the acc_ctrl array where the value for the ith privilege type of the jth peripheral is stored in the (j*BIT_WIDTH + i)th bit, except for peripheral 1 (j=1) which must not be OR-ed with peripheral 0's privilege bit.",
+      "related_signals": ["acc_ctrl_c[i][j]", "acc_ctrl[j*BIT_WIDTH+i]"]
+    },
+    "TP_002": {
+      "id": "TP_002",
+      "description": "at every positive edge of clock, for each of the BIT_WIDTH number of privilege arrays in the acc_ctrl_c matrix, the value of each of the NB_PERIPHERALS number of peripherals is same as the corresponding bit in the acc_ctrl array where the value for the ith privilege type of the jth peripheral is stored in the (j*BIT_WIDTH + i)th bit, except for peripheral 1 (j=1) which must not be OR-ed with peripheral 0's privilege bit.",
+      "related_signals": ["acc_ctrl_c[i][j]", "acc_ctrl[j*BIT_WIDTH+i]"]
+    },
+    "TP_003": {
+      "id": "TP_003",
+      "description": "at every positive edge of clock, for each of the BIT_WIDTH number of privilege arrays in the acc_ctrl_c matrix, the value of each of the NB_PERIPHERALS number of peripherals is same as the corresponding bit in the acc_ctrl array where the value for the ith privilege type of the jth peripheral is stored in the (j*BIT_WIDTH + i)th bit, except for peripheral 1 (j=1) which must not be OR-ed with peripheral 0's privilege bit.",
+      "related_signals": ["acc_ctrl_c[i][j]", "acc_ctrl[j*BIT_WIDTH+i]"]
+    }
+  }
+}
+```

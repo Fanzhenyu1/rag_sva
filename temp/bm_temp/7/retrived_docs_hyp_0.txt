@@ -1,0 +1,20 @@
+### Example: Register lock has incorrect default values
+* Example:
+Register lock. The expected security behavior is, at every positive edge of clock, all the BIT_WIDTH number of bits of each of the NO_WORDS number of elements in the reglk_mem array are set to 1 if the value of the rst signal in the previous clock cycle is 1.
+* Related CWE:
+CWE-276: Incorrect Default Permissions.
+
+## Vul_A_0008: Register lock has incorrect default values
+### Description
+* Design Description: 
+Register lock.
+* Threat Model:
+Register locks are configured with incorrect default values at reset.
+* Security Requirement:
+The register lock should be configured with correct default values at reset.
+
+### Example: Register Lock Failure
+* Example:
+A simple register lock module. The expected security behavior is, at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal in the previous clock cycle is 1.
+* Related CWE:
+CWE-1233: Improper Hardware Lock Protection for Security Sensitive Controls.

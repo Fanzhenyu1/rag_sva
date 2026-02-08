@@ -1,0 +1,14 @@
+```json
+{
+  "test_points": {
+    "TP_001": {
+      "description": "at every positive edge of clock, the value of the privilege_violation signal is 1 if any bit of the priv_lvl_o signal is 0 while the corresponding bit of the priv_lvl signal is 1 and the value of the csr_op_i signal is among the four values CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ",
+      "related_signals": ["privilege_violation", "priv_lvl_o", "priv_lvl", "csr_op_i"]
+    },
+    "TP_002": {
+      "description": "at every positive edge of clock, the value of the privilege_violation signal is 1 if csr_addr_i[11:4] equals 8'h7b and debug_mode_q is 0 and csr_we or csr_read is 1",
+      "related_signals": ["privilege_violation", "csr_addr_i", "debug_mode_q", "csr_we", "csr_read"]
+    }
+  }
+}
+```

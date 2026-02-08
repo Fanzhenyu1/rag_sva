@@ -1,0 +1,15 @@
+```json
+{
+  "design_name": "aes_wrapper",
+  "description": "AES accelerator wrapper module with external bus interface for configuration and data exchange. The module handles AES key input, debug mode control, and internal state management for encryption operations.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) $rose(debug_mode_i) |-> key_big == 0);",
+    "assertion_2": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en) && !ct_valid |-> external_bus_io.rdata == 0);",
+    "assertion_3": "assert property (@(posedge clk_i) disable iff (!rst_ni) !ct_valid |-> state_big == state_iv);",
+    "assertion_4": "assert property (@(posedge clk_i) disable iff (!rst_ni) debug_mode_i |-> inter_state == 0);",
+    "assertion_5": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.addr >= 0 && external_bus_io.addr <= 11 && external_bus_io.en) && !ct_valid |-> external_bus_io.rdata == 0);",
+    "assertion_6": "assert property (@(posedge clk_i) disable iff (!rst_ni) debug_mode_i |-> p_c_big == 0);",
+    "assertion_7": "assert property (@(posedge clk_i) disable iff (!rst_ni) !ct_valid |-> ct == 0);"
+  }
+}
+```

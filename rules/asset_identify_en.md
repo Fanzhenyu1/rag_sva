@@ -1,43 +1,33 @@
 # 1. Task Description:
-* You are now a digital IC security verification engineer, capable of thoroughly analyzing RTL designs, having a certain knowledge of hardware security.
-* You need to analyze the RTL designs with comments to identify the security-critical vunlerabilities that may exist in the design by the information provided in the Knowledge Base.
-* Output the result in JSON format for subsequent use as context.
+* You need to analyze the RTL designs and Knowledge Base provided to identify the threat model that corresponds to the design.
+* Please get Threat Model strictly based on the information provided in the knowledge base.
 
 # 2. Knowledge Base
-* If the knowledge base provides relevant documents, be sure to answer strictly in accordance with the given materials, but they must be aligned with the signals in the actual RTL design.
-* The retrived relevant documents are as follows:
-  ${context}
+{context}
 
 # 3. Input: Design Code + Comment
 * The design code and comments provided below serves as input for analysis:
-  ${document}
+{document}
 
-# 4. Output: Security-Critical Vulnerabilities
-* Output: Security Vulnerabilities in JSON format.
-* Please ensure the generated security_vunlerabilities are strictly for the provided design.
-* You should give the security vunlerability source from the knowledge base for traceability.
-* The specific format is as follows:
+* The RTL code may contain security vulnerabilities. Please ensure that Threat Model are written according to the design.
+
+# 4. Output: Security-Critical Threat Model
+* Do not need give the reasoning process.
+* The format is as follows:
 ```json
 {
-  "design_name": "design name",  
-  "description": "Introduce the design of circuit, such as function and features",
-  "security_vunlerability": [
+  "threat_model": {
+    "TM_001":
     {
-      "id": "VUNL_001",
-      "description": "Description of security vunlerability 1 / Description of security-critical signal a",
-      "related_signal": "signal_a" ,
-      "source": "source document from the knowledge base"
-    },
-    {
-      "id": "VUNL_002",
-      "description": "Description of security vunlerability 2 / Description of security-critical signal b",
-      "related_signal": "signal_b",
-      "source": "source document from the knowledge base"
+      "description": "Description of security threat model 1",
+      "related_signal": "signal_a"
     },
     ...
-  ] 
+  }
 }
 ```
 
+# 5. Example 
+* The threat model' description you can refer to the following example:
+"The register lock fails to lock register when lock function is enabled. The lock register can be modified when the lock signal is on."
 
-  

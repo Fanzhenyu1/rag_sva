@@ -1,0 +1,11 @@
+```json
+{
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (rst_i) (rst_i |-> ##1 ($countones(reglk_mem) == (NO_WORDS * BIT_WIDTH))))",
+    "assertion_2": "assert property (@(posedge clk_i) disable iff (rst_i) (rst_i |-> ##1 (reglk_mem == {NO_WORDS{{BIT_WIDTH{1'b1}}}})))",
+    "assertion_3": "assert property (@(posedge clk_i) disable iff (rst_i) (rst_i |-> ##1 ($onehot0(~reglk_mem) == 0)))",
+    "assertion_4": "assert property (@(posedge clk_i) disable iff (rst_i) (rst_i |-> ##1 (reglk_mem inside { {NO_WORDS{{BIT_WIDTH{1'b1}}}} })))",
+    "assertion_5": "assert property (@(posedge clk_i) disable iff (rst_i) (rst_i |-> ##1 (reglk_mem[0] == {BIT_WIDTH{1'b1}} && reglk_mem[1] == {BIT_WIDTH{1'b1}} && reglk_mem[2] == {BIT_WIDTH{1'b1}})))",
+    "assertion_6": "assert property (@(posedge clk_i) disable iff (rst_i) (rst_i |-> ##1 (reglk_mem[0] == {BIT_WIDTH{1'b1}} && reglk_mem[1] == {BIT_WIDTH{1'b1}} && reglk_mem[2] == {BIT_WIDTH{1'b1}})))",
+    "assertion_7": "assert property (@(posedge clk_i) disable iff (rst_i) (rst_i |-> ##1 (reglk_mem == {NO_WORDS{{BIT_WIDTH{1'b1}}}})))"
+}
+```

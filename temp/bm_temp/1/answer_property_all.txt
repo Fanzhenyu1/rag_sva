@@ -1,0 +1,15 @@
+```json
+{
+  "design_name": "traffic_controller",
+  "description": "A traffic light controller with pedestrian walk request functionality. The controller has three states: RED, GREEN, YELLOW. When a pedestrian presses the walk button during GREEN, the light should go RED and stay RED for 4 cycles before returning to normal operation.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk) disable iff (rst) (signal == RED) |-> ($past(signal) == RED || $past(signal) == YELLOW));",
+    "assertion_2": "assert property (@(posedge clk) disable iff (rst) (signal == GREEN) |-> ($past(signal) == RED || $past(signal) == GREEN));",
+    "assertion_3": "assert property (@(posedge clk) disable iff (rst) (signal == YELLOW) |-> ($past(signal) == GREEN));",
+    "assertion_4": "assert property (@(posedge clk) disable iff (rst) (walk && signal == GREEN) |=> (signal == RED) ##1 (signal == RED) [*3]);",
+    "assertion_5": "assert property (@(posedge clk) disable iff (rst) (walk && signal == GREEN) |=> (walk_ctr == 4) ##1 (walk_ctr == 3) ##1 (walk_ctr == 2) ##1 (walk_ctr == 1) ##1 (walk_ctr == 0));",
+    "assertion_6": "assert property (@(posedge clk) disable iff (rst) (walk_ctr > 0) |-> (signal == RED));",
+    "assertion_7": "assert property (@(posedge clk) disable iff (rst) (signal == RED && walk_ctr == 0 && !walk) |=> (signal == GREEN));"
+  }
+}
+```

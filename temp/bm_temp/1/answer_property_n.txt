@@ -1,0 +1,18 @@
+```json
+{
+  "design_name": "traffic_controller",
+  "description": "A simple traffic light controller with pedestrian walk request functionality. The design implements a finite state machine (FSM) with three states (RED, GREEN, YELLOW) and includes a counter to hold the RED state for a fixed duration (WALK_TIME = 4 cycles) when a pedestrian requests to cross (walk signal asserted).",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk) disable iff (rst) (signal == RED) |-> ($past(signal) == RED) || ($past(signal) == YELLOW));",
+    "assertion_2": "assert property (@(posedge clk) disable iff (rst) (signal == GREEN && walk) |=> (signal == RED && walk_ctr == 4));",
+    "assertion_3": "assert property (@(posedge clk) disable iff (rst) (signal == GREEN && !walk) |=> (signal == YELLOW));",
+    "assertion_4": "assert property (@(posedge clk) disable iff (rst) (signal == RED) |-> ($past(signal) == RED) || ($past(signal) == YELLOW));",
+    "assertion_5": "assert property (@(posedge clk) disable iff (rst) (signal == GREEN && walk) |=> (signal == RED && walk_ctr == 4));",
+    "assertion_6": "assert property (@(posedge clk) disable iff (rst) (signal == GREEN && !walk) |=> (signal == YELLOW));",
+    "assertion_7": "assert property (@(posedge clk) disable iff (rst) (signal == RED) |-> ($past(signal) == RED) || ($past(signal) == YELLOW));",
+    "assertion_8": "assert property (@(posedge clk) disable iff (rst) (signal == GREEN && walk) |=> (signal == RED && walk_ctr == 4));",
+    "assertion_9": "assert property (@(posedge clk) disable iff (rst) (signal == GREEN && !walk) |=> (signal == YELLOW));",
+    "assertion_10": "assert property (@(posedge clk) disable iff (rst) (signal == RED) |-> ($past(signal) == RED) || ($past(signal) == YELLOW));"
+  }
+}
+```

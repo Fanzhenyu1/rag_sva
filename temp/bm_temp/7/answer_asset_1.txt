@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "Malicious software or an attacker could exploit the incorrect default values in the register lock memory after a reset, potentially gaining unauthorized access to security-sensitive controls that should be locked by default."
+}
+```

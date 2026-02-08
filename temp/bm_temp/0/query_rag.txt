@@ -1,3 +1,4 @@
 ```txt
-A simple register lock design, retrieve possible threat models, or vulnerability it may have.
+Register Lock is a circuit design that can lock register when lock function is enabled, containing key signals data_in, data_out, r_en, w_en, lock, clk, and rst.
+retrieve possible Threat Model, Security Requirement and Example, etc.
 ```

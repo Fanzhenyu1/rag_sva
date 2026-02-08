@@ -1,0 +1,24 @@
+
+
+### Detection Example
+The JTAG port of the SoC is connected to the debug module in the Hardware Root of Trust, allowing an authenticated user to read data from all modules on the tbus interconnect. In order to protect against anyone reading the data in flight when it has left the SoC, data is encrypted in the AES core before going to the debug block.
+
+* Threat Model
+If data on the JTAG pins are not protected, an attacker may snoop on the bus while an authenticated user is performing reads of secure locations in the chip.
+
+* Security Requirement
+Only data coming from the AES block is allowed to reach the debug module and thus the JTAG port. There must be no information flow that bypass the AES block.
+
+
+
+### Example: JTAG Has Improper Password Lock Function
+* Example:
+JTAG module in cva6 processor. The expected security behavior is, at every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_check signal is 0.
+* Related CWE:
+CWE-1324: Sensitive Information Accessible by Physical Probing of JTAG Interface.
+
+## CWE 1324: Sensitive Information Accessible by Physical Probing of JTAG Interface
+### Description
+Sensitive information in clear text on the JTAG interface may be examined by an eavesdropper, e.g. by placing a probe device on the interface such as a logic analyzer, or a corresponding software technique.
+### Radix Security Rule Template
+Information from the design is only allowed to flow to User visible signals e.g. the JTAG port if it flows through the AES encryption block

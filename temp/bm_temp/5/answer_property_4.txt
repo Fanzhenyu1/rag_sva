@@ -1,0 +1,11 @@
+```json
+{
+    "assertion_1": "assert property (@(posedge clk_i) (debug_mode_i && $past(!debug_mode_i)) |-> (key_big == 0));",
+    "assertion_2": "assert property (@(posedge clk_i) (debug_mode_i && $past(debug_mode_i == 0)) |-> (key_big == 0));",
+    "assertion_3": "assert property (@(posedge clk_i) ($rose(debug_mode_i) |-> (key_big == 0)));",
+    "assertion_4": "assert property (@(posedge clk_i) (($past(debug_mode_i) == 0) && (debug_mode_i == 1)) |-> (key_big == 0));",
+    "assertion_5": "assert property (@(posedge clk_i) (debug_mode_i && $past(debug_mode_i === 1'b0)) |-> (key_big === {(BIT_WIDTH*NO_WORDS){1'b0}}));",
+    "assertion_6": "assert property (@(posedge clk_i) (debug_mode_i && $past(!debug_mode_i, 1)) |-> (key_big == 0));",
+    "assertion_7": "assert property (@(posedge clk_i) (($past(debug_mode_i) == 1'b0) && (debug_mode_i == 1'b1)) |-> (key_big == 0));"
+}
+```

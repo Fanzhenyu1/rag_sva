@@ -1,0 +1,18 @@
+```json
+{
+  "design_name": "AES Wrapper with AES-192 SED",
+  "description": "AES accelerator wrapper that implements an AES-192 encryption core with side-channel protection through data masking. The design includes an external bus interface for control and data access, and uses XOR masking with p_c_text to protect intermediate states.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) !(ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0));",
+    "assertion_2": "assert property (@(posedge clk_i) !(ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0));",
+    "assertion_3": "assert property (@(posedge clk_i) !(ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0));",
+    "assertion_4": "assert property (@(posedge clk_i) !(ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0));",
+    "assertion_5": "assert property (@(posedge clk_i) !(ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0));",
+    "assertion_6": "assert property (@(posedge clk_i) !(ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0));",
+    "assertion_7": "assert property (@(posedge clk_i) !(ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0));",
+    "assertion_8": "assert property (@(posedge clk_i) !(ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0));",
+    "assertion_9": "assert property (@(posedge clk_i) !(ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0));",
+    "assertion_10": "assert property (@(posedge clk_i) !(ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0));"
+  }
+}
+```

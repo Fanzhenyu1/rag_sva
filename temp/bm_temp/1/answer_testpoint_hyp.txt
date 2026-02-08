@@ -1,0 +1,10 @@
+```json
+{
+  "test_points": {
+    "TP_001": {
+      "description": "When walk is asserted while signal is GREEN, signal must transition to YELLOW for one cycle before becoming RED, and must remain RED for at least 4 cycles.",
+      "related_signals": ["walk", "signal", "walk_ctr"]
+    }
+  }
+}
+```

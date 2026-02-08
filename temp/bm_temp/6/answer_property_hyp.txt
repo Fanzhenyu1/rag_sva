@@ -1,0 +1,10 @@
+```json
+{
+  "design_name": "csr_regfile",
+  "description": "CSR controller of the processor that handles privileged register access control and privilege level checking",
+  "security_properties": {
+    "assertion_1": "assert property (@posedge clk) disable iff (rst) ((csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ}) && ((priv_lvl_o & priv_lvl) != priv_lvl) && !(csr_addr.address==riscv::CSR_MEPC)) |-> privilege_violation);",
+    "assertion_2": "assert property (@posedge clk) disable iff (rst) ((csr_we || csr_read) && (csr_addr_i[11:4] == 8'h7b) && !debug_mode_q) |-> privilege_violation);"
+  }
+}
+```

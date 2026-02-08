@@ -1,0 +1,9 @@
+```json
+{
+  "design_name": "aes_wrapper",
+  "description": "AES accelerator wrapper with memory-mapped I/O interface. The design includes an AES-192 core with side-channel protection (p_c_text XOR masking). The wrapper provides external access to control/status registers and ciphertext output through a bus interface.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.write == 0) |-> (external_bus_io.rdata == 0));"
+  }
+}
+```

@@ -1,0 +1,11 @@
+```json
+{
+    "assertion_1": "assert property (@(posedge clk) acc_ctrl_c[0][0] == acc_ctrl[0*2+0])",
+    "assertion_2": "assert property (@(posedge clk) acc_ctrl_c[0][1] == acc_ctrl[1*2+0])",
+    "assertion_3": "assert property (@(posedge clk) acc_ctrl_c[0][2] == acc_ctrl[2*2+0])",
+    "assertion_4": "assert property (@(posedge clk) acc_ctrl_c[0][3] == acc_ctrl[3*2+0])",
+    "assertion_5": "assert property (@(posedge clk) acc_ctrl_c[1][0] == acc_ctrl[0*2+1])",
+    "assertion_6": "assert property (@(posedge clk) acc_ctrl_c[1][1] == acc_ctrl[1*2+1])",
+    "assertion_7": "assert property (@(posedge clk) acc_ctrl_c[1][2] == acc_ctrl[2*2+1])"
+}
+```

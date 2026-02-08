@@ -1,0 +1,10 @@
+```json
+{
+  "test_points": {
+    "TP_001": {
+      "description": "At every positive edge of clock other than when the rst_aon_ni signal is 0, the value of the wakeup_timer_cnt_q signal is 0 in the next clock cycle if the value of the cfg_fsm_rst_i signal in this clock cycle is 1.",
+      "related_signals": ["clk_aon_i", "rst_aon_ni", "cfg_fsm_rst_i", "wakeup_timer_cnt_q"]
+    }
+  }
+}
+```

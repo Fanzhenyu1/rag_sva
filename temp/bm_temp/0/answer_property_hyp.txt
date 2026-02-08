@@ -1,0 +1,9 @@
+```json
+{
+  "design_name": "lock_reg",
+  "description": "A register lock module with data input/output, read/write enables, lock protection, clock, and reset. The module stores data in a register that should be protected from modification when the lock signal is active.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk) disable iff (rst) (($past(lock) == 1'b1) |-> ($stable(data))));"
+  }
+}
+```

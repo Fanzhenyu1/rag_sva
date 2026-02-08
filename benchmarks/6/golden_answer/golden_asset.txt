@@ -1,14 +1,1 @@
-```json
-{
-  "design_name": "csr_regfile",
-  "description": "Control and Status Register (CSR) register file module that handles CSR operations and privilege level checking. The module implements CSR read/write operations with different access modes (WRITE, SET, CLEAR, READ) and manages exception return operations (MRET, SRET, DRET). It performs privilege level validation to ensure secure access to protected CSRs based on current and required privilege levels.",
-  "security_vulnerability": [
-    {
-      "id": "VUNL_001",
-      "description": "Access to privileged CSR. The privilege check logic contains a bypass for CSR_MEPC register that allows access regardless of privilege level matching. This violates the principle that all registers should have proper access control based on privilege levels and could allow unauthorized access to critical machine exception program counter.",
-      "related_signal": "csr_addr.address, priv_lvl_o, priv_lvl",
-      "source": "All the registers in the aes block are protected by different access policies. For example, the aes.csr.key register is readable and writable by the tmcu only. The aes.csr.status register is readable by a specific master when the aes.csr.control registers is enabled for that specific master."
-    }
-  ]
-}
-```
+Incorrect implementation of the CSR controller allows attackers access to privileged CSRs.

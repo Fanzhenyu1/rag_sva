@@ -1,38 +1,23 @@
 ```json
 {
   "design_name": "aes_wrapper",
-  "description": "AES encryption wrapper module that interfaces with an external bus system. The module takes in a 192-bit key and processes 128-bit plaintext/ciphertext data through AES encryption operations. It provides a bridge between the external bus interface and the internal AES cryptographic processing within a Hardware Root of Trust context.",
-  "security_vunlerability": [
-    {
-      "id": "VUNL_001",
-      "description": "The external_bus_io interface allows untrusted external access to AES internal signals without proper access control. Confidential information (plaintext, ciphertext, intermediate states) could be leaked through this interface when debug_mode_i is active, violating the principle that internal signals carrying confidential information should not flow to external interfaces readable by untrusted agents.",
-      "related_signal": "external_bus_io",
-      "source": "Internal Signals carrying confidential information should not flow to device External interfaces readable by untrusted agents. The information flow may be qualified by debug mode condition, but leakage may also occur through for example a UART."
+  "description": "AES accelerator wrapper module that handles external bus interface and internal AES operations including key management, plaintext/ciphertext processing, and debug mode functionality",
+  "security_vulnerability": {
+    "VUNL_001": {
+      "description": "Secret keys are not cleared when entering debug mode - the key_big signal directly exposes the key_in when debug_mode_i is active",
+      "related_signal": "key_big, debug_mode_i, key_in",
+      "source": "AES accelerator, 'bug description': ['Secret keys are not cleared when entering debug mode']"
     },
-    {
-      "id": "VUNL_002",
-      "description": "The debug_mode_i signal controls access to sensitive AES operations but lacks proper authentication and access control mechanisms. An untrusted agent could potentially activate debug mode and gain unauthorized access to encrypted data through the external bus interface.",
-      "related_signal": "debug_mode_i",
-      "source": "The JTAG port of the SoC is connected to the debug module in the Hardware Root of Trust, allowing an authenticated user to read data from all modules on the tbus interconnect."
+    "VUNL_002": {
+      "description": "Secret keys are not cleared when entering debug mode - the conditional assignment exposes keys in debug mode without proper clearing mechanism",
+      "related_signal": "key_big, debug_mode_i, key_in",
+      "source": "AES accelerator, 'bug description': ['Secret keys are not cleared when entering debug mode']"
     },
-    {
-      "id": "VUNL_003",
-      "description": "The module supports 192-bit keys but lacks validation for TRNG self-test completion before using the key. The design does not ensure that the TRNG self-test has passed before allowing AES operations, potentially using weak or predictable random numbers.",
-      "related_signals": "key_in",
-      "source": "The aes engine must not use the generated random numbers unless the self-test passes. This means no read or write access of the AES block are allowed from untrusted agents outside the Hardware Root of Trust (HRoT) until the TRNG self-test has"
-    },
-    {
-      "id": "VUNL_004",
-      "description": "Intermediate states (inter_state) and internal AES state (state, state_big) are exposed without encryption protection. These signals could leak sensitive information about the encryption process if accessed through the external bus interface or other means.",
-      "related_signals": "inter_state, state, state_big",
-      "source": "Internal Signals carrying confidential information should not flow to device External interfaces readable by untrusted agents."
-    },
-    {
-      "id": "VUNL_005",
-      "description": "The external_bus_io interface is always ready (ready=1) and error-free (error=0), providing no access control or authentication mechanism. This allows untrusted external agents to freely interact with the AES module without restrictions.",
-      "related_signals": "external_bus_io.ready, external_bus_io.error",
-      "source": "Internal Signals carrying confidential information should not flow to device External interfaces readable by untrusted agents."
+    "VUNL_003": {
+      "description": "Secret keys are not cleared when entering debug mode - no protection against key exposure through debug mode interface",
+      "related_signal": "key_big, debug_mode_i, key_in",
+      "source": "AES accelerator, 'bug description': ['Secret keys are not cleared when entering debug mode']"
     }
-  ]
+  }
 }
 ```

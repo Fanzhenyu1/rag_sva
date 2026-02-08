@@ -1,0 +1,10 @@
+```json
+{
+  "design_name": "aes_wrapper",
+  "description": "AES accelerator wrapper module that handles key input, debug mode, and external bus interface. The module processes AES operations and contains sensitive key material that should be cleared when entering debug mode to prevent unauthorized access through debug interfaces.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) $rose(debug_mode_i) |-> (key_big == 0));",
+    "assertion_2": "assert property (@(posedge clk_i) disable iff (!rst_ni) debug_mode_i |-> (key_big == 0));"
+  }
+}
+```

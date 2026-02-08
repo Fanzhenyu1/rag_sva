@@ -1,0 +1,17 @@
+### Example: Register lock has incorrect default values
+* Example:
+Register lock. The expected security behavior is, at every positive edge of clock, all the BIT_WIDTH number of bits of each of the NO_WORDS number of elements in the reglk_mem array are set to 1 if the value of the rst signal in the previous clock cycle is 1.
+* Related CWE:
+CWE-276: Incorrect Default Permissions.
+
+### Example: Register Lock Failure
+* Example:
+A simple register lock module. The expected security behavior is, at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal in the previous clock cycle is 1.
+* Related CWE:
+CWE-1233: Improper Hardware Lock Protection for Security Sensitive Controls.
+
+## CWE 1231: Improper Implementation of Lock Protection Registers
+### Description
+The product incorrectly implements register lock bit protection features such that protected controls can be programmed even after the lock has been set.
+### Radix Security Rule Template
+Information should not flow from software through the Protected register data signals to the State-carrying signals of protected registers unless the Protected registers are unlocked.

@@ -1,26 +1,23 @@
 ```json
 {
-  "design_name": "adc_ctrl_fsm",
-  "description": "ADC Control Finite State Machine that manages wakeup timing and reset functionality. The module operates in the always-on clock domain and implements a configurable-width counter for wakeup timing control with multiple reset conditions including asynchronous reset, configuration FSM reset, and trigger-based reset.",
-  "security_vulnerability": [
-    {
-      "id": "VUNL_001",
-      "description": "The cfg_fsm_rst_i input signal can directly reset the wakeup timer counter without proper access control protection. An attacker could exploit this to manipulate the wakeup timing and potentially cause denial of service or disrupt normal system operation by forcing premature wakeup events.",
-      "related_signal": "cfg_fsm_rst_i",
-      "source": "Faulty finite state machines (FSMs) in the hardware logic allow an attacker to put the system in an undefined state, to cause a denial of service (DoS) or gain privileges on the victim's system."
+  "design_name": "adc_ctrl_fsm",  
+  "description": "ADC controller finite state machine with wakeup timer functionality",
+  "security_vulnerability": {
+    "VUNL_001": {
+      "description": "Wakeup timer may not be correctly reset when cfg_fsm_rst_i is asserted, potentially allowing unauthorized wakeup events",
+      "related_signal": "wakeup_timer_cnt_q, cfg_fsm_rst_i",
+      "source": "ADC controller"
     },
-    {
-      "id": "VUNL_002",
-      "description": "The wakeup_timer_cnt_q register lacks hardware lock protection mechanisms. Malicious software could potentially manipulate the counter value through the cfg_fsm_rst_i input, allowing unauthorized control over wakeup timing which is security-sensitive for power management and system reliability.",
-      "related_signal": "wakeup_timer_cnt_q",
-      "source": "CWE 1233: Improper Hardware Lock Protection for Security Sensitive Controls"
+    "VUNL_002": {
+      "description": "Wakeup timer may not be correctly reset when cfg_fsm_rst_i is asserted, potentially allowing unauthorized wakeup events",
+      "related_signal": "wakeup_timer_cnt_q, cfg_fsm_rst_i",
+      "source": "ADC controller"
     },
-    {
-      "id": "VUNL_003",
-      "description": "Inadequate access control protection for the configuration FSM reset input (cfg_fsm_rst_i) could allow untrusted entities to manipulate the wakeup timer state, potentially enabling fault injection attacks by disrupting the expected timing behavior of the ADC control system.",
-      "related_signal": "cfg_fsm_rst_i",
-      "source": "We assume that untrusted software running on any of the Core{0-N} processors, (the threat) has access to the input and output ports of the hrot_iface. If untrusted software can clear the lock_bit or write the clock frequency and voltage registers due to inadequate protection, a fault injection attack could be performed."
+    "VUNL_003": {
+      "description": "Wakeup timer may not be correctly reset when cfg_fsm_rst_i is asserted, potentially allowing unauthorized wakeup events",
+      "related_signal": "wakeup_timer_cnt_q, cfg_fsm_rst_i",
+      "source": "ADC controller"
     }
-  ]
+  }
 }
 ```

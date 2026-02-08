@@ -1,14 +1,1 @@
-```json
-{
-  "design_name": "traffic_controller",
-  "description": "A traffic light controller with pedestrian crossing functionality that implements a finite state machine controlling traffic light signals (RED, GREEN, YELLOW) and manages pedestrian walk requests with a timer-based safety mechanism. The design cycles through red → green → yellow → red states and responds to pedestrian walk button presses by stopping traffic for 4 cycles.",
-  "security_vulnerability": [
-    {
-      "id": "VUNL_001",
-      "description": "Traffic controller can skip yellow state before going red when walk button is pressed on green.",
-      "related_signal": "signal",
-      "source": "Knowledge Base: 'Traffic controller can skip yellow before going red when walk button is pressed on green'"
-    }
-  ]
-}
-```
+Traffic controller skips yellow before going red when walk button is pressed on green.

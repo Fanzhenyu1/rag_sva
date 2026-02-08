@@ -1,0 +1,18 @@
+```json
+{
+  "design_name": "register_lock",
+  "description": "A register lock module that is intended to secure multiple words of memory. The module has a reset input that, when asserted, should initialize all bits of the reglk_mem array to a secure default state (typically all 1s to lock registers).",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) ($past(rst_i) == 1'b1) |-> (reglk_mem == {NO_WORDS{{BIT_WIDTH{1'b1}}}}));",
+    "assertion_2": "assert property (@(posedge clk_i) ($past(rst_i) == 1'b1) |-> (reglk_mem == {NO_WORDS{{BIT_WIDTH{1'b1}}}}));",
+    "assertion_3": "assert property (@(posedge clk_i) ($past(rst_i) == 1'b1) |-> (reglk_mem == {NO_WORDS{{BIT_WIDTH{1'b1}}}}));",
+    "assertion_4": "assert property (@(posedge clk_i) ($past(rst_i) == 1'b1) |-> (reglk_mem == {NO_WORDS{{BIT_WIDTH{1'b1}}}}));",
+    "assertion_5": "assert property (@(posedge clk_i) ($past(rst_i) == 1'b1) |-> (reglk_mem == {NO_WORDS{{BIT_WIDTH{1'b1}}}}));",
+    "assertion_6": "assert property (@(posedge clk_i) ($past(rst_i) == 1'b1) |-> (reglk_mem == {NO_WORDS{{BIT_WIDTH{1'b1}}}}));",
+    "assertion_7": "assert property (@(posedge clk_i) ($past(rst_i) == 1'b1) |-> (reglk_mem == {NO_WORDS{{BIT_WIDTH{1'b1}}}}));",
+    "assertion_8": "assert property (@(posedge clk_i) ($past(rst_i) == 1'b1) |-> (reglk_mem == {NO_WORDS{{BIT_WIDTH{1'b1}}}}));",
+    "assertion_9": "assert property (@(posedge clk_i) ($past(rst_i) == 1'b1) |-> (reglk_mem == {NO_WORDS{{BIT_WIDTH{1'b1}}}}));",
+    "assertion_10": "assert property (@(posedge clk_i) ($past(rst_i) == 1'b1) |-> (reglk_mem == {NO_WORDS{{BIT_WIDTH{1'b1}}}}));"
+  }
+}
+```

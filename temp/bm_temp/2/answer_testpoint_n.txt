@@ -1,0 +1,23 @@
+```json
+{
+  "design_name": "dmi_jtag",
+  "description": "A JTAG Debug Module Interface (DMI) module that handles communication between JTAG and the internal debug module. It includes a password-based lock mechanism to control access to debug operations (read/write) via JTAG.",
+  "test_points": {
+    "TP_001": {
+      "id": "TP_001",
+      "description": "At every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_check signal is 0 and the dmi.op signal indicates a DTM_WRITE operation.",
+      "related_signals": ["pass_chk", "dmi_req_valid", "dmi.op"]
+    },
+    "TP_002": {
+      "id": "TP_002",
+      "description": "At every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_check signal is 0 and the dmi.op signal indicates a DTM_WRITE operation.",
+      "related_signals": ["pass_chk", "dmi_req_valid", "dmi.op"]
+    },
+    "TP_003": {
+      "id": "TP_003",
+      "description": "At every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_check signal is 0 and the dmi.op signal indicates a DTM_WRITE operation.",
+      "related_signals": ["pass_chk", "dmi_req_valid", "dmi.op"]
+    }
+  }
+}
+```

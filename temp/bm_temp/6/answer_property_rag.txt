@@ -1,0 +1,18 @@
+```json
+{
+  "design_name": "csr_regfile",
+  "description": "CSR (Control and Status Register) register file module that handles privileged CSR operations including read/write access control, privilege level checking, and exception/return operations",
+  "security_properties": {
+    "assertion_1": "assert property (@posedge clk) ((csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ}) && ((priv_lvl_o & priv_lvl) != priv_lvl)) |-> privilege_violation);",
+    "assertion_2": "assert property (@posedge clk) ((csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ}) && ((priv_lvl_o & priv_lvl) != priv_lvl)) |-> privilege_violation);",
+    "assertion_3": "assert property (@posedge clk) ((csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ}) && ((priv_lvl_o & priv_lvl) != priv_lvl)) |-> privilege_violation);",
+    "assertion_4": "assert property (@posedge clk) ((csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ}) && ((priv_lvl_o & priv_lvl) != priv_lvl)) |-> privilege_violation);",
+    "assertion_5": "assert property (@posedge clk) ((csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ}) && ((priv_lvl_o & priv_lvl) != priv_lvl)) |-> privilege_violation);",
+    "assertion_6": "assert property (@posedge clk) ((csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ}) && ((priv_lvl_o & priv_lvl) != priv_lvl)) |-> privilege_violation);",
+    "assertion_7": "assert property (@posedge clk) ((csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ}) && ((priv_lvl_o & priv_lvl) != priv_lvl)) |-> privilege_violation);",
+    "assertion_8": "assert property (@posedge clk) ((csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ}) && ((priv_lvl_o & priv_lvl) != priv_lvl)) |-> privilege_violation);",
+    "assertion_9": "assert property (@posedge clk) ((csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ}) && ((priv_lvl_o & priv_lvl) != priv_lvl)) |-> privilege_violation);",
+    "assertion_10": "assert property (@posedge clk) ((csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ}) && ((priv_lvl_o & priv_lvl) != priv_lvl)) |-> privilege_violation);"
+  }
+}
+```

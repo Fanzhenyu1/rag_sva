@@ -1,0 +1,33 @@
+Looking at the RTL code and the knowledge base, I can identify several security concerns related to the AES wrapper design. The main issues revolve around preventing unauthorized access to sensitive data (keys, ciphertext, intermediate states) and ensuring proper security controls. Here are 7 security-related SVA assertions:
+
+```json
+{
+  "design_name": "aes_wrapper",
+  "description": "AES-192 accelerator wrapper with external bus interface. The design includes an AES core that processes 128-bit data with 192-bit keys, and provides memory-mapped I/O for control and data access. Security concerns include preventing unauthorized access to ciphertext before encryption completes, protecting key material, and securing intermediate states.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.addr[2 +: ADDR_WIDTH] inside {[12:15]}) && external_bus_io.en && !external_bus_io.write |-> !ct_valid);",
+    "assertion_2": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.addr[2 +: ADDR_WIDTH] inside {[12:15]}) && external_bus_io.en && !external_bus_io.write |-> (external_bus_io.rdata == 0));",
+    "assertion_3": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.addr[2 +: ADDR_WIDTH] == 1) && external_bus_io.en && !external_bus_io.write |-> !ct_valid);",
+    "assertion_4": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.addr[2 +: ADDR_WIDTH] inside {[2:4]}) && external_bus_io.en && !external_bus_io.write |-> !ct_valid);",
+    "assertion_5": "assert property (@(posedge clk_i) disable iff (!rst_ni) $rose(start) |-> (key_in == 0) || (key_in != 0 && !external_bus_io.en));",
+    "assertion_6": "assert property (@(posedge clk_i) disable iff (!rst_ni) ct_valid |-> (aes.inter_state == 0) || !external_bus_io.en);",
+    "assertion_7": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(ct_valid) |-> (ct == 0) || !external_bus_io.en);"
+  }
+}
+```
+
+**Explanation of assertions:**
+
+1. **assertion_1**: Prevents reading ciphertext registers (addresses 12-15) when encryption is not complete (ct_valid=0)
+2. **assertion_2**: Ensures ciphertext registers return 0 when read before encryption completes
+3. **assertion_3**: Prevents reading p_c[3] (address 1) before encryption completes
+4. **assertion_4**: Prevents reading p_c[2:0] (addresses 2-4) before encryption completes
+5. **assertion_5**: Ensures key material is not exposed when starting encryption
+6. **assertion_6**: Prevents intermediate state leakage when ciphertext is valid
+7. **assertion_7**: Ensures ciphertext is cleared or protected after encryption completes
+
+These assertions address security concerns related to:
+- CWE-1303: Non-Transparent Sharing of Microarchitectural Resources (preventing ciphertext leakage)
+- CWE-1244: Improper Access to Sensitive Information Using Debug and Test Interfaces (protecting keys and intermediate states)
+- Data confidentiality during encryption operations
+- Proper clearing/zeroization of sensitive data

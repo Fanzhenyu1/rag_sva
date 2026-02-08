@@ -1,79 +1,18 @@
-Looking at the RTL code and security test points, I'll analyze each test point and generate appropriate SVA assertions where possible.
-
 ```json
-[
-  {
-    "module1": "traffic_controller",
-    "security_properties": [
-      {
-        "test_point_id": "TP_001",
-        "description": "Verify traffic signal state transitions follow proper RED->GREEN->YELLOW sequence under normal operation without walk button press",
-        "property": "property proper_state_sequence; @(posedge clk) disable iff (rst) (signal == RED && !walk && walk_ctr == 0) |=> (signal == GREEN) ##1 (signal == YELLOW) ##1 (signal == RED); endproperty",
-        "sva": "assert property (proper_state_sequence);"
-      },
-      {
-        "test_point_id": "TP_002",
-        "description": "Test walk counter functionality - ensure counter loads with WALK_TIME value when walk button is pressed and decrements properly during RED state",
-        "property": "property walk_counter_load; @(posedge clk) disable iff (rst) (walk) |=> (walk_ctr == WALK_TIME); endproperty\nproperty walk_counter_decrement; @(posedge clk) disable iff (rst) (signal == RED && walk_ctr > 0 && !walk) |=> (walk_ctr == $past(walk_ctr) - 1); endproperty",
-        "sva": "assert property (walk_counter_load);\nassert property (walk_counter_decrement);"
-      },
-      {
-        "test_point_id": "TP_003",
-        "description": "Verify walk button input handling - ensure pedestrian crossing mode is properly triggered and maintains RED state for required duration",
-        "property": "property walk_red_maintenance; @(posedge clk) disable iff (rst) (walk && signal == RED) |=> (signal == RED)[*WALK_TIME]; endproperty",
-        "sva": "assert property (walk_red_maintenance);"
-      },
-      {
-        "test_point_id": "TP_004",
-        "description": "Test state transition security - ensure YELLOW state is never skipped when transitioning from GREEN to RED, especially when walk button is pressed during GREEN state",
-        "property": "property no_yellow_skip; @(posedge clk) disable iff (rst) (signal == GREEN) |=> (signal == YELLOW); endproperty",
-        "sva": "assert property (no_yellow_skip);"
-      },
-      {
-        "test_point_id": "TP_005",
-        "description": "Verify reset functionality properly initializes traffic signal to RED and walk counter to zero",
-        "property": "property reset_initialization; @(posedge clk) (rst) |=> (signal == RED && walk_ctr == 0); endproperty",
-        "sva": "assert property (reset_initialization);"
-      },
-      {
-        "test_point_id": "TP_006",
-        "description": "Test walk counter underflow protection - ensure counter stops at zero and doesn't wrap around to maximum value",
-        "property": "property no_counter_underflow; @(posedge clk) disable iff (rst) (walk_ctr == 0 && signal == RED && !walk) |=> (walk_ctr == 0); endproperty",
-        "sva": "assert property (no_counter_underflow);"
-      },
-      {
-        "test_point_id": "TP_007",
-        "description": "Verify traffic signal maintains RED state while walk counter is non-zero, preventing premature transition to GREEN",
-        "property": "property red_while_walk_counter; @(posedge clk) disable iff (rst) (walk_ctr > 0) |-> (signal == RED); endproperty",
-        "sva": "assert property (red_while_walk_counter);"
-      },
-      {
-        "test_point_id": "TP_008",
-        "description": "Test concurrent walk button presses - ensure multiple presses don't extend walk time beyond designed limits or cause counter overflow",
-        "property": "property concurrent_walk_presses; @(posedge clk) disable iff (rst) (walk_ctr > 0 && walk) |=> (walk_ctr == WALK_TIME); endproperty",
-        "sva": "assert property (concurrent_walk_presses);"
-      }
-    ]
+{
+  "design_name": "traffic_controller",
+  "description": "A simple traffic light controller with pedestrian walk functionality that cycles through red -> green -> yellow -> red states. When a pedestrian presses the walk button, the traffic should stop for 4 cycles by holding red light.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_2": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_3": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_4": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_5": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_6": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_7": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_8": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_9": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));",
+    "assertion_10": "assert property (@(posedge clk) (signal == 0) |-> ($past(signal) == 0 || $past(signal) == 2));"
   }
-]
+}
 ```
-
-## Analysis Notes:
-
-**TP_001**: Created assertion to verify the proper state sequence RED→GREEN→YELLOW→RED when walk button is not pressed.
-
-**TP_002**: Created two assertions - one for counter loading when walk is pressed, and another for proper decrement during RED state.
-
-**TP_003**: Ensures RED state is maintained for exactly WALK_TIME cycles when walk button is pressed.
-
-**TP_004**: Critical security property - ensures YELLOW state is never skipped, addressing the potential bug mentioned in the knowledge base.
-
-**TP_005**: Verifies proper initialization on reset.
-
-**TP_006**: Prevents counter underflow by ensuring it stays at zero.
-
-**TP_007**: Security-critical property that prevents premature transition to GREEN while pedestrians are crossing.
-
-**TP_008**: Handles concurrent walk presses by ensuring counter resets to WALK_TIME rather than extending beyond limits.
-
-All assertions include proper clocking and reset conditions, and use SystemVerilog assertion syntax with appropriate operators (`|=>` for non-overlapping implication, `[*]` for repetition, etc.).

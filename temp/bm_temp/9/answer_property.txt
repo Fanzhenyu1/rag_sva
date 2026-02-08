@@ -1,0 +1,18 @@
+```json
+{
+  "design_name": "rstmgr_por",
+  "description": "Power-on reset manager module that filters and stretches reset signals with configurable filter stages and stretch count. The module ensures proper reset sequencing by filtering glitches and stretching the reset signal for a configurable number of clock cycles.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_aon_i) disable iff (rst_i) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i || !rst_por_aon_n));",
+    "assertion_2": "assert property (@(posedge clk_aon_i) disable iff (rst_i) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i || !rst_por_aon_n));",
+    "assertion_3": "assert property (@(posedge clk_aon_i) disable iff (rst_i) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i || !rst_por_aon_n));",
+    "assertion_4": "assert property (@(posedge clk_aon_i) disable iff (rst_i) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i || !rst_por_aon_n));",
+    "assertion_5": "assert property (@(posedge clk_aon_i) disable iff (rst_i) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i || !rst_por_aon_n));",
+    "assertion_6": "assert property (@(posedge clk_aon_i) disable iff (rst_i) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i || !rst_por_aon_n));",
+    "assertion_7": "assert property (@(posedge clk_aon_i) disable iff (rst_i) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i || !rst_por_aon_n));",
+    "assertion_8": "assert property (@(posedge clk_aon_i) disable iff (rst_i) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i || !rst_por_aon_n));",
+    "assertion_9": "assert property (@(posedge clk_aon_i) disable iff (rst_i) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i || !rst_por_aon_n));",
+    "assertion_10": "assert property (@(posedge clk_aon_i) disable iff (rst_i) $fell(por_n_i) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i || !rst_por_aon_n));"
+  }
+}
+```

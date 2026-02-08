@@ -1,0 +1,10 @@
+```json
+{
+  "threat_model": {
+    "TM_001": {
+      "description": "Privileged CSR register can be accessed by unprivileged user due to incorrect privilege level check logic",
+      "related_signal": "privilege_violation"
+    }
+  }
+}
+```

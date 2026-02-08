@@ -1,0 +1,20 @@
+### Example: The system failed to reset as required
+* Example:
+Reset manager. The expected security behavior is, at every positive edge of clock other than when the rst_i signal is 1, if the por_n_i signal falls, then in a minimum of MIN_CYCLES clock cycles and a maximum of MAX_CYCLES clock cycles, the value of the por_n_i signal should become 1 or the value of the rst_por_aon_n signal should become 0.
+* Related CWE:
+CWE-1206
+
+## Vul_A_0010: The system failed to reset as required
+### Description
+* Design Description: 
+Reset manager.
+* Threat Model:
+Reset does not follow fall even after maximum clock cycles of input trigger.
+* Security Requirement:
+Reset should follow fall of input signal within a given range of clock cycles unless input is asserted again.
+
+### Example: ADC Wakeup Timer Incorrectly Configured at Reset
+* Example:
+ADC controller. The expected security behavior is, at every positive edge of clock other than when the rst_i signal is 0, the value of the wakeup_timer_cnt_q signal is 0 in the next clock cycle if the value of the cfg_fsm_rst_i signal in this clock cycle is 1.
+* Related CWE:
+CWE-1221: Incorrect Register Defaults or Module Parameters.

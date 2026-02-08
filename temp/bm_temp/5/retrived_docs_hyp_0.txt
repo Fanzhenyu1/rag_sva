@@ -1,0 +1,23 @@
+### Example: AES Secret Keys Not Cleared When Entering Debug Mode
+* Example:
+AES accelerator. The expected security behavior is, at every positive edge of clock, the value of the key_big2 signal is 0 if the value of the debug_mode_i signal is 1 in the current clock cycle and 0 in the past clock cycle.
+* Related CWE:
+CWE-1244: Improper Access to Sensitive Information Using Debug and Test Interfaces.
+
+## Vul_A_0006: AES Secret Keys Not Cleared When Entering Debug Mode
+### Description
+* Design Description: 
+AES accelerator. Secret keys are not cleared when entering debug mode.
+* Threat Model:
+The challenge response authorization is not applying to all debug accesses thus giving an attacker access to some security sensitive registers, such as AES keys.
+* Security Requirement:
+the key is cleared if the debug mode is entered.
+
+## Vul_A_0005: AES Security-critical data are visible externally
+### Description
+* Design Description: 
+AES accelerator. Internal register of AES are visible externally.
+* Threat Model:
+Incorrect implementation of AES enables attackers to illegally extract information from security-critical data such as key registers, cipher text in AES.
+* Security Requirement:
+the cipher text cannot be read until encryption is done.

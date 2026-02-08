@@ -1,47 +1,34 @@
 # 1. Task Description:
-* You are now a digital IC security verification engineer proficient in writing SV and SVA, capable of thoroughly analyzing RTL designs, converting test points into verifiable properties and assertions, with a foundational understanding of hardware security.
-* You need to generate security-related SVA assertions based on the provided security-related test points in JSON format, combined with RTL code.
-* For test points where security properties and corresponding assertions cannot be generated, mark "description" in the JSON data format and set the sva field to "null".
+* You are now a digital IC security verification engineer proficient in writing SVA.
+* You need to generate 7 items of security-related SVA assertions based on the provided security-related test points in JSON format and the RTL code which may have security vulnerabilities.
+* * You are allowed to generate the same assertion.
 * Output the SVA security assertions and achieve structured JSON output.
 
-# 2. Input:
-* Input: RTL code, security-related test points
-* The following provides RTL code and security-related test points in JSON format as input for analysis:
+# 2. Knowledge Base
+* Be sure to answer strictly in accordance with the given related documents if provided.
+{context}
 
-​​RTL Code/SPEC Document:​​
-  ${document}
+# 3. Input: Design Code + Comments + Security-Related Test Points
+​​RTL Code and Comments:​​
+{document}
 
 ​​Security-Related Test Points:​​
-  ${test_points}
+{test_points}
 
-# 3. Output:
+* The RTL code may contain security vulnerabilities. Please ensure that assertions are written according to the test points.
+
+# 4. Output:
 * Output: Security properties and assertions, with structured JSON output
-* Ensure the output security properties or SVA correspond to the modules in the provided real RTL
+* Ensure the output SVA correspond to the provided real RTL. Do not need give the reasoning process.
 * Specific output format is as follows:
 ```json
-[ {
-    "module1": "module1_name",
-    "security_properties": [
-      {
-        "test_point_id": "TP_001",
-        "description": "Description of test point 1",
-        "property":"property property_name; ... end property",
-        "sva": "SVA for TP_001"
-      },
-      {
-        "test_point_id": "TP_002",
-        "description": "Description of test point 2",
-        "property":"property property_name; ... end property",
-        "sva": "SVA for TP_002"
-      }
-      ...
-    ]
-  },
-  {},
-  ...
-]
+{
+  "design_name": "design name",
+  "description": "Introduce the design of circuit",
+  "security_properties": {
+    "assertion_1":"assert property (@(posedge clk) disable iff (rst) ...)",
+    "assertion_2":"...",
+    ...
+  }
+}
 ```
-# 4. Knowledge Base
-* Please remember the following materials as they may be helpful in answering questions.
-* If the knowledge base is null, do not use it.
-  ${context}

@@ -2,61 +2,61 @@
 {
   "lock_reg": {
     "module_name": "lock_reg",
-    "comment_info": "A lockable register module with controlled read/write access. The register can be written only when write enable is active, and read only when read enable is active. The register maintains its value until explicitly written or reset.",
+    "comment_info": "A lockable register module with separate read and write enable controls. The register can be written only when w_en is asserted, and its stored value can be read out only when r_en is asserted. When r_en is low, the output is forced to 0. The register can be asynchronously reset to 0. The lock input is currently unused in the RTL but may be reserved for future enhancement (e.g., to prevent writes when locked).",
     "comment_signal": [
       {
         "signal_name": "data_in",
-        "signal_description": "Input data to be written into the register when write enable is active"
+        "signal_description": "Input data to be written into the internal register when w_en is asserted."
       },
       {
         "signal_name": "data_out",
-        "signal_description": "Output data from the register, driven only when read enable is active, otherwise outputs 0"
+        "signal_description": "Output data; driven with the stored register value when r_en is high, otherwise driven to 0."
       },
       {
         "signal_name": "r_en",
-        "signal_description": "Read enable signal - when high, register value is output on data_out; when low, data_out is driven to 0"
+        "signal_description": "Read enable signal; when high, the stored data is output on data_out; when low, data_out is 0."
       },
       {
         "signal_name": "w_en",
-        "signal_description": "Write enable signal - when high, data_in is written to the register on clock edge"
+        "signal_description": "Write enable signal; when high on a clock edge (and rst is low), data_in is captured into the internal register."
       },
       {
         "signal_name": "lock",
-        "signal_description": "Lock signal (currently unused in the design but available for future enhancement)"
+        "signal_description": "Lock control input (currently unused in the RTL). Could be intended to disable writes or reads when asserted."
       },
       {
         "signal_name": "clk",
-        "signal_description": "Clock input for synchronous operation"
+        "signal_description": "Clock input; all register updates occur on the positive edge."
       },
       {
         "signal_name": "rst",
-        "signal_description": "Active-high reset signal that clears the register to 0"
+        "signal_description": "Asynchronous reset input (active high); when asserted, the internal register is cleared to 0."
       },
       {
         "signal_name": "data",
-        "signal_description": "Internal register storage element that holds the current value"
+        "signal_description": "Internal storage register that holds the value written via data_in when w_en is active."
       }
     ],
     "comment_logic": [
       {
-        "logic_name": "reset_behavior",
-        "logic_description": "On reset assertion, the internal register is cleared to 0 with 1ns delay",
+        "logic_name": "Reset Logic",
+        "logic_description": "Asynchronous reset: when rst is high, the internal data register is cleared to 0 at the next positive clock edge (with a 1ns delay).",
         "related_signals": ["rst", "clk", "data"]
       },
       {
-        "logic_name": "write_operation",
-        "logic_description": "When write enable is active and reset is not asserted, input data is written to the register on rising clock edge with 1ns delay",
-        "related_signals": ["w_en", "data_in", "clk", "data", "rst"]
+        "logic_name": "Write Logic",
+        "logic_description": "Synchronous write: when rst is low and w_en is high on the positive clock edge, data_in is stored into the internal data register (with a 1ns delay).",
+        "related_signals": ["clk", "w_en", "data_in", "data"]
       },
       {
-        "logic_name": "read_operation",
-        "logic_description": "When read enable is active, register value is output; otherwise output is driven to 0 (combinational logic)",
+        "logic_name": "Read Logic",
+        "logic_description": "Combinational read multiplexing: data_out is driven with the value of the internal data register when r_en is high; otherwise, it is driven to 0.",
         "related_signals": ["r_en", "data", "data_out"]
       },
       {
-        "logic_name": "register_retention",
-        "logic_description": "The register retains its value when neither reset nor write enable is active, maintaining state across clock cycles",
-        "related_signals": ["data", "clk", "rst", "w_en"]
+        "logic_name": "Lock Signal Handling",
+        "logic_description": "The lock input is currently not connected to any logic in the module. It may be a placeholder for future functionality.",
+        "related_signals": ["lock"]
       }
     ]
   }

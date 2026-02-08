@@ -1,0 +1,5 @@
+AES accelerator, "bug description": ["Secret keys are not cleared when entering debug mode"], "security property":" at every positive edge of clock, the value of the key_big2 signal is 0 if the value of the debug_mode_i signal is 1 in the current clock cycle and 0 in the past clock cycle".
+
+AES accelerator, "bug description": ["Internal register of AES are visible externally"], "security property":" at every positive edge of clock, the value of the rdata signal is 0 if the value of ct_valid signal is 0 and the value of the address is greater than or equal to 12 and less than or equal to 15 and the value of the en signal is 1".
+
+ADC controller, "bug description": ["Wakeup timer is incorrectly configured at reset"], "security property": "at every positive edge of clock other than when the rst_i signal is 0, the value of the wakeup_timer_cnt_q signal is 0 in the next clock cycle if the value of the cfg_fsm_rst_i signal in this clock cycle is 1".

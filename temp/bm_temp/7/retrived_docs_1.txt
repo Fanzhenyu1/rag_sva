@@ -1,0 +1,23 @@
+### Example: Register lock has incorrect default values
+* Example:
+Register lock. The expected security behavior is, at every positive edge of clock, all the BIT_WIDTH number of bits of each of the NO_WORDS number of elements in the reglk_mem array are set to 1 if the value of the rst signal in the previous clock cycle is 1.
+* Related CWE:
+CWE-276: Incorrect Default Permissions.
+
+### Example: Register Lock Failure
+* Example:
+A simple register lock module. The expected security behavior is, at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal in the previous clock cycle is 1.
+* Related CWE:
+CWE-1233: Improper Hardware Lock Protection for Security Sensitive Controls.
+
+
+
+### Detection Example
+The SoC contains a thermal sensor with a programmable max temperature. Another register tmcu.csr.temp shutdown determines the action to take when the max temperature is reached. If the register is programmed to "1", the SoC is shut down to avoid malfunction or damage. The max temperature register and the temp shutdown register are protected by a lock bit. When trusted firmware sets the lock bit in tmcu.csr.reglock it is not possible to modify the registers. Due to a design bug, the temp shutdown register is not protected by the lock bit. It is also assumed that the lock bit tmcu.csr.reglock remains set during normal operation.
+
+* Threat Model
+Malicious software running on one of the un-trusted cores can potentially do a fault injection attack by disabling the tmcu.csr.tempshutdown register thus allowing the device to overheat to a point where behavior is unpredictable and security features are no longer active.
+
+* Security Requirement
+Critical registers which should not be modifiable after configuration, should be protected by a lock mechanism. The lock bit should be set during normal operation, i.e. after secure boot is done.
+

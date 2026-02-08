@@ -1,0 +1,23 @@
+```json
+{
+  "design_name": "lock_reg",
+  "description": "A register module with read/write enable controls and a lock signal intended to protect the stored data from unauthorized modification. The register stores input data (data_in) on clock edges when write enable (w_en) is active and reset is not asserted. The stored value is output (data_out) when read enable (r_en) is active, otherwise output is zero. The design includes a lock input signal, but the RTL does not implement its intended security function.",
+  "test_points": {
+    "TP_001": {
+      "id": "TP_001",
+      "description": "Register Lock Failure. The expected security behavior is, at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal in the previous clock cycle is 1.",
+      "related_signals": ["lock", "data", "w_en", "data_in"]
+    },
+    "TP_002": {
+      "id": "TP_002",
+      "description": "Register Lock Failure. The expected security behavior is, at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal in the previous clock cycle is 1.",
+      "related_signals": ["lock", "data", "w_en", "data_in"]
+    },
+    "TP_003": {
+      "id": "TP_003",
+      "description": "Register Lock Failure. The expected security behavior is, at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal in the previous clock cycle is 1.",
+      "related_signals": ["lock", "data", "w_en", "data_in"]
+    }
+  }
+}
+```

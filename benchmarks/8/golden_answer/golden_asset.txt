@@ -1,14 +1,1 @@
-```json
-{
-  "design_name": "adc_ctrl_fsm",
-  "description": "ADC Control Finite State Machine that manages wakeup timing and reset functionality. The module operates in the always-on clock domain and implements a configurable-width counter for wakeup timing control with multiple reset conditions including asynchronous reset, configuration FSM reset, and trigger-based reset.",
-  "security_vulnerability": [
-    {
-      "id": "VUNL_001",
-      "description": "Wakeup timer is incorrectly configured at reset.",
-      "related_signal": "cfg_fsm_rst_i",
-      "source": ""
-    }
-  ]
-}
-```
+Incorrect implementation of the Wakeup timer in ADC controller allows attackers to bypass the wakeup timer.

@@ -1,3 +1,4 @@
 ```txt
-AES encryption wrapper module that interfaces with an external bus system. The module serves as an interface between external bus communications and internal AES cryptographic operations, handling data formatting and control signal management. Retrieve possible threat models, or vulnerability it may have.
+AES accelerator is a circuit design with secret keys that implements AES cryptographic operations with debug mode, containing key signals clk_i (clock input), rst_ni (reset active low), key_in (192-bit secret key input), debug_mode_i (debug mode control), external_bus_io (external bus interface), p_c_big (128-bit plaintext/ciphertext), state_big (128-bit internal state), and key_big (key bus).
+Based on the above information, retrieve possible threat models, security Requirements, Examples etc.
 ```

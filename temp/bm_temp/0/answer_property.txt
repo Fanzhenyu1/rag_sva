@@ -1,65 +1,18 @@
-Looking at the RTL code and security test points, I'll generate SVA assertions for each test point. Here's my analysis:
-
 ```json
-[
-  {
-    "module1": "lock_reg",
-    "security_properties": [
-      {
-        "test_point_id": "TP_001",
-        "description": "Verify that when lock signal is active (1), write operations are blocked and register data maintains its current value regardless of w_en and data_in signals",
-        "property": "property lock_protection; @(posedge clk) disable iff (rst) (lock && w_en) |=> (data == $past(data)); endproperty",
-        "sva": "assert property (lock_protection);"
-      },
-      {
-        "test_point_id": "TP_002", 
-        "description": "Verify that when lock signal is inactive (0) and w_en is active, register data is updated with data_in value on clock edge",
-        "property": "property write_enabled; @(posedge clk) disable iff (rst) (!lock && w_en) |=> (data == $past(data_in)); endproperty",
-        "sva": "assert property (write_enabled);"
-      },
-      {
-        "test_point_id": "TP_003",
-        "description": "Verify that synchronous reset properly clears the register data to 0 regardless of lock state",
-        "property": "property reset_check; @(posedge clk) (rst) |=> (data == 1'b0); endproperty",
-        "sva": "assert property (reset_check);"
-      },
-      {
-        "test_point_id": "TP_004",
-        "description": "Verify that read enable control (r_en) properly gates the data output - output should be data when r_en=1, and 0 when r_en=0",
-        "property": "property read_control; @(*) (r_en) -> (data_out == data) and (!r_en) -> (data_out == 1'b0); endproperty",
-        "sva": "assert property (read_control);"
-      },
-      {
-        "test_point_id": "TP_005",
-        "description": "Verify that write operations without write enable (w_en=0) do not modify register data regardless of lock state",
-        "property": "property no_write_enable; @(posedge clk) disable iff (rst) (!w_en) |=> (data == $past(data)); endproperty",
-        "sva": "assert property (no_write_enable);"
-      },
-      {
-        "test_point_id": "TP_006",
-        "description": "Verify lock signal timing requirements - ensure lock signal stability around clock edges to prevent glitch-based attacks",
-        "property": "property lock_stability; @(posedge clk) disable iff (rst) $stable(lock) throughout [0:$]; endproperty",
-        "sva": "assert property (lock_stability);"
-      },
-      {
-        "test_point_id": "TP_007",
-        "description": "Verify that the protected register data maintains integrity during power-on and normal operation under various lock/write enable scenarios",
-        "property": "property data_integrity; @(posedge clk) disable iff (rst) (lock || !w_en) |=> (data == $past(data)); endproperty",
-        "sva": "assert property (data_integrity);"
-      }
-    ]
+{
+  "design_name": "lock_reg",
+  "description": "A register module with read/write enable controls and a lock feature that prevents data modification when locked. The register maintains its current value when locked during write operations.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk) disable iff (rst) (lock && w_en) |-> $stable(data))",
+    "assertion_2": "assert property (@(posedge clk) disable iff (rst) !r_en |-> (data_out == 0))",
+    "assertion_3": "assert property (@(posedge clk) disable iff (rst) ($rose(lock) && w_en) |-> $stable(data))",
+    "assertion_4": "assert property (@(posedge clk) disable iff (rst) (lock && w_en) |-> $stable(data))",
+    "assertion_5": "assert property (@(posedge clk) disable iff (rst) !r_en |-> (data_out == 0))",
+    "assertion_6": "assert property (@(posedge clk) disable iff (rst) ($rose(lock) && w_en) |-> $stable(data))",
+    "assertion_7": "assert property (@(posedge clk) disable iff (rst) (lock && w_en) |-> $stable(data))",
+    "assertion_8": "assert property (@(posedge clk) disable iff (rst) !r_en |-> (data_out == 0))",
+    "assertion_9": "assert property (@(posedge clk) disable iff (rst) ($rose(lock) && w_en) |-> $stable(data))",
+    "assertion_10": "assert property (@(posedge clk) disable iff (rst) (lock && w_en) |-> $stable(data))"
   }
-]
+}
 ```
-
-**Key Analysis:**
-
-1. **TP_001**: When lock=1 and w_en=1, data should remain unchanged from previous value
-2. **TP_002**: When lock=0 and w_en=1, data should update to data_in
-3. **TP_003**: Reset should always clear data to 0 on next cycle
-4. **TP_004**: Combinational check for read enable functionality
-5. **TP_005**: When w_en=0, data should remain unchanged regardless of lock state
-6. **TP_006**: Lock signal stability check to prevent timing attacks
-7. **TP_007**: Comprehensive data integrity check covering all protection scenarios
-
-All test points were successfully converted to SVA assertions that directly verify the security properties described in the test points against the actual RTL implementation.

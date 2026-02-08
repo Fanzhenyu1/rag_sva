@@ -1,0 +1,5 @@
+JTAG module in cva6 processor. It is locked with a password by default. "bug description": ["Able to 'write' to locked JTAG"]. "security property":"at every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_check signal is 0".
+
+AES accelerator, "bug description": ["Secret keys are not cleared when entering debug mode"], "security property":" at every positive edge of clock, the value of the key_big2 signal is 0 if the value of the debug_mode_i signal is 1 in the current clock cycle and 0 in the past clock cycle".
+
+Register lock feature, "bug description": ["Incorrect default values"], "security property": "at every positive edge of clock, all the BIT_WIDTH number of bits of each of the NO_WORDS number of elements in the reglk_mem array are set to 1 if the rst signal in the previous clock cycle is 1.".

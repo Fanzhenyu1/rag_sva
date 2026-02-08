@@ -1,3 +1,4 @@
 ```txt
-Top-level wrapper module that provides a memory-mapped interface for an AES-192 encryption core. It handles external bus communication and coordinates the AES encryption process with input/output data management. Retrieve possible threat models, or vulnerability it may have.
+AES accelerator is a circuit design with Internal register or security-critical data, containing key signals clk_i/rst_ni (clock/reset), key_in (192-bit encryption key), external_bus_io (memory-mapped interface), start (encryption trigger), ct/ct_valid (ciphertext output), and p_c_text (plaintext/ciphertext for XOR operation), which serve the purposes of controlling encryption operations, interfacing with external systems, and providing data confidentiality through AES encryption with additional XOR masking respectively.
+Based on the above information, retrieve possible Threat Model, Security Requirement and Example, etc.
 ```

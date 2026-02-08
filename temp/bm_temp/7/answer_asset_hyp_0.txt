@@ -1,0 +1,10 @@
+```json
+{
+  "threat_model": {
+    "TM_001": {
+      "description": "Register lock has incorrect default values at reset. The register lock is configured with all zeros instead of all ones when reset is asserted.",
+      "related_signal": "reglk_mem"
+    }
+  }
+}
+```

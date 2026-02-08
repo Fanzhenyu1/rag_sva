@@ -1,3 +1,4 @@
 ```txt
-A traffic controller module. Traffic changes from red -> green -> yellow -> red, retrieve possible threat models, or vulnerability it may have.
+traffic_controller is a circuit design that implements a finite state machine for traffic light control with pedestrian crossing functionality, containing key signals walk (pedestrian crossing request), signal[1:0] (traffic light state: RED/GREEN/YELLOW), clk (clock), rst (reset), and walk_ctr[2:0] (walk countdown timer), which serve the purposes of receiving pedestrian inputs, controlling light transitions, providing timing reference, resetting the system, and managing walk duration respectively.
+Based on the above information, retrieve possible threat models, security related test points and security properties, etc.
 ```

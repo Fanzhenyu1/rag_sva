@@ -1,0 +1,5 @@
+AES accelerator, "bug description": ["Secret keys are not cleared when entering debug mode"], "security property":" at every positive edge of clock, the value of the key_big2 signal is 0 if the value of the debug_mode_i signal is 1 in the current clock cycle and 0 in the past clock cycle".
+
+Access control bus in cva6 processor, "bug description": ["Access to HMAC peripheral grants it access to PKT peripheral"], "security property": " at every positive edge of clock, for each of the PRIV_TYPES number of privilege arrays in the acc_ctrl_c matrix, the value of each of the NB_PERIPHERALS number of peripherals is same as the corresponding bit in the acc_ctrl array where the value for the ith privilege type of the jth peripheral is stored in the (j*PRIV_TYPES + i)th bit".
+
+AES accelerator, "bug description": ["Internal register of AES are visible externally"], "security property":" at every positive edge of clock, the value of the rdata signal is 0 if the value of ct_valid signal is 0 and the value of the address is greater than or equal to 12 and less than or equal to 15 and the value of the en signal is 1".

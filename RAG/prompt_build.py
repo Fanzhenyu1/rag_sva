@@ -15,24 +15,31 @@ def prompt_build_design_analysis(docs_content, all_files, RAG_ENABLE = 0):
     if RAG_ENABLE:
         filled_prompt = (
             prompt_template
-            .replace(r'${document}', context_all)          # 填入RTL代码
-            .replace(r'${context}', docs_content)       # 填入检索文档
+            .replace(r'{document}', context_all)          # 填入RTL代码
+            .replace(r'{context}', docs_content)       # 填入检索文档
         )
     else:
         filled_prompt = (
             prompt_template
-            .replace(r'${document}', context_all)               # 填入RTL代码
-            .replace(r'${context}', "知识库功能禁用，无需检索知识库。")       # 填入检索文档
+            .replace(r'{document}', context_all)               # 填入RTL代码
+            .replace(r'{context}', "")       # 填入检索文档
         )
     return filled_prompt
 
-def prompt_build_query_simplify(docs_content, answer_design, RAG_ENABLE = 0):
+def prompt_build_query_simplify(docs_content, rtl_files, RAG_ENABLE = 0):
     with open('e:/mylife_yanjiu/project/rag_sva/rules_1/query_simplify_en.md', 'r', encoding='utf-8') as f:
         prompt_template = f.read()
-        filled_prompt = (
-            prompt_template
-            .replace(r'${document}', answer_design)               # 填入RTL代码
-        )
+    rtl_code = ""
+    for rtl_path in rtl_files:
+        if not os.path.isfile(rtl_path):
+            print(f'{rtl_path} is not a file, skip it.')
+            continue
+        with open(rtl_path, 'r', encoding='utf-8') as f:
+            rtl_code = rtl_code + f.read()
+    filled_prompt = (
+        prompt_template
+        .replace(r'{document}', rtl_code)               # 填入RTL代码
+    )
     return filled_prompt
 
 def prompt_build_comment_fill(docs_content, rtl_files, RAG_ENABLE = 0):
@@ -48,19 +55,20 @@ def prompt_build_comment_fill(docs_content, rtl_files, RAG_ENABLE = 0):
     if RAG_ENABLE:
         filled_prompt = (
             prompt_template
-            .replace(r'${document}', rtl_code)          # 填入RTL代码
-            .replace(r'${context}', docs_content)       # 填入检索文档
+            .replace(r'{document}', rtl_code)          # 填入RTL代码
+            .replace(r'{context}', docs_content)       # 填入检索文档
         )
     else:
         filled_prompt = (
             prompt_template
-            .replace(r'${document}', rtl_code)               # 填入RTL代码
-            .replace(r'${context}', "知识库功能禁用，无需检索知识库。")       # 填入检索文档
+            .replace(r'{document}', rtl_code)               # 填入RTL代码
+            .replace(r'{context}', "")       # 填入检索文档
         )
     return filled_prompt
 
 def prompt_build_assets_identify(docs_content, rtl_files, RAG_ENABLE = 0):
-    with open('e:/mylife_yanjiu/project/rag_sva/rules/asset_identify_en.md', 'r', encoding='utf-8') as f:
+    # with open('e:/mylife_yanjiu/project/rag_sva/rules/asset_identify_en.md', 'r', encoding='utf-8') as f:
+    with open('e:/mylife_yanjiu/project/rag_sva/rules/asset_identify_en_2.md', 'r', encoding='utf-8') as f:
         prompt_template = f.read()
     rtl_code = ""
     for rtl_path in rtl_files:
@@ -72,14 +80,14 @@ def prompt_build_assets_identify(docs_content, rtl_files, RAG_ENABLE = 0):
     if RAG_ENABLE:
         filled_prompt = (
             prompt_template
-            .replace(r'${document}', rtl_code)          # 填入RTL代码
-            .replace(r'${context}', docs_content)       # 填入检索文档
+            .replace(r'{document}', rtl_code)          # 填入RTL代码
+            .replace(r'{context}', docs_content)       # 填入检索文档
         )
     else:
         filled_prompt = (
             prompt_template
-            .replace(r'${document}', rtl_code)               # 填入RTL代码
-            .replace(r'${context}', "知识库功能禁用，无需检索知识库。")       # 填入检索文档
+            .replace(r'{document}', rtl_code)               # 填入RTL代码
+            .replace(r'{context}', "")       # 填入检索文档
         )
     return filled_prompt
 
@@ -102,16 +110,16 @@ def prompt_build_testpoint_generation(docs_content, json_assets, rtl_files, RAG_
     if RAG_ENABLE:
         filled_prompt = (
             prompt_template
-            .replace(r'${document}', rtl_code)          # 填入RTL代码
-            .replace(r'${security_assets}', assets_str)  # 填入安全资产
-            .replace(r'${context}', docs_content)       # 填入检索文档
+            .replace(r'{document}', rtl_code)          # 填入RTL代码
+            .replace(r'{security_assets}', assets_str)  # 填入安全资产
+            .replace(r'{context}', docs_content)       # 填入检索文档
         )
     else:
         filled_prompt = (
             prompt_template
-            .replace(r'${document}', rtl_code)               # 填入RTL代码
-            .replace(r'${security_assets}', assets_str)       # 填入安全资产
-            .replace(r'${context}', "知识库功能禁用，无需检索知识库。")       # 填入检索文档
+            .replace(r'{document}', rtl_code)               # 填入RTL代码
+            .replace(r'{security_assets}', assets_str)       # 填入安全资产
+            .replace(r'{context}', "")       # 填入检索文档
         )
     return filled_prompt
 
@@ -134,21 +142,21 @@ def prompt_build_property_generation(docs_content, json_testpoint, rtl_files, RA
     if RAG_ENABLE:
         filled_prompt = (
             prompt_template
-            .replace(r'${document}', rtl_code)          # 填入RTL代码
-            .replace(r'${test_points}', testpoint_str)  # 填入安全资产
-            .replace(r'${context}', docs_content)       # 填入检索文档
+            .replace(r'{document}', rtl_code)          # 填入RTL代码
+            .replace(r'{test_points}', testpoint_str)  # 填入安全资产
+            .replace(r'{context}', docs_content)       # 填入检索文档
         )
     else:
         filled_prompt = (
             prompt_template
-            .replace(r'${document}', rtl_code)               # 填入RTL代码
-            .replace(r'${test_points}', testpoint_str)       # 填入安全资产
-            .replace(r'${context}', "知识库功能禁用，无需检索知识库。")       # 填入检索文档
+            .replace(r'{document}', rtl_code)               # 填入RTL代码
+            .replace(r'{test_points}', testpoint_str)       # 填入安全资产
+            .replace(r'{context}', "")       # 填入检索文档
         )
     return filled_prompt
 
 def prompt_build_property_generation_all(docs_content, rtl_files, RAG_ENABLE = 0):
-    with open('e:/mylife_yanjiu/project/rag_sva/rules/property_generation_en.md', 'r', encoding='utf-8') as f:
+    with open('e:/mylife_yanjiu/project/rag_sva/rules/property_generation_all.md', 'r', encoding='utf-8') as f:
         prompt_template = f.read()
     rtl_code = ""
     for rtl_path in rtl_files:
@@ -160,14 +168,14 @@ def prompt_build_property_generation_all(docs_content, rtl_files, RAG_ENABLE = 0
     if RAG_ENABLE:
         filled_prompt = (
             prompt_template
-            .replace(r'${document}', rtl_code)          # 填入RTL代码
-            .replace(r'${context}', docs_content)       # 填入检索文档
+            .replace(r'{document}', rtl_code)          # 填入RTL代码
+            .replace(r'{context}', docs_content)       # 填入检索文档
         )
     else:
         filled_prompt = (
             prompt_template
-            .replace(r'${document}', rtl_code)               # 填入RTL代码
-            .replace(r'${context}', "知识库功能禁用，无需检索知识库。")       # 填入检索文档
+            .replace(r'{document}', rtl_code)               # 填入RTL代码
+            .replace(r'{context}', "")       # 填入检索文档
         )
     return filled_prompt
 
@@ -176,6 +184,6 @@ def prompt_build_sva_simplify(sva_content):
         prompt_template = f.read()
     filled_prompt = (
         prompt_template
-        .replace(r'${sva_content}', sva_content)          # 填入SVA内容
+        .replace(r'{sva_content}', sva_content)          # 填入SVA内容
     )
     return filled_prompt

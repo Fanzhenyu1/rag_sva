@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "Incorrect implementation of AES enables attackers to illegally extract information from security-critical data such as key registers, cipher text in AES."
+}
+```

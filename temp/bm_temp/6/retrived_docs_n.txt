@@ -1,0 +1,24 @@
+
+
+### Example: Privileged CSR register can be accessed by unprivileged user
+* Example:
+CSR controller of the processor. The expected security behavior is, at every positive edge of clock, the value of the privilege_violation signal is 1 if any bit of the priv_lvl_o signal is 0 while the corresponding bit of the priv_lvl signal is 1 and the value of the csr_op_i signal is among the four values CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ.
+* Related CWE:
+CWE-1261: Improper Handling of Single Event Upsets
+
+## Vul_A_0007: Privileged CSR register can be accessed by unprivileged user
+### Description
+* Design Description: 
+CSR controller of the processor.
+* Threat Model:
+Incorrect implementation of the CSR controller allows attackers access to privileged CSRs.
+* Security Requirement:
+When accessing CSR from a lower than required privilege level, the privilege violation should be triggered.
+
+
+
+### Example: Sensitive Information in HRoT Local SRAM Not Removed Before Reuse
+* Example:
+SoC Level. Hardware Root of Trust (HRoT) local SRAM, TMCU, etc. The expected security behavior is, In the hardware root of trust, data residing in the privileged address space of the local SRAM (ranging from PRIV_START_ADDR to PRIV_END_ADDR) is strictly prohibited from being exposed to external interfaces. Access to this privileged data is permitted only under two specific conditions: first, when the system is operating in privileged mode—indicated by tmcu.CSR.priv_mode being set to true, which signifies the execution of trusted high-privilege software; and second, during a zeroization procedure—when tmcu.CSR.zeroize_status equals 0, typically indicating that the system is actively performing a security erasure operation. Under all other circumstances, data leakage from the privileged memory region is blocked.
+* Related CWE:
+CWE-226: Sensitive Information in Resource Not Removed Before Reuse.

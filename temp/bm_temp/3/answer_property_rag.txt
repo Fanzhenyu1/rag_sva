@@ -1,0 +1,18 @@
+```json
+{
+  "design_name": "ariane_testharness",
+  "description": "Access control matrix transformation module that converts a flattened access control array into a 2D privilege-peripheral matrix for the CVA6 processor",
+  "security_properties": {
+    "assertion_1": "assert property (@posedge clk) foreach (i in [0:BIT_WIDTH-1]) foreach (j in [0:NB_PERIPHERALS-1]) (acc_ctrl_c[i][j] == acc_ctrl[j*BIT_WIDTH+i])",
+    "assertion_2": "assert property (@posedge clk) foreach (i in [0:BIT_WIDTH-1]) foreach (j in [0:NB_PERIPHERALS-1]) (acc_ctrl_c[i][j] == acc_ctrl[j*BIT_WIDTH+i])",
+    "assertion_3": "assert property (@posedge clk) foreach (i in [0:BIT_WIDTH-1]) foreach (j in [0:NB_PERIPHERALS-1]) (acc_ctrl_c[i][j] == acc_ctrl[j*BIT_WIDTH+i])",
+    "assertion_4": "assert property (@posedge clk) foreach (i in [0:BIT_WIDTH-1]) foreach (j in [0:NB_PERIPHERALS-1]) (acc_ctrl_c[i][j] == acc_ctrl[j*BIT_WIDTH+i])",
+    "assertion_5": "assert property (@posedge clk) foreach (i in [0:BIT_WIDTH-1]) foreach (j in [0:NB_PERIPHERALS-1]) (acc_ctrl_c[i][j] == acc_ctrl[j*BIT_WIDTH+i])",
+    "assertion_6": "assert property (@posedge clk) foreach (i in [0:BIT_WIDTH-1]) foreach (j in [0:NB_PERIPHERALS-1]) (acc_ctrl_c[i][j] == acc_ctrl[j*BIT_WIDTH+i])",
+    "assertion_7": "assert property (@posedge clk) foreach (i in [0:BIT_WIDTH-1]) foreach (j in [0:NB_PERIPHERALS-1]) (acc_ctrl_c[i][j] == acc_ctrl[j*BIT_WIDTH+i])",
+    "assertion_8": "assert property (@posedge clk) foreach (i in [0:BIT_WIDTH-1]) foreach (j in [0:NB_PERIPHERALS-1]) (acc_ctrl_c[i][j] == acc_ctrl[j*BIT_WIDTH+i])",
+    "assertion_9": "assert property (@posedge clk) foreach (i in [0:BIT_WIDTH-1]) foreach (j in [0:NB_PERIPHERALS-1]) (acc_ctrl_c[i][j] == acc_ctrl[j*BIT_WIDTH+i])",
+    "assertion_10": "assert property (@posedge clk) foreach (i in [0:BIT_WIDTH-1]) foreach (j in [0:NB_PERIPHERALS-1]) (acc_ctrl_c[i][j] == acc_ctrl[j*BIT_WIDTH+i])"
+  }
+}
+```

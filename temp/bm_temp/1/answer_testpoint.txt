@@ -1,48 +1,23 @@
 ```json
 {
   "design_name": "traffic_controller",
-  "description": "A finite state machine traffic light controller with pedestrian crossing functionality. The controller cycles through RED -> GREEN -> YELLOW states. When the walk button is pressed, the system maintains RED state for 4 clock cycles to allow pedestrian crossing before resuming normal operation. The design includes state transition logic and a walk counter for pedestrian safety timing.",
-  "test_points": [
-    {
+  "description": "A finite state machine (FSM) based traffic light controller with pedestrian walk request functionality. The design has three states (RED, GREEN, YELLOW) and a counter (walk_ctr) to hold the RED state for a fixed duration (WALK_TIME = 4 cycles) when a pedestrian walk request (walk) is made.",
+  "test_points": {
+    "TP_001": {
       "id": "TP_001",
-      "description": "Verify traffic signal state transitions follow proper RED->GREEN->YELLOW sequence under normal operation without walk button press",
-      "related_signals": ["signal", "clk", "rst"]
+      "description": "At every positive edge of clock, if the walk signal is asserted while the signal is GREEN, the signal should transition to YELLOW in the next cycle, not directly to RED.",
+      "related_signals": ["walk", "signal", "clk"]
     },
-    {
+    "TP_002": {
       "id": "TP_002",
-      "description": "Test walk counter functionality - ensure counter loads with WALK_TIME value when walk button is pressed and decrements properly during RED state",
-      "related_signals": ["walk_ctr", "walk", "signal", "clk", "rst"]
+      "description": "At every positive edge of clock, if the walk signal is asserted while the signal is GREEN, the signal should transition to YELLOW in the next cycle, not directly to RED.",
+      "related_signals": ["walk", "signal", "clk"]
     },
-    {
+    "TP_003": {
       "id": "TP_003",
-      "description": "Verify walk button input handling - ensure pedestrian crossing mode is properly triggered and maintains RED state for required duration",
-      "related_signals": ["walk", "signal", "walk_ctr", "clk"]
-    },
-    {
-      "id": "TP_004",
-      "description": "Test state transition security - ensure YELLOW state is never skipped when transitioning from GREEN to RED, especially when walk button is pressed during GREEN state",
-      "related_signals": ["signal", "walk", "clk"]
-    },
-    {
-      "id": "TP_005",
-      "description": "Verify reset functionality properly initializes traffic signal to RED and walk counter to zero",
-      "related_signals": ["rst", "signal", "walk_ctr", "clk"]
-    },
-    {
-      "id": "TP_006",
-      "description": "Test walk counter underflow protection - ensure counter stops at zero and doesn't wrap around to maximum value",
-      "related_signals": ["walk_ctr", "signal", "clk", "rst"]
-    },
-    {
-      "id": "TP_007",
-      "description": "Verify traffic signal maintains RED state while walk counter is non-zero, preventing premature transition to GREEN",
-      "related_signals": ["signal", "walk_ctr", "clk"]
-    },
-    {
-      "id": "TP_008",
-      "description": "Test concurrent walk button presses - ensure multiple presses don't extend walk time beyond designed limits or cause counter overflow",
-      "related_signals": ["walk", "walk_ctr", "signal", "clk"]
+      "description": "At every positive edge of clock, if the walk signal is asserted while the signal is GREEN, the signal should transition to YELLOW in the next cycle, not directly to RED.",
+      "related_signals": ["walk", "signal", "clk"]
     }
-  ]
+  }
 }
 ```

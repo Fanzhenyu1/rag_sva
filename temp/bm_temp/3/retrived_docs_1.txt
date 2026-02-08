@@ -1,0 +1,36 @@
+
+
+### Detection Example
+Assume that the registers in the HRoT aes core are memory mapped in the core{0-N} address space. All the aes core memory mapped registers have an access control policy specifying read or write access and access by tmcu or core{0-N} . For example, the aes.reg.key register is only readable and writable by tmcu, the aes.reg.datain register is writable but not readable by core{0-N} and the aes.reg.dataout register is only readable when the aes.done bit is set.
+
+* Threat Model
+In this example, we assume that the threat is from malicious software running on one of the untrusted processors. It will attempt to read and write all memory mapped registers in the aes address space hoping the access control policy is insufficient. If any access succeeds, information about the key may be obtained.
+
+* Security Requirement
+Only the aes.reg.datain register is writable by core{0-N} and only the aes.reg.dataout register is readable by core{0-N} when encryption is done. The aes.dataout register is never writable and the aes.datain register is never readable by core{0-N}.
+
+
+
+
+### Detection Example
+The SoC has two debug interfaces. The debug port in HRoT is used to access the HRoT only during debug and a UART Peripheral connected to the interconnect in the untrusted part of the SoC which is used to debug the rest of the SoC. The debug port in HRoT has access control limiting access to authorized users. The UART doesn't have access control and allows access to all agents and modules connected to the interconnect unless they have their own access control. The memory MEM is configured to only allow access to a memory range [ PROTECTEDADDREND : PROTECTEDADDRSTART ] to privileged code running on the Core0 processor.
+
+* Threat Model
+A malicious actor can read sensitive data stored in memory or in registers when debugging using the UART interface and bypassing normal access protections.
+
+* Security Requirement
+Data in the protected area of memory should not be readable through the UART interface at any time.
+
+
+
+
+
+### Detection Example
+The debug unit checks a user-provided password to grant access to a user. The password is 64 bits but the comparison logic is implemented using an 8 bit comparator, checking each byte of the password on consecutive clock cycles. If the password compare fails in the first byte, the fail status signal is asserted and access is denied. If all 8 compares pass, access is granted.
+
+* Threat Model
+By measuring the time between request and the fail indication, the timing side channel leaks information about which byte of the password does not match. If you know which byte fails, it is easy to guess the correct password.
+
+* Security Requirement
+The compare function should indicate pass / fail after the same amount of time regardless if the fail happened before the last byte.
+

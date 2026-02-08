@@ -1,0 +1,18 @@
+```json
+{
+  "design_name": "lock_reg",
+  "description": "A register module with write enable (w_en), read enable (r_en), and a lock signal intended to prevent writes when asserted. The register resets to 0 and outputs its value when r_en is high, otherwise outputs 0.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk) disable iff (rst) $past(lock) |-> $stable(data));",
+    "assertion_2": "assert property (@(posedge clk) disable iff (rst) $past(lock) |-> $stable(data));",
+    "assertion_3": "assert property (@(posedge clk) disable iff (rst) $past(lock) |-> $stable(data));",
+    "assertion_4": "assert property (@(posedge clk) disable iff (rst) $past(lock) |-> $stable(data));",
+    "assertion_5": "assert property (@(posedge clk) disable iff (rst) $past(lock) |-> $stable(data));",
+    "assertion_6": "assert property (@(posedge clk) disable iff (rst) $past(lock) |-> $stable(data));",
+    "assertion_7": "assert property (@(posedge clk) disable iff (rst) $past(lock) |-> $stable(data));",
+    "assertion_8": "assert property (@(posedge clk) disable iff (rst) $past(lock) |-> $stable(data));",
+    "assertion_9": "assert property (@(posedge clk) disable iff (rst) $past(lock) |-> $stable(data));",
+    "assertion_10": "assert property (@(posedge clk) disable iff (rst) $past(lock) |-> $stable(data));"
+  }
+}
+```

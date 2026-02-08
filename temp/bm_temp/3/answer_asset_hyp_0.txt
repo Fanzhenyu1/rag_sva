@@ -1,0 +1,10 @@
+```json
+{
+  "threat_model": {
+    "TM_001": {
+      "description": "The access control logic may grant a peripheral unintended access to other peripherals due to incorrect bit mapping and conditional OR operation, potentially allowing an untrusted agent to bypass intended access policies.",
+      "related_signal": "acc_ctrl, acc_ctrl_c"
+    }
+  }
+}
+```

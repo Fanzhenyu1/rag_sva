@@ -1,0 +1,10 @@
+```json
+{
+  "threat_model": {
+    "TM_001": {
+      "description": "The JTAG password lock function is improperly implemented, allowing read operations to proceed without password verification when pass_chk is 0. An attacker can read sensitive data via JTAG without knowing the correct password.",
+      "related_signal": "pass_chk"
+    }
+  }
+}
+```

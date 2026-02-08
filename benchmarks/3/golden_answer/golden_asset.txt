@@ -1,14 +1,1 @@
-```json
-{
-  "design_name": "ariane_testharness",
-  "description": "Access control signal transformation module that rearranges access control values from a flattened input format to a structured 2D output format. The module performs bit-level reorganization with special conditional OR operations that create dependencies between peripheral access controls.",
-  "security_vulnerability": [
-    {
-      "id": "VUNL_001",
-      "description": "Access to HMAC peripheral grants it access to PKT peripheral.",
-      "related_signal": "acc_ctrl_c",
-      "source": ""
-    }
-  ]
-}
-```
+When access to the peripheral, the access control bus grants it access to other peripherals illegally.

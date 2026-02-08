@@ -1,14 +1,1 @@
-```json
-{
-  "design_name": "aes_wrapper",
-  "description": "AES encryption wrapper module that interfaces with an external bus system, handling data formatting and control signal management for AES cryptographic operations. Supports 192-bit key input and provides external bus communication through REG_BUS protocol.",
-  "security_vulnerability": [
-    {
-      "id": "VUNL_001",
-      "description": "Secret keys are not cleared when entering debug mode. Debug mode signal (debug_mode_i) may allow unauthorized access to confidential AES data through external interfaces when enabled, potentially exposing plaintext/ciphertext and key material to untrusted agents",
-      "related_signal": "debug_mode_i",
-      "source": "Internal Signals carrying confidential information should not flow to device External interfaces readable by untrusted agents. The information flow may be qualified by debug mode condition, but leakage may also occur through for example a UART."
-    }
-  ]
-}
-```
+The challenge response authorization is not applying to all debug accesses thus giving an attacker access to some security sensitive registers, such as AES keys.

@@ -1,0 +1,23 @@
+```json
+{
+  "design_name": "ariane_testharness",
+  "description": "This module implements an access control bus for peripherals. It takes a flat input vector 'acc_ctrl' containing access control bits for multiple peripherals across multiple privilege types (BIT_WIDTH) and reshapes it into a 2D output matrix 'acc_ctrl_c'. The transformation includes a specific logic condition that modifies the access for peripheral j=1 based on the privilege bits of peripheral 0.",
+  "test_points": {
+    "TP_001": {
+      "id": "TP_001",
+      "description": "At every positive edge of clock, the value of acc_ctrl_c[i][1] should be equal to acc_ctrl[1*BIT_WIDTH+i] unless there is an explicit, authorized privilege escalation path. The current logic 'acc_ctrl_c[i][1] = acc_ctrl[1*BIT_WIDTH+i] | acc_ctrl[0*BIT_WIDTH+i]' creates an unauthorized dependency.",
+      "related_signals": ["acc_ctrl_c[i][1]", "acc_ctrl[1*BIT_WIDTH+i]", "acc_ctrl[0*BIT_WIDTH+i]"]
+    },
+    "TP_002": {
+      "id": "TP_002",
+      "description": "At every positive edge of clock, the value of acc_ctrl_c[i][1] should be equal to acc_ctrl[1*BIT_WIDTH+i] unless there is an explicit, authorized privilege escalation path. The current logic 'acc_ctrl_c[i][1] = acc_ctrl[1*BIT_WIDTH+i] | acc_ctrl[0*BIT_WIDTH+i]' creates an unauthorized dependency.",
+      "related_signals": ["acc_ctrl_c[i][1]", "acc_ctrl[1*BIT_WIDTH+i]", "acc_ctrl[0*BIT_WIDTH+i]"]
+    },
+    "TP_003": {
+      "id": "TP_003",
+      "description": "At every positive edge of clock, the value of acc_ctrl_c[i][1] should be equal to acc_ctrl[1*BIT_WIDTH+i] unless there is an explicit, authorized privilege escalation path. The current logic 'acc_ctrl_c[i][1] = acc_ctrl[1*BIT_WIDTH+i] | acc_ctrl[0*BIT_WIDTH+i]' creates an unauthorized dependency.",
+      "related_signals": ["acc_ctrl_c[i][1]", "acc_ctrl[1*BIT_WIDTH+i]", "acc_ctrl[0*BIT_WIDTH+i]"]
+    }
+  }
+}
+```

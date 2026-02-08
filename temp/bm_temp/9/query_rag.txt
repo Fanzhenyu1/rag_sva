@@ -1,3 +1,4 @@
 ```txt
-Power-On Reset (POR) management module with configurable filtering and stretching capabilities. Provides a clean, stretched reset signal that can be controlled via scan mode for test purposes. Retrieve possible threat models, or vulnerability it may have.
+Reset manager is a circuit design that implements a power-on reset (POR) generation and stretching function with scan mode support, containing key signals clk_i (clock input), rst_ni (asynchronous reset input), scan_rst_ni (scan reset), scanmode_i (scan mode control), and rst_no (filtered and stretched reset output), which serve the purposes of clock synchronization, reset filtering, reset stretching for stability, and scan mode multiplexing for testability respectively.
+Based on the above information, retrieve possible threat models, security related test points and security properties, etc.
 ```

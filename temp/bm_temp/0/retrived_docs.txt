@@ -1,1 +1,1 @@
-A simple register lock module. The register (named data) cannot be modified when the lock signal is on
+A simple register lock module. The register (named data) cannot be modified when the lock signal is on. at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal in the previous clock cycle is 1".

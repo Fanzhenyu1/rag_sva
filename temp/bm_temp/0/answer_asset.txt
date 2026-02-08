@@ -1,26 +1,23 @@
 ```json
 {
   "design_name": "lock_reg",
-  "description": "A lockable register module with controlled read/write access. The register can be written when write enable is active, and read when read enable is active. The register maintains its value until explicitly written or reset. The design includes a lock signal that is currently unimplemented.",
-  "security_vulnerability": [
-    {
-      "id": "VUNL_001",
-      "description": "The lock signal is connected but completely unused in the design logic, providing no protection against unauthorized write operations. Malicious software can write to the register regardless of the lock signal state.",
-      "related_signal": "lock",
-      "source": "CWE 1231: Improper Implementation of Lock Protection Registers"
+  "description": "A lockable register module with separate read and write enable controls. The register can be written when w_en is asserted and read when r_en is asserted. The lock input is currently unused in the RTL, leaving the register vulnerable to unauthorized modifications.",
+  "threat_model": {
+    "TM_001": {
+      "description": "Malicious software or hardware can write to the critical register at any time since the lock input is not implemented, allowing unauthorized modification of protected data.",
+      "related_signal": "lock, w_en",
+      "source": "Detection Example 1 & 2: Critical registers should be protected by a lock mechanism to prevent modification after configuration."
     },
-    {
-      "id": "VUNL_002",
-      "description": "Inadequate hardware lock protection for security-sensitive controls. The register lacks proper lock-based access control, allowing untrusted software to modify critical data without lock verification, enabling potential fault injection attacks.",
-      "related_signal": "w_en",
-      "source": "CWE 1233: Improper Hardware Lock Protection for Security Sensitive Controls"
+    "TM_002": {
+      "description": "Malicious software can read the register contents at any time via r_en, potentially leaking sensitive information that should be protected.",
+      "related_signal": "r_en, data_out",
+      "source": "Detection Example 3: Access control policies should restrict read access to sensitive registers to prevent information leakage."
     },
-    {
-      "id": "VUNL_003",
-      "description": "No lock-based read protection mechanism. The read operation is controlled only by r_en signal without lock verification, potentially allowing unauthorized reading of sensitive register contents when lock should be enforced.",
-      "related_signal": "r_en",
-      "source": "CWE 1231: Improper Implementation of Lock Protection Registers"
+    "TM_003": {
+      "description": "The register lacks proper access control enforcement - both read and write operations are controlled by simple enable signals without authentication or lock protection, making it vulnerable to privilege escalation attacks.",
+      "related_signal": "r_en, w_en, lock",
+      "source": "Detection Example 3: Memory-mapped registers should have proper access control policies specifying which entities can read or write them."
     }
-  ]
+  }
 }
 ```

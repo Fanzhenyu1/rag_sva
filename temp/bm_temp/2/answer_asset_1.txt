@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "Sensitive information in clear text on the JTAG interface may be examined by an eavesdropper, e.g. by placing a probe device on the interface such as a logic analyzer, or a corresponding software technique."
+}
+```

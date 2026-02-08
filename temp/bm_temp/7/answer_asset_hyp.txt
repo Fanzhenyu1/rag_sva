@@ -1,0 +1,5 @@
+```json
+{
+"Threat Model": "Register locks are configured with incorrect default values at reset."
+}
+```

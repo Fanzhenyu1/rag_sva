@@ -1,0 +1,15 @@
+```json
+{
+  "design_name": "dmi_jtag",
+  "description": "This module implements a JTAG-to-DMI (Debug Module Interface) bridge with password-based access control. It handles DMI read/write operations through JTAG interface, requiring password authentication before allowing read operations to sensitive debug data.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) (dmi_req_valid_o && (state_q == Read)) |-> (pass_chk == 1'b1));",
+    "assertion_2": "assert property (@(posedge clk_i) disable iff (!rst_ni) (dmi_req_valid_o && (dm::dtm_op_t'(dmi.op) == dm::DTM_READ)) |-> (pass_chk == 1'b1));",
+    "assertion_3": "assert property (@(posedge clk_i) disable iff (!rst_ni) (state_d == Read) |-> (pass_chk == 1'b1));",
+    "assertion_4": "assert property (@(posedge clk_i) disable iff (!rst_ni) ((dm::dtm_op_t'(dmi.op) == dm::DTM_PASS) && (data_d == pass)) |=> (pass_chk == 1'b1));",
+    "assertion_5": "assert property (@(posedge clk_i) disable iff (!rst_ni) (pass_chk == 1'b0) |-> !(dmi_req_valid_o && (dm::dtm_op_t'(dmi.op) == dm::DTM_READ)));",
+    "assertion_6": "assert property (@(posedge clk_i) disable iff (!rst_ni) (state_q == WaitReadValid) |-> (pass_chk == 1'b1));",
+    "assertion_7": "assert property (@(posedge clk_i) disable iff (!rst_ni) (dmi_access && update_dr && (dm::dtm_op_t'(dmi.op) == dm::DTM_READ) && (error_q == DMINoError)) |-> (pass_chk == 1'b1));"
+  }
+}
+```

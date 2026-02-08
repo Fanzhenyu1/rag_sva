@@ -1,0 +1,15 @@
+```json
+{
+  "design_name": "csr_regfile",
+  "description": "CSR controller of the processor that handles privileged register access control and privilege level checking",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk) disable iff (rst) !((priv_lvl_o & priv_lvl) != priv_lvl && csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ}) || privilege_violation == 1'b1);",
+    "assertion_2": "assert property (@(posedge clk) disable iff (rst) !(csr_addr_i[11:4] == 8'h7b && debug_mode_q == 1'b0 && (csr_we || csr_read)) || privilege_violation == 1'b1);",
+    "assertion_3": "assert property (@(posedge clk) disable iff (rst) (csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ} && (priv_lvl_o & priv_lvl) != priv_lvl) |-> privilege_violation == 1'b1);",
+    "assertion_4": "assert property (@(posedge clk) disable iff (rst) (csr_addr_i[11:4] == 8'h7b && debug_mode_q == 1'b0 && (csr_we || csr_read)) |-> privilege_violation == 1'b1);",
+    "assertion_5": "assert property (@(posedge clk) disable iff (rst) (csr_we || csr_read) && ((priv_lvl_o & priv_lvl) != priv_lvl) && !(csr_addr_i == riscv::CSR_MEPC) |-> privilege_violation == 1'b1);",
+    "assertion_6": "assert property (@(posedge clk) disable iff (rst) (csr_we || csr_read) && csr_addr_i[11:4] == 8'h7b && !debug_mode_q |-> privilege_violation == 1'b1);",
+    "assertion_7": "assert property (@(posedge clk) disable iff (rst) privilege_violation == 1'b1 |-> csr_exception_o.cause == riscv::ILLEGAL_INSTR);"
+  }
+}
+```

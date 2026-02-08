@@ -1,0 +1,23 @@
+```json
+{
+  "design_name": "rstmgr_por",
+  "description": "This is a Power-On Reset (POR) manager module. It filters the incoming asynchronous POR signal (rst_ni), synchronizes it to the clock domain (clk_i), and stretches it for a configurable number of clock cycles (StretchCount) before de-asserting the output reset (rst_no). It includes scan mode multiplexing for testability.",
+  "test_points": {
+    "TP_001": {
+      "id": "TP_001",
+      "description": "At every positive edge of clock other than when the rst_ni signal is 1, if the por_n_i signal falls, then in a minimum of MIN_CYCLES clock cycles and a maximum of MAX_CYCLES clock cycles, the value of the por_n_i signal should become 1 or the value of the rst_por_aon_n signal should become 0.",
+      "related_signals": ["rst_ni", "rst_no", "cnt"]
+    },
+    "TP_002": {
+      "id": "TP_002",
+      "description": "At every positive edge of clock other than when the rst_ni signal is 1, if the por_n_i signal falls, then in a minimum of MIN_CYCLES clock cycles and a maximum of MAX_CYCLES clock cycles, the value of the por_n_i signal should become 1 or the value of the rst_por_aon_n signal should become 0.",
+      "related_signals": ["rst_ni", "rst_no", "cnt"]
+    },
+    "TP_003": {
+      "id": "TP_003",
+      "description": "At every positive edge of clock other than when the rst_ni signal is 1, if the por_n_i signal falls, then in a minimum of MIN_CYCLES clock cycles and a maximum of MAX_CYCLES clock cycles, the value of the por_n_i signal should become 1 or the value of the rst_por_aon_n signal should become 0.",
+      "related_signals": ["rst_ni", "rst_no", "cnt"]
+    }
+  }
+}
+```

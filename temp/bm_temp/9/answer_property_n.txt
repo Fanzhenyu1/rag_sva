@@ -1,0 +1,18 @@
+```json
+{
+  "design_name": "rstmgr_por",
+  "description": "This is a Power-On Reset (POR) manager module. It filters the incoming asynchronous POR signal (rst_ni), synchronizes it to the clock domain (clk_i), and stretches it for a configurable number of clock cycles (StretchCount) before de-asserting the output reset (rst_no). It includes scan mode multiplexing for testability.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(rst_ni) |-> ##[MIN_CYCLES:MAX_CYCLES] (rst_ni || !rst_no));",
+    "assertion_2": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(rst_ni) |-> ##[MIN_CYCLES:MAX_CYCLES] (rst_ni || !rst_no));",
+    "assertion_3": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(rst_ni) |-> ##[MIN_CYCLES:MAX_CYCLES] (rst_ni || !rst_no));",
+    "assertion_4": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(rst_ni) |-> ##[MIN_CYCLES:MAX_CYCLES] (rst_ni || !rst_no));",
+    "assertion_5": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(rst_ni) |-> ##[MIN_CYCLES:MAX_CYCLES] (rst_ni || !rst_no));",
+    "assertion_6": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(rst_ni) |-> ##[MIN_CYCLES:MAX_CYCLES] (rst_ni || !rst_no));",
+    "assertion_7": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(rst_ni) |-> ##[MIN_CYCLES:MAX_CYCLES] (rst_ni || !rst_no));",
+    "assertion_8": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(rst_ni) |-> ##[MIN_CYCLES:MAX_CYCLES] (rst_ni || !rst_no));",
+    "assertion_9": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(rst_ni) |-> ##[MIN_CYCLES:MAX_CYCLES] (rst_ni || !rst_no));",
+    "assertion_10": "assert property (@(posedge clk_i) disable iff (!rst_ni) $fell(rst_ni) |-> ##[MIN_CYCLES:MAX_CYCLES] (rst_ni || !rst_no));"
+  }
+}
+```

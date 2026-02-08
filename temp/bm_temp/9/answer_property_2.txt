@@ -1,0 +1,15 @@
+```json
+{
+  "design_name": "rstmgr_por",
+  "description": "Power-on reset manager with filtering and stretching capabilities. The module filters the incoming reset signal through multiple stages for stability, then stretches it for a configurable duration before deasserting the output reset. Includes scan mode multiplexing for testability.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_root_n) $fell(rst_ni) |-> ##[FilterStages:FilterStages+StretchCount] (rst_no == 1'b1 || $rose(rst_ni)))",
+    "assertion_2": "assert property (@(posedge clk_i) disable iff (!rst_root_n) $fell(rst_ni) |-> ##[FilterStages:FilterStages+StretchCount] (rst_no == 1'b1 || rst_ni == 1'b1))",
+    "assertion_3": "assert property (@(posedge clk_i) disable iff (!rst_root_n) $fell(rst_ni) |-> ##FilterStages rst_stable == 1'b1)",
+    "assertion_4": "assert property (@(posedge clk_i) disable iff (!rst_root_n) $fell(rst_ni) |-> ##[FilterStages:FilterStages+StretchCount] rst_no == 1'b1)",
+    "assertion_5": "assert property (@(posedge clk_i) disable iff (!rst_root_n) $fell(rst_ni) |-> ##[FilterStages:FilterStages+StretchCount] (rst_no == 1'b1 || $past(rst_ni, 1) == 1'b1))",
+    "assertion_6": "assert property (@(posedge clk_i) disable iff (!rst_root_n) $fell(rst_ni) |-> ##[FilterStages:FilterStages+StretchCount] (rst_no == 1'b1 || rst_ni == 1'b1) throughout ##[1:FilterStages+StretchCount] $stable(rst_ni))",
+    "assertion_7": "assert property (@(posedge clk_i) disable iff (!rst_root_n) $fell(rst_ni) |-> ##[FilterStages:FilterStages+StretchCount] (rst_no == 1'b1 || $changed(rst_ni)))"
+  }
+}
+```

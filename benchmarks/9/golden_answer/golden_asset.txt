@@ -1,14 +1,1 @@
-```json
-{
-  "design_name": "rstmgr_por",
-  "description": "Power-On Reset (POR) management module with configurable filtering and stretching capabilities. Provides a clean, stretched reset signal that can be controlled via scan mode for test purposes. The module filters the incoming reset to remove glitches, then stretches it for a programmable duration to ensure proper system initialization.",
-  "security_vunlerability": [
-    {
-      "id": "VUNL_001",
-      "description": "No reset even after maximum clock cycles of input trigger.",
-      "related_signal": "scanmode_i, scan_rst_ni",
-      "source": ""
-    }
-  ]
-}
-```
+Reset does not follow fall even after maximum clock cycles of input trigger.

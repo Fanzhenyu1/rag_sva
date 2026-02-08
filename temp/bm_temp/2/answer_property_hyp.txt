@@ -1,0 +1,9 @@
+```json
+{
+  "design_name": "dmi_jtag",
+  "description": "JTAG DMI (Debug Module Interface) module with password-based access control. The module implements a state machine to handle DMI read/write operations and includes a password check mechanism (pass_chk) to lock/unlock JTAG access.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) (state_q == Read && pass_chk == 1'b0) |-> dmi_req_valid == 1'b0);"
+  }
+}
+```

@@ -1,0 +1,23 @@
+```json
+{
+  "design_name": "rstmgr_por",
+  "description": "This is a Power-On-Reset (POR) manager module that filters and stretches the incoming POR signal (rst_ni) to generate a clean, stable reset output (rst_no). It includes scan mode multiplexing for testability, allowing the scan reset (scan_rst_ni) to override the functional reset path when scanmode_i is active.",
+  "test_points": {
+    "TP_001": {
+      "id": "TP_001",
+      "description": "at every positive edge of clock other than when the rst_root_n signal is 0, if the value of the rst_ni signal falls, then in a minimum of FilterStages clock cycles and a maximum of (FilterStages + StretchCount) clock cycles, the value of the rst_no signal should become 0.",
+      "related_signals": ["rst_ni", "rst_no", "cnt", "rst_stable"]
+    },
+    "TP_002": {
+      "id": "TP_002",
+      "description": "at every positive edge of clock other than when the rst_root_n signal is 0, if the value of the rst_ni signal falls, then in a minimum of FilterStages clock cycles and a maximum of (FilterStages + StretchCount) clock cycles, the value of the rst_no signal should become 0.",
+      "related_signals": ["rst_ni", "rst_no", "cnt", "rst_stable"]
+    },
+    "TP_003": {
+      "id": "TP_003",
+      "description": "at every positive edge of clock other than when the rst_root_n signal is 0, if the value of the rst_ni signal falls, then in a minimum of FilterStages clock cycles and a maximum of (FilterStages + StretchCount) clock cycles, the value of the rst_no signal should become 0.",
+      "related_signals": ["rst_ni", "rst_no", "cnt", "rst_stable"]
+    }
+  }
+}
+```

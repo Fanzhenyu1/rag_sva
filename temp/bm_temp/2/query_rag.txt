@@ -1,3 +1,4 @@
 ```txt
-JTAG module in cva6 processor. It is locked with a password by default. Retrieve possible threat models, or vulnerability it may have.
+dmi_jtag is a circuit design that implements JTAG to DMI (Debug Module Interface) protocol conversion functions, containing key signals clk_i, rst_ni, tck_i, tms_i, td_i, td_o for JTAG interface, dmi_req_o, dmi_req_valid_o, dmi_resp_i, dmi_resp_valid_i for DMI bus communication, and jtag_key for Password Lock Function, which serve the purposes of debug access control, protocol translation, and secure processor debugging respectively.
+Based on the above information, retrieve possible threat models, security related test points and security properties, etc.
 ```

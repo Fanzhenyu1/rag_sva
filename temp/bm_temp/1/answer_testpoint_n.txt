@@ -1,0 +1,23 @@
+```json
+{
+  "design_name": "traffic_controller",
+  "description": "A simple traffic light controller with pedestrian walk request functionality. The design implements a finite state machine (FSM) with three states (RED, GREEN, YELLOW) and includes a counter to hold the RED state for a fixed duration (WALK_TIME = 4 cycles) when a pedestrian requests to cross (walk signal asserted).",
+  "test_points": {
+    "TP_001": {
+      "id": "TP_001",
+      "description": "at every positive edge of clock other than when the rst signal is 1, if the value of the signal register is RED, then the value of the signal register in the previous clock cycle is either RED or YELLOW.",
+      "related_signals": ["signal", "clk", "rst"]
+    },
+    "TP_002": {
+      "id": "TP_002",
+      "description": "at every positive edge of clock other than when the rst signal is 1, if the value of the signal register is GREEN and the walk signal is 1, then the value of the signal register in the next clock cycle is RED and the value of the walk_ctr register in the next clock cycle is WALK_TIME.",
+      "related_signals": ["signal", "walk", "walk_ctr", "clk", "rst"]
+    },
+    "TP_003": {
+      "id": "TP_003",
+      "description": "at every positive edge of clock other than when the rst signal is 1, if the value of the signal register is GREEN and the walk signal is 0, then the value of the signal register in the next clock cycle is YELLOW.",
+      "related_signals": ["signal", "walk", "clk", "rst"]
+    }
+  }
+}
+```

@@ -1,0 +1,5 @@
+ADC controller, "bug description": ["Wakeup timer is incorrectly configured at reset"], "security property": "at every positive edge of clock other than when the rst_i signal is 0, the value of the wakeup_timer_cnt_q signal is 0 in the next clock cycle if the value of the cfg_fsm_rst_i signal in this clock cycle is 1".
+
+Reset manager, "bug description": ["No reset even after maximum clock cycles of input trigger"], "security property": " at every positive edge of clock other than when the rst_i signal is 1, if the por_n_i signal falls, then in a minimum of MIN_CYCLES clock cycles and a maximum of MAX_CYCLES clock cycles, the value of the por_n_i signal should become 1 or the value of the rst_por_aon_n signal should become 0".
+
+Register lock feature, "bug description": ["Incorrect default values"], "security property": "at every positive edge of clock, all the BIT_WIDTH number of bits of each of the NO_WORDS number of elements in the reglk_mem array are set to 1 if the rst signal in the previous clock cycle is 1.".

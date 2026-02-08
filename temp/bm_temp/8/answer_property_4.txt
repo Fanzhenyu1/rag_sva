@@ -1,0 +1,11 @@
+```json
+{
+    "assertion_1": "assert property (@(posedge clk_aon_i) disable iff (rst_aon_ni === 1'b0) (cfg_fsm_rst_i == 1'b1) |=> (wakeup_timer_cnt_q == 0));",
+    "assertion_2": "assert property (@(posedge clk_aon_i) disable iff (rst_aon_ni === 1'b0) (cfg_fsm_rst_i == 1'b1) |=> (wakeup_timer_cnt_q == 0));",
+    "assertion_3": "assert property (@(posedge clk_aon_i) disable iff (rst_aon_ni === 1'b0) (cfg_fsm_rst_i == 1'b1) |=> (wakeup_timer_cnt_q == 0));",
+    "assertion_4": "assert property (@(posedge clk_aon_i) disable iff (rst_aon_ni === 1'b0) (cfg_fsm_rst_i == 1'b1) |=> (wakeup_timer_cnt_q == 0));",
+    "assertion_5": "assert property (@(posedge clk_aon_i) disable iff (rst_aon_ni === 1'b0) (cfg_fsm_rst_i == 1'b1) |=> (wakeup_timer_cnt_q == 0));",
+    "assertion_6": "assert property (@(posedge clk_aon_i) disable iff (rst_aon_ni === 1'b0) (cfg_fsm_rst_i == 1'b1) |=> (wakeup_timer_cnt_q == 0));",
+    "assertion_7": "assert property (@(posedge clk_aon_i) disable iff (rst_aon_ni === 1'b0) (cfg_fsm_rst_i == 1'b1) |=> (wakeup_timer_cnt_q == 0));"
+}
+```
