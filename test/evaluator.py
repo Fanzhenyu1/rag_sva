@@ -112,12 +112,7 @@ def main():
         'contexts': retrived_list,
         'ground_truth': golden_list
     }
-    # test_data = {
-    #     "question": ["我们公司的总部在哪里？"],
-    #     "answer": ["我们公司的总部在北京"],
-    #     "contexts": [["根据公司2024年财报显示，我们公司的总部位于中国北京。"]],
-    #     "ground_truth": ["公司的总部在北京"]
-    # }
+
     dataset = Dataset.from_dict(data_dict)
 
     end_to_end_results = evaluate(
