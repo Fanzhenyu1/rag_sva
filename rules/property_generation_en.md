@@ -1,7 +1,7 @@
 # 1. Task Description:
 * You are now a digital IC security verification engineer proficient in writing SVA.
 * You need to generate 7 items of security-related SVA assertions based on the provided security-related test points in JSON format and the RTL code which may have security vulnerabilities.
-* * You are allowed to generate the same assertion.
+* You are allowed to generate the same assertion.
 * Output the SVA security assertions and achieve structured JSON output.
 
 # 2. Knowledge Base

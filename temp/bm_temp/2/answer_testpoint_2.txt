@@ -1,18 +1,16 @@
 ```json
 {
-  "test_points": {
-    "TP_001": {
-      "description": "At every positive edge of clock, the value of the dmi_req_valid signal is 0 if the value of the pass_chk signal is 0 and the state is Write.",
-      "related_signals": ["clk_i", "dmi_req_valid", "pass_chk", "state_q"]
+    "SP_001": {
+        "description": "at every positive edge of clock, the value of the dmi_req_valid_o signal is 0 if the value of the pass_chk signal is 0",
+        "related_signals": ["dmi_req_valid_o", "pass_chk"]
     },
-    "TP_002": {
-      "description": "At every positive edge of clock, the state does not transition to Write state if the value of the pass_chk signal is 0 and the dmi.op is DTM_WRITE.",
-      "related_signals": ["clk_i", "state_q", "pass_chk", "dmi.op"]
+    "SP_002": {
+        "description": "at every positive edge of clock, the value of the dmi_req_valid_o signal is 0 if the value of the pass_chk signal is 0 and dm::dtm_op_t'(dmi.op) is DTM_WRITE",
+        "related_signals": ["dmi_req_valid_o", "pass_chk", "dmi.op"]
     },
-    "TP_003": {
-      "description": "At every positive edge of clock, when pass_chk is 0, the dmi_req_valid signal remains 0 regardless of dmi_req_ready_i signal.",
-      "related_signals": ["clk_i", "dmi_req_valid", "pass_chk", "dmi_req_ready_i"]
+    "SP_003": {
+        "description": "at every positive edge of clock, the value of the dmi_req_valid_o signal is 0 if the value of the pass_chk signal is 0 and dm::dtm_op_t'(dmi.op) is DTM_READ",
+        "related_signals": ["dmi_req_valid_o", "pass_chk", "dmi.op"]
     }
-  }
 }
 ```

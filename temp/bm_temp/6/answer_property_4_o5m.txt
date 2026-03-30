@@ -1,0 +1,9 @@
+{
+    "assertion_1": "assert property ((@posedge clk) ( ((~priv_lvl_o & priv_lvl) != 0) && ((csr_op_i==CSR_WRITE) || (csr_op_i==CSR_SET) || (csr_op_i==CSR_CLEAR) || (csr_op_i==CSR_READ)) -> (privilege_violation == 1'b1) ));",
+    "assertion_2": "assert property ((@posedge clk) ( (|(~priv_lvl_o & priv_lvl)) && ((csr_op_i==CSR_WRITE)||(csr_op_i==CSR_SET)||(csr_op_i==CSR_CLEAR)||(csr_op_i==CSR_READ)) -> (privilege_violation == 1'b1) ));",
+    "assertion_3": "assert property ((@posedge clk) ( (((priv_lvl_o & priv_lvl) != priv_lvl)) && ((csr_op_i==CSR_WRITE)||(csr_op_i==CSR_SET)||(csr_op_i==CSR_CLEAR)||(csr_op_i==CSR_READ)) -> (privilege_violation == 1'b1) ));",
+    "assertion_4": "assert property ((@posedge clk) ( (((priv_lvl[1] && !priv_lvl_o[1]) || (priv_lvl[0] && !priv_lvl_o[0]))) && ((csr_op_i==CSR_WRITE)||(csr_op_i==CSR_SET)||(csr_op_i==CSR_CLEAR)||(csr_op_i==CSR_READ)) -> (privilege_violation == 1'b1) ));",
+    "assertion_5": "assert property ((@posedge clk) ( ((|(~priv_lvl_o & priv_lvl)) && (csr_op_i==CSR_WRITE || csr_op_i==CSR_SET || csr_op_i==CSR_CLEAR || csr_op_i==CSR_READ)) -> (privilege_violation == 1'b1) ));",
+    "assertion_6": "assert property ((@posedge clk) ( ( ((~priv_lvl_o & priv_lvl) != '0) && ((csr_op_i==CSR_WRITE)||(csr_op_i==CSR_SET)||(csr_op_i==CSR_CLEAR)||(csr_op_i==CSR_READ)) ) -> (privilege_violation == 1'b1) ));",
+    "assertion_7": "assert property ((@posedge clk) ( ((|(~priv_lvl_o & priv_lvl)) && ((csr_op_i==CSR_WRITE)||(csr_op_i==CSR_SET)||(csr_op_i==CSR_CLEAR)||(csr_op_i==CSR_READ))) -> (privilege_violation == 1'b1) ));"
+}

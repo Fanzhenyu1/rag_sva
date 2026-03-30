@@ -1,0 +1,15 @@
+```json
+{
+  "design_name": "lock_reg",
+  "description": "A register lock module with data input/output, read enable (r_en), write enable (w_en), lock signal, clock, and reset. The register stores data_in when w_en is high and reset is low. The lock signal is present but not functionally connected in the given RTL, indicating a potential security flaw.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk) disable iff (rst) lock |-> $stable(data));",
+    "assertion_2": "assert property (@(posedge clk) disable iff (rst) (lock && w_en) |-> (data == $past(data)));",
+    "assertion_3": "assert property (@(posedge clk) disable iff (rst) (lock && w_en) |-> (data_in == $past(data_in)));",
+    "assertion_4": "assert property (@(posedge clk) disable iff (rst) (lock && w_en) |-> (data_out == $past(data_out)));",
+    "assertion_5": "assert property (@(posedge clk) disable iff (rst) (lock && w_en) |-> (data == $past(data, 1)));",
+    "assertion_6": "assert property (@(posedge clk) disable iff (rst) (lock && w_en) |-> (data_in == $past(data_in, 1)));",
+    "assertion_7": "assert property (@(posedge clk) disable iff (rst) (lock && w_en) |-> (data_out == $past(data_out, 1)));"
+  }
+}
+```

@@ -1,22 +1,16 @@
 ```json
 {
-  "test_points": {
-    "TP_001": {
-      "description": "When walk button is pressed while signal is GREEN, signal must transition through YELLOW before becoming RED",
-      "related_signals": ["walk", "signal"]
+    "SP_001": {
+        "description": "at every positive edge of clock, if the value of the signal register is RED, then the value of the signal register in the previous clock cycle is either RED or YELLOW",
+        "related_signals": ["signal", "clk"]
     },
-    "TP_002": {
-      "description": "When walk button is pressed while signal is GREEN, signal must remain GREEN for at least 1 cycle before transitioning to YELLOW",
-      "related_signals": ["walk", "signal"]
+    "SP_002": {
+        "description": "at every positive edge of clock, if the value of the signal register changes from GREEN to RED, then the value of the signal register in the previous clock cycle must be YELLOW",
+        "related_signals": ["signal", "clk"]
     },
-    "TP_003": {
-      "description": "When walk button is pressed while signal is GREEN, signal must be YELLOW for exactly 1 cycle before transitioning to RED",
-      "related_signals": ["signal"]
-    },
-    "TP_004": {
-      "description": "When walk button is pressed while signal is GREEN, signal must remain RED for 4 consecutive cycles before transitioning to GREEN",
-      "related_signals": ["walk", "signal", "walk_ctr"]
+    "SP_003": {
+        "description": "at every positive edge of clock, if the walk input is 1 and the value of the signal register is GREEN, then the value of the signal register in the next clock cycle must be YELLOW",
+        "related_signals": ["signal", "walk", "clk"]
     }
-  }
 }
 ```

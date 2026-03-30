@@ -1,0 +1,9 @@
+{
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) ($rose(debug_mode_i) |-> (key_big2 == 0)));",
+    "assertion_2": "assert property (@(posedge clk_i) disable iff (!rst_ni) ((debug_mode_i && !$past(debug_mode_i)) |-> (key_big2 == 0)));",
+    "assertion_3": "assert property (@(posedge clk_i) disable iff (!rst_ni) ((debug_mode_i == 1 && $past(debug_mode_i,1,0) == 0) |-> (key_big2 == 0)));",
+    "assertion_4": "assert property (@(posedge clk_i) disable iff (!rst_ni) ($rose(debug_mode_i) |-> (key_big2 === '0)));",
+    "assertion_5": "assert property (@(posedge clk_i) disable iff (!rst_ni) ((debug_mode_i && !$past(debug_mode_i)) |-> (!|key_big2)));",
+    "assertion_6": "assert property (@(posedge clk_i) ($rose(debug_mode_i) |-> (key_big2 == 0)));",
+    "assertion_7": "assert property (@(posedge clk_i) disable iff (!rst_ni) ((debug_mode_i && !$past(debug_mode_i)) |-> (key_big2 == 0)));"
+}

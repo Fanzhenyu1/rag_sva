@@ -1,15 +1,15 @@
 ```json
 {
   "design_name": "traffic_controller",
-  "description": "A simple traffic controller with pedestrian walk functionality. The controller manages traffic light states (RED, GREEN, YELLOW) and includes a walk counter to hold RED state when pedestrian walk button is pressed during GREEN.",
+  "description": "A traffic light controller with pedestrian walk request functionality. The controller manages three states (RED, GREEN, YELLOW) and includes a walk counter to handle pedestrian crossing requests.",
   "security_properties": {
-    "assertion_1": "assert property (@(posedge clk) disable iff (rst) (($past(signal) == GREEN) && ($past(walk) == 1'b1)) |-> (signal == RED) throughout (##[0:3] (signal == RED))[*4]);",
-    "assertion_2": "assert property (@(posedge clk) disable iff (rst) (($past(signal) == GREEN) && ($past(walk) == 1'b1)) |-> !($past(signal) == GREEN && $past(walk) == 1'b1 && signal == RED));",
-    "assertion_3": "assert property (@(posedge clk) disable iff (rst) (($past(signal) == GREEN) && ($past(walk) == 1'b1)) |-> (walk_ctr == WALK_TIME));",
-    "assertion_4": "assert property (@(posedge clk) disable iff (rst) ((signal == RED) && (walk_ctr != 0)) |=> ((signal == RED) && (walk_ctr == $past(walk_ctr) - 1))[*] ##0 (walk_ctr == 0));",
-    "assertion_5": "assert property (@(posedge clk) disable iff (rst) (($past(signal) == GREEN) && ($past(walk) == 1'b1)) |-> (signal == RED) throughout (##[0:3] (signal == RED))[*4]);",
-    "assertion_6": "assert property (@(posedge clk) disable iff (rst) (($past(signal) == GREEN) && ($past(walk) == 1'b1)) |-> !($past(signal) == GREEN && $past(walk) == 1'b1 && signal == RED));",
-    "assertion_7": "assert property (@(posedge clk) disable iff (rst) ((signal == RED) && (walk_ctr != 0)) |=> ((signal == RED) && (walk_ctr == $past(walk_ctr) - 1))[*] ##0 (walk_ctr == 0));"
+    "assertion_1": "assert property (@(posedge clk) disable iff (rst) (walk && signal == GREEN) |=> (signal == YELLOW))",
+    "assertion_2": "assert property (@(posedge clk) disable iff (rst) (walk && signal == GREEN) |=> (signal == YELLOW))",
+    "assertion_3": "assert property (@(posedge clk) disable iff (rst) (walk && signal == GREEN) |=> (signal == YELLOW))",
+    "assertion_4": "assert property (@(posedge clk) disable iff (rst) (walk && signal == GREEN) |=> (signal == YELLOW))",
+    "assertion_5": "assert property (@(posedge clk) disable iff (rst) (walk && signal == GREEN) |=> (signal == YELLOW))",
+    "assertion_6": "assert property (@(posedge clk) disable iff (rst) (walk && signal == GREEN) |=> (signal == YELLOW))",
+    "assertion_7": "assert property (@(posedge clk) disable iff (rst) (walk && signal == GREEN) |=> (signal == YELLOW))"
   }
 }
 ```

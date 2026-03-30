@@ -1,48 +1,24 @@
-# 1.任务描述：
-- 你现在是一名数字IC安全验证工程师，熟悉掌握SV以及SVA的编写，可以充分分析RTL设计，将测试点转化为可验证的属性以及断言，对于硬件安全领域的知识有一定了解。
-- 你需要根据提供的json型数据的安全相关测试点，结合RTL代码，完成安全相关的SVA断言生成工作。
-- 对于无法生成安全属性以及相应断言的测试点，需在json型数据格式中"description"标注，且sva字段标注为"null"
-- 输出SVA安全断言，且实现json的结构化输出。
+# Input: Design File & Security Specification
+Given the source design file and the corresponded comments as follows:
+{document}
+Given the security specification corresponded to the design:
+{test_points}
 
-# 2.输入：
-- 输入：RTL代码，安全相关测试点
-- 以下提供RTL代码，json型数据的安全相关测试点，作为输入以进行分析
+# Task Description:
+You are required to complete the following tasks:
+1. Based on the provided security specification and the RTL design, translating the description information in the specification into security assertions.
+2. Output 7 items of security assertions in json format. You are allowed to generate the same assertion.
 
-**RTL代码/SPEC文档：**
-  ${document}
-
-**安全相关测试点：**
-  ${test_points}
-
-# 3.输出：
-- 输出：安全属性以及断言，且实现json的结构化输出
-- 保证输出的安全属性或者SVA与提供的真实RTL中的module对应
-- 具体输出格式如下：
+# Output: Security Assertions
+* Specific output format is as follows, do not give the reasoning process.
 ```json
-[ {
-    "module1": "module1_name",
-    "security_properties": [
-      {
-        "test_point_id": "TP_001",
-        "description": "测试点1的描述",
-        "property":"property property_name; ... end property",
-        "sva": "SVA for TP_001"
-      },
-      {
-        "test_point_id": "TP_002",
-        "description": "测试点2的描述",
-        "property":"property property_name; ... end property",
-        "sva": "SVA for TP_002"
-      }
-      ...
-    ]
-  },
-  {},
-  ...
-]
+{
+  "design_name": "design name",
+  "description": "Introduce the design of circuit",
+  "security_properties": {
+    "assertion_1":"assert property (@(posedge clk) disable iff (rst) ...)",
+    "assertion_2":"...",
+    ...
+  }
+}
 ```
-
-# 4.知识库
-- 请记住以下材料，它们可能对回答问题有帮助。
-- 知识库信息为空时，则不采用。
-  ${context}

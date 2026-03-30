@@ -1,11 +1,11 @@
 ```json
 {
-    "assertion_1": "assert property (@(posedge clk) disable iff (rst) (lock |-> $stable(data)))",
-    "assertion_2": "assert property (@(posedge clk) disable iff (rst) (lock |-> $stable(data)))",
-    "assertion_3": "assert property (@(posedge clk) disable iff (rst) (lock |-> $stable(data)))",
-    "assertion_4": "assert property (@(posedge clk) disable iff (rst) (lock |-> $stable(data)))",
-    "assertion_5": "assert property (@(posedge clk) disable iff (rst) (lock |-> $stable(data)))",
-    "assertion_6": "assert property (@(posedge clk) disable iff (rst) (lock |-> $stable(data)))",
-    "assertion_7": "assert property (@(posedge clk) disable iff (rst) (lock |-> $stable(data)))"
+    "assertion_1":"assert property (@(posedge clk) disable iff (rst) (($past(lock,1) == 1'b1) |-> ($past(data,1) == data)))",
+    "assertion_2":"assert property (@(posedge clk) disable iff (rst) (($past(lock) == 1'b1) |-> ($past(data) == data)))",
+    "assertion_3":"assert property (@(posedge clk) disable iff (rst) (($past(lock,1) == 1'b1) |-> ($past(data,1) == data)))",
+    "assertion_4":"assert property (@(posedge clk) disable iff (rst) (($past(lock) == 1'b1) |-> ($past(data) == data)))",
+    "assertion_5":"assert property (@(posedge clk) disable iff (rst) (($past(lock,1) == 1'b1) |-> ($past(data,1) == data)))",
+    "assertion_6":"assert property (@(posedge clk) disable iff (rst) (($past(lock) == 1'b1) |-> ($past(data) == data)))",
+    "assertion_7":"assert property (@(posedge clk) disable iff (rst) (($past(lock,1) == 1'b1) |-> ($past(data,1) == data)))"
 }
 ```

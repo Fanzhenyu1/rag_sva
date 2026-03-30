@@ -1,18 +1,8 @@
 ```json
 {
-  "test_points": {
-    "TP_001": {
-      "description": "at every positive edge of clock, the value of the data register remains unchanged if the value of the lock signal in the previous clock cycle is 1",
-      "related_signals": ["data", "lock", "clk"]
-    },
-    "TP_002": {
-      "description": "at every positive edge of clock, the value of the data register can only be updated from data_in when both w_en is 1 and lock is 0 in the previous clock cycle",
-      "related_signals": ["data", "data_in", "w_en", "lock", "clk"]
-    },
-    "TP_003": {
-      "description": "the lock signal should prevent write operations to the protected data register regardless of the w_en signal value",
-      "related_signals": ["lock", "w_en", "data"]
+    "SP_001": {
+        "description": "at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal in the previous clock cycle is 1",
+        "related_signals": ["data", "lock", "clk"]
     }
-  }
 }
 ```

@@ -1,15 +1,15 @@
 ```json
 {
   "design_name": "lock_reg",
-  "description": "A register lock module with data input, output, read enable, write enable, lock control, clock, and reset signals. The module is intended to protect the data register from unauthorized writes when locked.",
+  "description": "A register module with read/write enable controls and a lock mechanism. The register stores data on clock edges when write enable is active and reset is not asserted. The lock signal is intended to prevent data changes when asserted.",
   "security_properties": {
-    "assertion_1": "assert property (@(posedge clk) disable iff (rst) $past(lock) |-> $stable(data));",
-    "assertion_2": "assert property (@(posedge clk) disable iff (rst) $past(lock) |-> $stable(data));",
-    "assertion_3": "assert property (@(posedge clk) disable iff (rst) !$past(lock) && $past(w_en) |-> data == $past(data_in));",
-    "assertion_4": "assert property (@(posedge clk) disable iff (rst) $past(lock) && $past(w_en) |-> $stable(data));",
-    "assertion_5": "assert property (@(posedge clk) disable iff (rst) lock && w_en |-> $stable(data));",
-    "assertion_6": "assert property (@(posedge clk) disable iff (rst) lock |-> $stable(data));",
-    "assertion_7": "assert property (@(posedge clk) disable iff (rst) $past(lock) |-> $stable(data));"
+    "assertion_1": "assert property (@(posedge clk) disable iff (rst) lock |=> $stable(data))",
+    "assertion_2": "assert property (@(posedge clk) disable iff (rst) lock |=> $stable(data))",
+    "assertion_3": "assert property (@(posedge clk) disable iff (rst) lock |=> $stable(data))",
+    "assertion_4": "assert property (@(posedge clk) disable iff (rst) lock |=> $stable(data))",
+    "assertion_5": "assert property (@(posedge clk) disable iff (rst) lock |=> $stable(data))",
+    "assertion_6": "assert property (@(posedge clk) disable iff (rst) lock |=> $stable(data))",
+    "assertion_7": "assert property (@(posedge clk) disable iff (rst) lock |=> $stable(data))"
   }
 }
 ```

@@ -1,22 +1,12 @@
 ```json
 {
-  "test_points": {
-    "TP_001": {
-      "description": "at every positive edge of clock, if the value of the signal register in the previous clock cycle is GREEN and the walk signal is 1, then the value of the signal register should be RED for at least 4 consecutive clock cycles",
-      "related_signals": ["signal", "walk", "clk"]
+    "SP_001": {
+        "description": "at every positive edge of clock, if the value of the walk signal is 1 and the value of the signal register is GREEN, then the value of the signal register in the next clock cycle should be YELLOW",
+        "related_signals": ["walk", "signal"]
     },
-    "TP_002": {
-      "description": "at every positive edge of clock, if the value of the signal register in the previous clock cycle is GREEN and the walk signal is 1, then the value of the signal register should not change from GREEN directly to RED without passing through YELLOW in the same transition",
-      "related_signals": ["signal", "walk", "clk"]
-    },
-    "TP_003": {
-      "description": "at every positive edge of clock, the value of the walk_ctr register should be WALK_TIME when walk signal is 1 and signal register is GREEN",
-      "related_signals": ["walk_ctr", "walk", "signal", "clk"]
-    },
-    "TP_004": {
-      "description": "at every positive edge of clock, if the value of the signal register is RED and walk_ctr is not 0, then the value of the signal register should remain RED until walk_ctr becomes 0",
-      "related_signals": ["signal", "walk_ctr", "clk"]
+    "SP_002": {
+        "description": "at every positive edge of clock, if the value of the walk signal is 1 and the value of the signal register is GREEN, then the value of the signal register should transition through YELLOW before becoming RED",
+        "related_signals": ["walk", "signal"]
     }
-  }
 }
 ```

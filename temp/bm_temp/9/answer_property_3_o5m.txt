@@ -1,0 +1,9 @@
+{
+  "assertion_1": "assert property (@(posedge clk_aon_i) disable iff (rst_i === 1) $fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] ((por_n_i[i] == 1) || (rst_por_aon_n[i] == 0)));",
+  "assertion_2": "assert property (@(posedge clk_aon_i) disable iff (rst_i === 1) $fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] ((por_n_i[i] == 1) || (rst_por_aon_n[i] == 0)));",
+  "assertion_3": "assert property (@(posedge clk_aon_i) disable iff (rst_i === 1) $fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] ((por_n_i[i] == 1) || (rst_por_aon_n[i] == 0)));",
+  "assertion_4": "assert property (@(posedge clk_aon_i) disable iff (rst_i === 1) $fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] ((por_n_i[i] == 1) || (rst_por_aon_n[i] == 0)));",
+  "assertion_5": "assert property (@(posedge clk_aon_i) disable iff (rst_i === 1) $fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] ((por_n_i[i] == 1) || (rst_por_aon_n[i] == 0)));",
+  "assertion_6": "assert property (@(posedge clk_aon_i) disable iff (rst_i === 1) $fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] ((por_n_i[i] == 1) || (rst_por_aon_n[i] == 0)));",
+  "assertion_7": "assert property (@(posedge clk_aon_i) disable iff (rst_i === 1) $fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] ((por_n_i[i] == 1) || (rst_por_aon_n[i] == 0)));"
+}

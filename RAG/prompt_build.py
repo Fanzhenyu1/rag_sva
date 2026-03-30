@@ -93,7 +93,8 @@ def prompt_build_assets_identify(docs_content, rtl_files, RAG_ENABLE = 0):
 
 
 def prompt_build_testpoint_generation(docs_content, json_assets, rtl_files, RAG_ENABLE = 0):
-    with open('e:/mylife_yanjiu/project/rag_sva/rules/testpoint_generation_en.md', 'r', encoding='utf-8') as f:
+    # with open('e:/mylife_yanjiu/project/rag_sva/rules/testpoint_generation_en.md', 'r', encoding='utf-8') as f:
+    with open('e:/mylife_yanjiu/project/rag_sva/rules/testpoint_generation.md', 'r', encoding='utf-8') as f:
         prompt_template = f.read()
     rtl_code = ""
     for rtl_path in rtl_files:
@@ -125,7 +126,8 @@ def prompt_build_testpoint_generation(docs_content, json_assets, rtl_files, RAG_
 
 
 def prompt_build_property_generation(docs_content, json_testpoint, rtl_files, RAG_ENABLE = 0):
-    with open('e:/mylife_yanjiu/project/rag_sva/rules/property_generation_en.md', 'r', encoding='utf-8') as f:
+    # with open('e:/mylife_yanjiu/project/rag_sva/rules/property_generation_en.md', 'r', encoding='utf-8') as f:
+    with open('e:/mylife_yanjiu/project/rag_sva/rules/property_generation.md', 'r', encoding='utf-8') as f:    
         prompt_template = f.read()
     rtl_code = ""
     for rtl_path in rtl_files:

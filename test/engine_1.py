@@ -69,7 +69,7 @@ def my_chain(BM_ENABLE, design_name, RAG_ENABLE):
     print(f"Temp files has been set to temp path: {temp_path}")
 ####################################################################################
 ####################################################################################
-    if (0):
+    if (1):
         outtype = "hyp"
     else:
         outtype = "n"

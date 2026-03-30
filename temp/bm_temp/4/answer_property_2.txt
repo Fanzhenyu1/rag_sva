@@ -1,15 +1,15 @@
 ```json
 {
   "design_name": "aes_wrapper",
-  "description": "AES accelerator wrapper with external bus interface for configuration and data access. The design includes an AES-192 core with side-channel protection (SED) that XORs intermediate states with plaintext/ciphertext. The wrapper exposes internal registers through a memory-mapped interface, including start control, intermediate states (p_c), ciphertext validity (ct_valid), and ciphertext data (ct).",
+  "description": "AES-192 encryption wrapper with memory-mapped I/O interface for external bus communication. The design includes an AES core with side-channel protection and XOR-based output masking.",
   "security_properties": {
-    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.write == 0) |-> (external_bus_io.rdata == 0));",
-    "assertion_2": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.write == 0) |-> (external_bus_io.rdata == 0));",
-    "assertion_3": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.write == 0) |-> (external_bus_io.rdata == 0));",
-    "assertion_4": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.write == 0) |-> (external_bus_io.rdata == 0));",
-    "assertion_5": "assert property (@(posedge clk_i) disable iff (!rst_ni) ((external_bus_io.addr == 1 || external_bus_io.addr == 2 || external_bus_io.addr == 3 || external_bus_io.addr == 4) && external_bus_io.write == 0 && ct_valid == 0) |-> (external_bus_io.rdata == 0));",
-    "assertion_6": "assert property (@(posedge clk_i) disable iff (!rst_ni) ((external_bus_io.addr == 1 || external_bus_io.addr == 2 || external_bus_io.addr == 3 || external_bus_io.addr == 4) && external_bus_io.write == 0 && ct_valid == 0) |-> (external_bus_io.rdata == 0));",
-    "assertion_7": "assert property (@(posedge clk_i) disable iff (!rst_ni) ((external_bus_io.addr == 1 || external_bus_io.addr == 2 || external_bus_io.addr == 3 || external_bus_io.addr == 4) && external_bus_io.write == 0 && ct_valid == 0) |-> (external_bus_io.rdata == 0));"
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0))",
+    "assertion_2": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0))",
+    "assertion_3": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0))",
+    "assertion_4": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0))",
+    "assertion_5": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0))",
+    "assertion_6": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0))",
+    "assertion_7": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && external_bus_io.addr >= 12 && external_bus_io.addr <= 15 && external_bus_io.en == 1) |-> (external_bus_io.rdata == 0))"
   }
 }
 ```
