@@ -1,10 +1,16 @@
 ```json
 {
-  "test_points": {
-    "TP_001": {
-      "description": "At every positive edge of clock, the value of the privilege_violation signal is 1 if any bit of the priv_lvl_o signal is 0 while the corresponding bit of the priv_lvl signal is 1 and the value of the csr_op_i signal is among the four values CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ.",
-      "related_signals": ["priv_lvl_o", "priv_lvl", "csr_op_i", "privilege_violation"]
+    "SP_001": {
+        "description": "At every positive edge of clock, the value of the privilege_violation signal is 1 if the privilege level of the operation (priv_lvl_o) does not match or exceed the required privilege level (priv_lvl) for the CSR address being accessed, and the CSR operation (csr_op_i) is among CSR_WRITE, CSR_SET, CSR_CLEAR, or CSR_READ.",
+        "related_signals": ["privilege_violation", "priv_lvl_o", "priv_lvl", "csr_op_i", "csr_addr_i"]
+    },
+    "SP_002": {
+        "description": "At every positive edge of clock, the value of the privilege_violation signal is 1 if the CSR address (csr_addr_i[11:4]) is 8'h7b (debug mode CSRs) and the debug_mode_q signal is 0, regardless of the privilege levels, when the CSR operation (csr_op_i) is among CSR_WRITE, CSR_SET, CSR_CLEAR, or CSR_READ.",
+        "related_signals": ["privilege_violation", "csr_addr_i", "debug_mode_q", "csr_op_i"]
+    },
+    "SP_003": {
+        "description": "The CSR address riscv::CSR_MEPC must be accessible even when the privilege level of the operation (priv_lvl_o) does not match or exceed the required privilege level (priv_lvl), and this access must not cause a privilege_violation.",
+        "related_signals": ["privilege_violation", "priv_lvl_o", "priv_lvl", "csr_addr_i"]
     }
-  }
 }
 ```

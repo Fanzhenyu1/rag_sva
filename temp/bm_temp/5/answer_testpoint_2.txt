@@ -1,22 +1,12 @@
 ```json
 {
-  "test_points": {
-    "TP_001": {
-      "description": "at every positive edge of clock, the value of the key_big signal is 0 if the value of the debug_mode_i signal is 1 in the current clock cycle and 0 in the previous clock cycle",
-      "related_signals": ["key_big", "debug_mode_i", "clk_i"]
+    "SP_001": {
+        "description": "at every positive edge of clock, the value of the key_big signal is 0 if the value of the debug_mode_i signal is 1 in the current clock cycle and 0 in the previous clock cycle",
+        "related_signals": ["key_big", "debug_mode_i", "clk_i"]
     },
-    "TP_002": {
-      "description": "at every positive edge of clock, the value of the ct signal cannot be read via external_bus_io when ct_valid is 0",
-      "related_signals": ["ct", "ct_valid", "external_bus_io", "clk_i"]
-    },
-    "TP_003": {
-      "description": "at every positive edge of clock, the value of the state_big signal cannot be read via external_bus_io when ct_valid is 0",
-      "related_signals": ["state_big", "ct_valid", "external_bus_io", "clk_i"]
-    },
-    "TP_004": {
-      "description": "at every positive edge of clock, the value of the inter_state signal cannot be read via external_bus_io when ct_valid is 0",
-      "related_signals": ["inter_state", "ct_valid", "external_bus_io", "clk_i"]
+    "SP_002": {
+        "description": "at every positive edge of clock, the value of the ct signal cannot be read through external_bus_io until the value of the ct_valid signal is 1",
+        "related_signals": ["ct", "ct_valid", "external_bus_io"]
     }
-  }
 }
 ```

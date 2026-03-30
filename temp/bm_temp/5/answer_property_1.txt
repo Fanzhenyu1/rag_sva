@@ -1,15 +1,15 @@
 ```json
 {
   "design_name": "aes_wrapper",
-  "description": "AES accelerator wrapper module with external bus interface for reading/writing internal AES registers including state, key, and intermediate state. Security assertions ensure sensitive data (key, intermediate state, cipher state) is not exposed externally until encryption is complete (ct_valid=1).",
+  "description": "AES encryption wrapper module with external bus interface, internal state registers, and debug mode control",
   "security_properties": {
-    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.en && (external_bus_io.addr >= 0 && external_bus_io.addr <= 3) && !ct_valid) |-> (external_bus_io.rdata == 0));",
-    "assertion_2": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.en && (external_bus_io.addr >= 4 && external_bus_io.addr <= 9) && !ct_valid) |-> (external_bus_io.rdata == 0));",
-    "assertion_3": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.en && (external_bus_io.addr >= 10 && external_bus_io.addr <= 13) && !ct_valid) |-> (external_bus_io.rdata == 0));",
-    "assertion_4": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.en && (external_bus_io.addr >= 0 && external_bus_io.addr <= 3) && !ct_valid) |-> (state_big == 0));",
-    "assertion_5": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.en && (external_bus_io.addr >= 4 && external_bus_io.addr <= 9) && !ct_valid) |-> (key_big == 0));",
-    "assertion_6": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.en && (external_bus_io.addr >= 10 && external_bus_io.addr <= 13) && !ct_valid) |-> (inter_state == 0));",
-    "assertion_7": "assert property (@(posedge clk_i) disable iff (!rst_ni) (debug_mode_i && $past(!debug_mode_i)) |-> (key_big == 0));"
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && (external_bus_io.addr inside {p_c_addr_range, state_addr_range, key_big_addr_range, inter_state_addr_range, ct_addr_range}) |-> external_bus_io.rdata == 0))",
+    "assertion_2": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && (external_bus_io.addr inside {p_c_addr_range, state_addr_range, key_big_addr_range, inter_state_addr_range, ct_addr_range}) |-> external_bus_io.rdata == 0))",
+    "assertion_3": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && (external_bus_io.addr inside {p_c_addr_range, state_addr_range, key_big_addr_range, inter_state_addr_range, ct_addr_range}) |-> external_bus_io.rdata == 0))",
+    "assertion_4": "assert property (@(posedge clk_i) disable iff (!rst_ni) (ct_valid == 0 && (external_bus_io.addr inside {p_c_addr_range, state_addr_range, key_big_addr_range, inter_state_addr_range, ct_addr_range}) |-> external_bus_io.rdata == 0))",
+    "assertion_5": "assert property (@(posedge clk_i) disable iff (!rst_ni) (debug_mode_i && $past(!debug_mode_i) |-> key_big == 0))",
+    "assertion_6": "assert property (@(posedge clk_i) disable iff (!rst_ni) (debug_mode_i && $past(!debug_mode_i) |-> key_big == 0))",
+    "assertion_7": "assert property (@(posedge clk_i) disable iff (!rst_ni) (debug_mode_i && $past(!debug_mode_i) |-> key_big == 0))"
   }
 }
 ```

@@ -1,0 +1,9 @@
+{
+    "assertion_1":"assert property (@(posedge clk) ($past(lock) === 1'b1) |-> (data === $past(data)));",
+    "assertion_2":"assert property (@(posedge clk) disable iff (rst) ($past(lock) === 1'b1) |-> (data === $past(data)));",
+    "assertion_3":"assert property (@(posedge clk) ($past(lock) === 1'b1) |-> $stable(data));",
+    "assertion_4":"assert property (@(posedge clk) (1'b1 === $past(lock)) |-> (data === $past(data)));",
+    "assertion_5":"assert property (@(posedge clk) ($past(lock,1) === 1'b1) |-> (data === $past(data)));",
+    "assertion_6":"assert property (@(posedge clk) disable iff (rst) ($past(lock,1) === 1'b1) |-> (data === $past(data)));",
+    "assertion_7":"assert property (@(posedge clk) ($past(lock) === 1'b1) |-> (data === $past(data)));"
+}

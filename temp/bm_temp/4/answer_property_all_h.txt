@@ -1,0 +1,15 @@
+```json
+{
+  "design_name": "aes_wrapper",
+  "description": "AES accelerator wrapper with external bus interface for control and data access. The design includes an AES-192 core with side-channel resistant masking (p_c_text XOR). Security-critical data includes ciphertext (ct), internal states, and key material.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.addr inside {[12:15]} && external_bus_io.en && !external_bus_io.write) |-> (ct_valid || external_bus_io.rdata == 0));",
+    "assertion_2": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.addr inside {[12:15]} && external_bus_io.en && !external_bus_io.write && !ct_valid) |-> (external_bus_io.rdata == 0));",
+    "assertion_3": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.addr inside {[1:4]} && external_bus_io.en && !external_bus_io.write && !ct_valid) |-> (external_bus_io.rdata == 0));",
+    "assertion_4": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.addr inside {[1:4]} && external_bus_io.en && !external_bus_io.write) |-> (ct_valid || external_bus_io.rdata == 0));",
+    "assertion_5": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.addr == 11 && external_bus_io.en && !external_bus_io.write) |-> (external_bus_io.rdata[0] == ct_valid));",
+    "assertion_6": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.addr inside {[12:15]} && external_bus_io.en && !external_bus_io.write && ct_valid) |-> (external_bus_io.rdata == ct[(15-external_bus_io.addr)*DATA_WIDTH +: DATA_WIDTH]));",
+    "assertion_7": "assert property (@(posedge clk_i) disable iff (!rst_ni) (external_bus_io.addr inside {[1:4]} && external_bus_io.en && !external_bus_io.write && ct_valid) |-> (external_bus_io.rdata == p_c[(4-external_bus_io.addr)]));"
+  }
+}
+```

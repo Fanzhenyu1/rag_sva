@@ -1,0 +1,15 @@
+```json
+{
+  "design_name": "ariane_testharness",
+  "description": "This module implements an access control mechanism for peripherals. It takes a flat access control vector (acc_ctrl) and transforms it into a 2D matrix (acc_ctrl_c) where each row represents a privilege level and each column represents a peripheral. The transformation includes a potential security flaw: for peripheral 1 (j=1), its access control bits are OR-ed with the corresponding bits of peripheral 0, which could allow privilege escalation if peripheral 0 has higher privileges.",
+  "security_properties": {
+    "assertion_1": "assert property (@(posedge clk) disable iff (rst) (acc_ctrl_c[0][1] == (acc_ctrl[1*BIT_WIDTH+0] | acc_ctrl[0*BIT_WIDTH+0])));",
+    "assertion_2": "assert property (@(posedge clk) disable iff (rst) (acc_ctrl_c[1][1] == (acc_ctrl[1*BIT_WIDTH+1] | acc_ctrl[0*BIT_WIDTH+1])));",
+    "assertion_3": "assert property (@(posedge clk) disable iff (rst) (acc_ctrl_c[0][0] == acc_ctrl[0*BIT_WIDTH+0]));",
+    "assertion_4": "assert property (@(posedge clk) disable iff (rst) (acc_ctrl_c[1][0] == acc_ctrl[0*BIT_WIDTH+1]));",
+    "assertion_5": "assert property (@(posedge clk) disable iff (rst) (acc_ctrl_c[0][2] == acc_ctrl[2*BIT_WIDTH+0]));",
+    "assertion_6": "assert property (@(posedge clk) disable iff (rst) (acc_ctrl_c[1][2] == acc_ctrl[2*BIT_WIDTH+1]));",
+    "assertion_7": "assert property (@(posedge clk) disable iff (rst) (acc_ctrl_c[0][3] == acc_ctrl[3*BIT_WIDTH+0]));"
+  }
+}
+```

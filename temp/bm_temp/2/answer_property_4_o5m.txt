@@ -1,0 +1,9 @@
+{
+    "assertion_1": "assert property (@(posedge clk_i) (pass_chk == 1'b0) |-> (dmi_req_valid == 1'b0));",
+    "assertion_2": "assert property (@(posedge clk_i) (!pass_chk) |-> (!dmi_req_valid));",
+    "assertion_3": "assert property (@(posedge clk_i) disable iff (!rst_ni) (pass_chk == 1'b0) |-> (dmi_req_valid == 1'b0));",
+    "assertion_4": "assert property (@(posedge clk_i) (dmi_req_valid == 1'b1) |-> (pass_chk == 1'b1));",
+    "assertion_5": "assert property (@(posedge clk_i) (pass_chk == 1'b0) |-> (dmi_req_valid == 1'b0));",
+    "assertion_6": "assert property (@(posedge clk_i) (!pass_chk) |-> (!dmi_req_valid));",
+    "assertion_7": "assert property (@(posedge clk_i) disable iff (!rst_ni) (!pass_chk) |-> (!dmi_req_valid));"
+}

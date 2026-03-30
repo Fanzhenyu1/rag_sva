@@ -1,0 +1,9 @@
+{
+    "assertion_1": "assert property (@(posedge clk_i) $past(rst_i) |-> foreach (reglk_mem[i]) reglk_mem[i] == {BIT_WIDTH{1'b1}});",
+    "assertion_2": "assert property (@(posedge clk_i) $past(rst_i) |-> (reglk_mem[0] == {BIT_WIDTH{1'b1}} && reglk_mem[1] == {BIT_WIDTH{1'b1}} && reglk_mem[2] == {BIT_WIDTH{1'b1}}));",
+    "assertion_3": "assert property (@(posedge clk_i) $past(rst_i,1) == 1'b1 |-> foreach (reglk_mem[i]) reglk_mem[i] == {BIT_WIDTH{1'b1}});",
+    "assertion_4": "property rst_prev_all_ones; @(posedge clk_i) $past(rst_i) |-> foreach (reglk_mem[i]) reglk_mem[i] === {BIT_WIDTH{1'b1}}; endproperty assert property (rst_prev_all_ones);",
+    "assertion_5": "generate for (genvar k=0; k<NO_WORDS; k=k+1) begin : gen_assert assert property (@(posedge clk_i) $past(rst_i) |-> reglk_mem[k] == {BIT_WIDTH{1'b1}}); end endgenerate",
+    "assertion_6": "assert property (@(posedge clk_i) $past(rst_i) |-> foreach (reglk_mem[i]) reglk_mem[i] == {BIT_WIDTH{1'b1}});",
+    "assertion_7": "assert property (@(posedge clk_i) ($past(rst_i) == 1'b1) |-> (reglk_mem[0] === {BIT_WIDTH{1'b1}} && reglk_mem[1] === {BIT_WIDTH{1'b1}} && reglk_mem[2] === {BIT_WIDTH{1'b1}}));"
+}

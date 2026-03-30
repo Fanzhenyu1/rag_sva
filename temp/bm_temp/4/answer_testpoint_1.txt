@@ -1,14 +1,8 @@
 ```json
 {
-  "test_points": {
-    "TP_001": {
-      "description": "at every positive edge of clock, the value of the external_bus_io.rdata signal is 0 if the value of the ct_valid signal is 0 and the value of the external_bus_io.addr is greater than or equal to 12 and less than or equal to 15 and the value of the external_bus_io.en signal is 1",
-      "related_signals": ["external_bus_io.rdata", "ct_valid", "external_bus_io.addr", "external_bus_io.en"]
-    },
-    "TP_002": {
-      "description": "at every positive edge of clock, the value of the external_bus_io.rdata signal is 0 if the value of the external_bus_io.addr is 1, 2, 3, or 4 and the value of the external_bus_io.en signal is 1",
-      "related_signals": ["external_bus_io.rdata", "external_bus_io.addr", "external_bus_io.en"]
+    "SP_001": {
+        "description": "at every positive edge of clock, the value of the external_bus_io.rdata signal is 0 if the value of the ct_valid signal is 0 and the value of the external_bus_io.addr signal is greater than or equal to 12 and less than or equal to 15 and the value of the external_bus_io.en signal is 1",
+        "related_signals": ["external_bus_io.rdata", "ct_valid", "external_bus_io.addr", "external_bus_io.en"]
     }
-  }
 }
 ```

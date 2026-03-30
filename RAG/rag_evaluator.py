@@ -59,7 +59,8 @@ def evaluator_llm_call(input_query, llm_answer, retrived_doc, golden_answer):
 
     end_to_end_results = evaluate(
         dataset,
-        metrics=[faithfulness, answer_relevancy, context_recall, answer_correctness]
+        # metrics=[faithfulness, answer_relevancy, context_recall, answer_correctness]
+        metrics=[faithfulness, answer_relevancy, context_precision, answer_correctness]
     )
 
     print(end_to_end_results)
@@ -67,7 +68,7 @@ def evaluator_llm_call(input_query, llm_answer, retrived_doc, golden_answer):
     return 0
 
 def main():
-    design_name = "9"
+    design_name = "3"
     BM_ENABLE = 1
     #### source files directory ####
     if BM_ENABLE == 1:
@@ -88,7 +89,7 @@ def main():
     print(f"RTL files have been loaded: {rtl_files}")
     print(f"Temp files has been set to temp path: {temp_path}")
 
-    if (0):
+    if (1):
         outtype = "hyp"
     else:
         outtype = "n"

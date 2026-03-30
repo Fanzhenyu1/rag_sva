@@ -1,5 +1,5 @@
 ```json
 {
-"Threat Model": "Privileged CSR register can be accessed by unprivileged user"
+"Threat Model": "A less privileged access policy may override a higher privileged access policy due to incorrect implementation thus allowing access for an untrusted agent to privileged data."
 }
 ```

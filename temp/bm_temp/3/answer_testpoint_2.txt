@@ -1,18 +1,12 @@
 ```json
 {
-  "test_points": {
-    "TP_001": {
-      "description": "For each privilege type i (0 to BIT_WIDTH-1) and each peripheral j (0 to NB_PERIPHERALS-1), the value of acc_ctrl_c[i][j] must equal acc_ctrl[j*BIT_WIDTH+i] and must not be affected by any other peripheral's access control bits.",
-      "related_signals": ["acc_ctrl", "acc_ctrl_c"]
+    "SP_001": {
+        "description": "For each peripheral j and each privilege type i, the access control signal acc_ctrl_c[i][j] must be determined solely by the corresponding access control bit acc_ctrl[j*BIT_WIDTH+i] for that specific peripheral and privilege type, without being influenced by access control bits of other peripherals.",
+        "related_signals": ["acc_ctrl", "acc_ctrl_c"]
     },
-    "TP_002": {
-      "description": "When accessing peripheral j, the access control bus must not grant illegal access to other peripherals; specifically, for any peripheral j, acc_ctrl_c[i][j] must not depend on acc_ctrl[k*BIT_WIDTH+i] where k != j.",
-      "related_signals": ["acc_ctrl", "acc_ctrl_c"]
-    },
-    "TP_003": {
-      "description": "The privilege level for each peripheral must be independently controlled; verify that the assignment acc_ctrl_c[i][j] = acc_ctrl[j*BIT_WIDTH+i] | (j==1 && acc_ctrl[0*BIT_WIDTH+i]) does not allow peripheral 1 to inherit privilege from peripheral 0.",
-      "related_signals": ["acc_ctrl", "acc_ctrl_c"]
+    "SP_002": {
+        "description": "The access control logic must not grant access to peripheral j based on the access control bits of peripheral k (where k ≠ j), preventing illegal cross-peripheral access escalation.",
+        "related_signals": ["acc_ctrl", "acc_ctrl_c"]
     }
-  }
 }
 ```

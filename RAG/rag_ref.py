@@ -4,7 +4,16 @@ import doc_chunk
 import vector_store
 import prompt_build
 import hjson
+import openai
+from dotenv import load_dotenv
 from langchain_deepseek import ChatDeepSeek
+
+load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
+# base_url = os.getenv("OPENAI_BASE_URL")
+
+openai.api_key = api_key
+openai.api_base = "https://sg.uiuiapi.com/v1/chat/completions"
 
 def answer_to_temp(answer, temp_path, filename="1111.txt"):
     os.makedirs(temp_path, exist_ok=True)
@@ -15,24 +24,34 @@ def answer_to_temp(answer, temp_path, filename="1111.txt"):
     return file_path
 
 
+# def property_llm_call(prompt_template, rtl_content, sec_content, example_assertion):
+#     # build full prompt
+#     filled_prompt = prompt_template.replace(r'{document}', rtl_content).replace(r'{context}', sec_content).replace(r'{example}', example_assertion)
+#     # LLM call
+#     llm = ChatDeepSeek(
+#         model="deepseek-chat",
+#         temperature=0.4,
+#         max_tokens=2048,
+#         api_key=os.getenv("DEEPSEEK_API_KEY")
+#     )
+#     answer = llm.invoke(filled_prompt)
+#     if hasattr(answer, 'content'):  # 检查是否有content属性
+#         return answer.content
+#     elif isinstance(answer, str):   # 如果是直接返回字符串
+#         return answer
+#     else:  # 其他格式的处理
+#         return str(answer)  # 转换为字符串
+
 def property_llm_call(prompt_template, rtl_content, sec_content, example_assertion):
     # build full prompt
     filled_prompt = prompt_template.replace(r'{document}', rtl_content).replace(r'{context}', sec_content).replace(r'{example}', example_assertion)
-    # LLM call
-    llm = ChatDeepSeek(
-        model="deepseek-chat",
-        temperature=0.4,
-        max_tokens=2048,
-        api_key=os.getenv("DEEPSEEK_API_KEY")
-    )
-    answer = llm.invoke(filled_prompt)
-    if hasattr(answer, 'content'):  # 检查是否有content属性
-        return answer.content
-    elif isinstance(answer, str):   # 如果是直接返回字符串
-        return answer
-    else:  # 其他格式的处理
-        return str(answer)  # 转换为字符串
 
+    client = openai.OpenAI()
+    response = client.responses.create(
+        model="gpt-5-mini",        # 根据需要替换为其他可用模型
+        input = filled_prompt
+    )
+    return (response.output_text)
 
 def main():
 
@@ -40,7 +59,7 @@ def main():
     # dir of prompt template
     prompt_path = f"e:/mylife_yanjiu/project/rag_sva/rules/test"
     # load prompt template
-    with open(os.path.join(prompt_path, "sva_gen_test_1.md"), "r", encoding="utf-8") as f:
+    with open(os.path.join(prompt_path, "sva_gen_test.md"), "r", encoding="utf-8") as f:
         prompt_template = f.read()
 
     # dir of src
@@ -63,7 +82,7 @@ def main():
     # LLM call for property generation
     answer_property = property_llm_call(prompt_template, rtl_content, sec_content, example_assertion)
     # save answer to temp file
-    answer_to_temp(answer_property, temp_path, "answer_property_3.txt")
+    answer_to_temp(answer_property, temp_path, "answer_property_3_o5m.txt")
 
     return answer_property
 

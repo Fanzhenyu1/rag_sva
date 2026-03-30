@@ -88,7 +88,7 @@ def my_chain(BM_ENABLE, design_name, RAG_ENABLE):
         ######################
         docs = file_load.load_files(lib_data_file) # load lib data
         chunks = doc_chunk.langchain_doc_chunk(docs) # chunking
-        if(0):
+        if(1):
             chunks_texts = [doc.page_content if hasattr(doc, "page_content") else str(doc) for doc in chunks]
             pass
             retrieved_docs = vector_store.hyper_vector_retrieval(chunks_texts, query_rag, k=3)    # parmeter k is important
@@ -107,21 +107,21 @@ def my_chain(BM_ENABLE, design_name, RAG_ENABLE):
         docs_content = '''A simple register lock module. "threat model": ["The register (named data) cannot be modified when the lock signal is on."]. "security property": "at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal in the previous clock cycle is 1".'''
         pass
 
-    if(1):
+    if(0):
         #### LLM_chain ####
         # LLM call for asset identify
         answer_asset = llm_call(rtl_files, docs_content, RAG_ENABLE, "asset")
         # save answer to temp file
-        answer_to_temp(answer_asset, temp_path, "answer_asset_1.txt")
+        answer_to_temp(answer_asset, temp_path, "answer_asset_2.txt")
         pass
         # LLM call for testpoint generation
         answer_testpoint = llm_call(rtl_files, docs_content, RAG_ENABLE, "testpoint", asset_content = answer_asset)
         # save answer to temp file
-        answer_to_temp(answer_testpoint, temp_path, "answer_testpoint_1.txt")
+        answer_to_temp(answer_testpoint, temp_path, "answer_testpoint_2.txt")
         pass
         # LLM call for property generation
         answer_property = llm_call(rtl_files, docs_content, RAG_ENABLE, "property", testpoint_content = answer_testpoint)
-        answer_to_temp(answer_property, temp_path, "answer_property_1.txt")   
+        answer_to_temp(answer_property, temp_path, "answer_property_2.txt")   
         pass
         # # LLM call for SVA simplify
         # answer_sva_simplify = llm_call("", "", RAG_ENABLE, rule="simplify", sva_content = answer_property)
@@ -131,7 +131,7 @@ def my_chain(BM_ENABLE, design_name, RAG_ENABLE):
         # LLM call for property generation all
         answer_property = llm_call(rtl_files, docs_content, RAG_ENABLE, "property_all")
         # save answer to temp file
-        answer_to_temp(answer_property, temp_path, "answer_property_all.txt")          
+        answer_to_temp(answer_property, temp_path, "answer_property_all_h.txt")          
 
 
 

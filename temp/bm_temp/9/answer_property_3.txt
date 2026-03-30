@@ -1,11 +1,11 @@
 ```json
 {
-    "assertion_1": "assert property (@(posedge clk_aon_i) disable iff (!por_n_i[DomainAonSel]) $fell(por_n_i[DomainAonSel]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[DomainAonSel] || !rst_por_aon_n[DomainAonSel]));",
-    "assertion_2": "assert property (@(posedge clk_aon_i) disable iff (!por_n_i[DomainAonSel]) $fell(por_n_i[DomainAonSel]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[DomainAonSel] || !rst_por_aon_n[DomainAonSel]));",
-    "assertion_3": "assert property (@(posedge clk_aon_i) disable iff (!por_n_i[DomainAonSel]) $fell(por_n_i[DomainAonSel]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[DomainAonSel] || !rst_por_aon_n[DomainAonSel]));",
-    "assertion_4": "assert property (@(posedge clk_aon_i) disable iff (!por_n_i[DomainAonSel]) $fell(por_n_i[DomainAonSel]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[DomainAonSel] || !rst_por_aon_n[DomainAonSel]));",
-    "assertion_5": "assert property (@(posedge clk_aon_i) disable iff (!por_n_i[DomainAonSel]) $fell(por_n_i[DomainAonSel]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[DomainAonSel] || !rst_por_aon_n[DomainAonSel]));",
-    "assertion_6": "assert property (@(posedge clk_aon_i) disable iff (!por_n_i[DomainAonSel]) $fell(por_n_i[DomainAonSel]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[DomainAonSel] || !rst_por_aon_n[DomainAonSel]));",
-    "assertion_7": "assert property (@(posedge clk_aon_i) disable iff (!por_n_i[DomainAonSel]) $fell(por_n_i[DomainAonSel]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[DomainAonSel] || !rst_por_aon_n[DomainAonSel]));"
+    "assertion_1": "assert property (@(posedge clk_aon_i) disable iff (!rst_ni) ($fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[i] || !rst_por_aon_n[i])));",
+    "assertion_2": "assert property (@(posedge clk_aon_i) disable iff (!rst_ni) ($fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[i] || !rst_por_aon_n[i])));",
+    "assertion_3": "assert property (@(posedge clk_aon_i) disable iff (!rst_ni) ($fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[i] || !rst_por_aon_n[i])));",
+    "assertion_4": "assert property (@(posedge clk_aon_i) disable iff (!rst_ni) ($fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[i] || !rst_por_aon_n[i])));",
+    "assertion_5": "assert property (@(posedge clk_aon_i) disable iff (!rst_ni) ($fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[i] || !rst_por_aon_n[i])));",
+    "assertion_6": "assert property (@(posedge clk_aon_i) disable iff (!rst_ni) ($fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[i] || !rst_por_aon_n[i])));",
+    "assertion_7": "assert property (@(posedge clk_aon_i) disable iff (!rst_ni) ($fell(por_n_i[i]) |-> ##[MIN_CYCLES:MAX_CYCLES] (por_n_i[i] || !rst_por_aon_n[i])));"
 }
 ```

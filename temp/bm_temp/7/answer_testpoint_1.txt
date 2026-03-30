@@ -1,10 +1,8 @@
 ```json
 {
-  "test_points": {
-    "TP_001": {
-      "description": "At every positive edge of clock, all the BIT_WIDTH number of bits of each of the NO_WORDS number of elements in the reglk_mem array are set to 1 if the value of the rst_i signal in the previous clock cycle is 1.",
-      "related_signals": ["clk_i", "rst_i", "reglk_mem"]
+    "SP_001": {
+        "description": "at every positive edge of clock, all the BIT_WIDTH number of bits of each of the NO_WORDS number of elements in the reglk_mem array are set to 1 if the value of the rst_i signal in the previous clock cycle is 1",
+        "related_signals": ["clk_i", "rst_i", "reglk_mem"]
     }
-  }
 }
 ```

@@ -1,0 +1,9 @@
+{
+    "assertion_1": "assert property (@(posedge clk) (((~priv_lvl_o & priv_lvl) != 2'b00) && (csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ})) |-> (privilege_violation == 1'b1));",
+    "assertion_2": "assert property (@(posedge clk) (((priv_lvl_o & priv_lvl) != priv_lvl) && (csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ})) |-> (privilege_violation == 1'b1));",
+    "assertion_3": "assert property (@(posedge clk) ((|((~priv_lvl_o) & priv_lvl)) && (csr_op_i == CSR_WRITE || csr_op_i == CSR_SET || csr_op_i == CSR_CLEAR || csr_op_i == CSR_READ)) |-> (privilege_violation == 1'b1));",
+    "assertion_4": "assert property (@(posedge clk) (((~priv_lvl_o & priv_lvl) != '0) && (csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ})) |-> (privilege_violation === 1'b1));",
+    "assertion_5": "assert property (@(posedge clk) ((|((~priv_lvl_o) & priv_lvl)) && (csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ})) |-> ##0 (privilege_violation == 1'b1));",
+    "assertion_6": "assert property (@(posedge clk) (((priv_lvl_o & priv_lvl) != priv_lvl) && ((csr_op_i == CSR_WRITE) || (csr_op_i == CSR_SET) || (csr_op_i == CSR_CLEAR) || (csr_op_i == CSR_READ))) |-> (privilege_violation == 1));",
+    "assertion_7": "assert property (@(posedge clk) (((~priv_lvl_o & priv_lvl) != 0) && (csr_op_i inside {CSR_WRITE, CSR_SET, CSR_CLEAR, CSR_READ})) |-> (privilege_violation == 1'b1));"
+}

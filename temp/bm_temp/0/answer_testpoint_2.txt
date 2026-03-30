@@ -1,18 +1,20 @@
+Based on the provided threat model and the RTL design, here is the security specification in JSON format:
+
 ```json
 {
-  "test_points": {
-    "TP_001": {
-      "description": "at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal in the previous clock cycle is 1",
-      "related_signals": ["clk", "data", "lock"]
+    "SP_001": {
+        "description": "at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal in the previous clock cycle is 1",
+        "related_signals": ["data", "lock", "clk"]
     },
-    "TP_002": {
-      "description": "at every positive edge of clock, the value of the data register is same as its value in the previous clock cycle if the value of the lock signal is 1 and the value of the w_en signal is 1",
-      "related_signals": ["clk", "data", "lock", "w_en"]
-    },
-    "TP_003": {
-      "description": "at every positive edge of clock, the value of the data register is 0 if the value of the rst signal in the previous clock cycle is 1",
-      "related_signals": ["clk", "data", "rst"]
+    "SP_002": {
+        "description": "at every positive edge of clock, the value of the data register is 0 if the value of the rst signal in the previous clock cycle is 1",
+        "related_signals": ["data", "rst", "clk"]
     }
-  }
 }
 ```
+
+**Explanation:**
+
+1. **SP_001**: This specification directly addresses the threat model's concern about the lock function failing to prevent modifications. The current design has no logic that checks the `lock` signal in the `always` block. This specification requires that when `lock` is asserted (1), the register value should remain unchanged regardless of `w_en` or `data_in`.
+
+2. **SP_002**: This specification addresses the proper initialization/clearing of the register on reset, which is mentioned in the threat model as "Improper clearing of the lock bit." While the current design does reset `data` to 0, this specification makes that security requirement explicit to ensure it's not accidentally removed in future modifications.

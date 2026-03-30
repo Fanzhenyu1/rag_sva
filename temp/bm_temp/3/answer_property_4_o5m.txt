@@ -1,0 +1,9 @@
+{
+    "assertion_1": "assert property ((@posedge clk) for (int i = 0; i < PRIV_TYPES; i = i + 1) for (int j = 0; j < NB_PERIPHERALS; j = j + 1) acc_ctrl_c[i][j] == acc_ctrl[j*PRIV_TYPES + i]);",
+    "assertion_2": "assert property ((@posedge clk) for (int i = 0; i < BIT_WIDTH; i = i + 1) for (int j = 0; j < NB_PERIPHERALS; j = j + 1) acc_ctrl_c[i][j] == acc_ctrl[j*BIT_WIDTH + i]);",
+    "assertion_3": "assert property ((@posedge clk) foreach (acc_ctrl_c[i]) foreach (acc_ctrl_c[i][j]) acc_ctrl_c[i][j] == acc_ctrl[j*PRIV_TYPES + i]);",
+    "assertion_4": "assert property ((@posedge clk) for (int j = 0; j < NB_PERIPHERALS; j = j + 1) acc_ctrl_c[0][j] == acc_ctrl[j*PRIV_TYPES + 0]);",
+    "assertion_5": "assert property ((@posedge clk) for (int j = 0; j < NB_PERIPHERALS; j = j + 1) acc_ctrl_c[1][j] == acc_ctrl[j*PRIV_TYPES + 1]);",
+    "assertion_6": "assert property ((@posedge clk) for (int i = 0; i < PRIV_TYPES; i = i + 1) (acc_ctrl_c[i] == { acc_ctrl[(NB_PERIPHERALS-1)*PRIV_TYPES + i], acc_ctrl[(NB_PERIPHERALS-2)*PRIV_TYPES + i], /* ... */, acc_ctrl[i] }));",
+    "assertion_7": "assert property ((@posedge clk) for (int i = 0; i < PRIV_TYPES; i = i + 1) for (int j = 0; j < NB_PERIPHERALS; j = j + 1) acc_ctrl_c[i][j] == acc_ctrl[j*PRIV_TYPES + i]);"
+}
